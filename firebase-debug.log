@@ -1,0 +1,13 @@
+[debug] [2022-04-15T17:48:11.834Z] ----------------------------------------------------------------------
+[debug] [2022-04-15T17:48:11.836Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\OEM\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2022-04-15T17:48:11.836Z] CLI Version:   10.6.0
+[debug] [2022-04-15T17:48:11.836Z] Platform:      win32
+[debug] [2022-04-15T17:48:11.836Z] Node Version:  v16.13.2
+[debug] [2022-04-15T17:48:11.837Z] Time:          Fri Apr 15 2022 19:48:11 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2022-04-15T17:48:11.838Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-04-15T17:48:11.899Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-04-15T17:48:11.900Z] > authorizing via signed-in user (pyteksodoll@gmail.com)
+[debug] [2022-04-15T17:48:11.900Z] [iam] checking project mood-23f44 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-04-15T17:48:11.902Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/mood-23f44:testIamPermissions [none]
+[debug] [2022-04-15T17:48:11.902Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/mood-23f44:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}

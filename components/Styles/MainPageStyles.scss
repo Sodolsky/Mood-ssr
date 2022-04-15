@@ -1,0 +1,543 @@
+$white: #fefefe;
+$black: #2f2f2f;
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;400&display=swap");
+//TODO On small screen Post Text is getting out of frame
+@mixin FlexCenterHV {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@mixin BreakAllWords {
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+@mixin PostButton {
+  margin: 0.5rem;
+  border: 0.1rem black solid;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    62deg,
+    rgb(21, 213, 235) 0%,
+    rgb(255, 0, 191) 100%
+  );
+  color: white;
+  &:disabled {
+    background: linear-gradient(62deg, hsl(0, 0%, 40%) 0%, hsl(0, 0%, 60%));
+  }
+}
+@mixin SemiCirleBG {
+  background-color: #f0f2f5;
+  border-radius: 1rem;
+}
+@mixin Link {
+  cursor: pointer;
+  font-weight: bold;
+  color: blue;
+  text-decoration: underline;
+}
+@mixin PostSchema {
+  .Post {
+    @media (max-width: 700px) {
+      font-size: 1rem;
+    }
+    font-family: "Source Code Pro", monospace;
+    font-weight: 600;
+    // display: grid;
+    // grid-auto-columns: minmax(0, 1fr);
+    // grid-template-rows: 0.5fr 2fr 0.5fr;
+    strong {
+      @include FlexCenterHV();
+      padding-bottom: 0.5rem;
+    }
+    .PostHeader {
+      display: grid;
+      place-items: center;
+      grid-template-columns: 1fr 5fr 1fr;
+      padding: 0.75rem;
+      border-bottom: 1px black solid;
+      max-width: 100%;
+      gap: 1rem;
+      position: relative;
+      font-size: 1.5rem;
+      overflow-wrap: break-word;
+      .NameAndDescription {
+        @include FlexCenterHV();
+        flex-wrap: wrap;
+        word-break: break-all;
+        grid-column-start: 2;
+        max-width: 100%;
+      }
+      svg {
+        font-size: 2vw;
+        @media (max-width: 768px) {
+          font-size: 1rem;
+        }
+      }
+      .DeletePost {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        cursor: pointer;
+      }
+      .LinkToPost {
+        cursor: pointer;
+        justify-self: flex-start;
+      }
+      .ActionsBody {
+        @include FlexCenterHV();
+        flex-direction: column;
+        gap: 0.25rem;
+        position: absolute;
+        padding: 0.25rem;
+        z-index: 25;
+        background-color: $white;
+        border-radius: 0.25rem;
+        border: 0.1rem lightgray solid;
+        transition: all 0.2s;
+        img {
+          margin: 0;
+        }
+        span {
+          @include FlexCenterHV();
+        }
+      }
+      .PinPostIcon {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      .flexColumnWrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      img {
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+      }
+      .userAvatar {
+        width: 60px;
+        height: 60px;
+        @media (max-width: 768px) {
+          width: 40px;
+          height: 40px;
+        }
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+          rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+          rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        // border: 2px solid black;
+      }
+      grid-area: 1 / 1 / 2 / 2;
+    }
+    .PostBody {
+      grid-area: 2 / 1 / 3 / 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .PostText {
+        text-align: center;
+        padding: 1rem;
+        max-width: 100%;
+        word-wrap: break-word;
+        word-break: break-all;
+        overflow-wrap: anywhere;
+      }
+      span {
+        font-size: 125%;
+        font-weight: bold;
+      }
+      .PostPhoto {
+        @include FlexCenterHV();
+        padding: 0.5rem;
+        flex-grow: 3;
+        width: 80%;
+        .userImageContainer {
+          max-width: 100%;
+          img {
+            max-width: 100%;
+            height: auto;
+            // min-height: 300px;
+          }
+          video {
+            aspect-ratio: 16/9;
+            max-width: 100%;
+            height: auto;
+          }
+        }
+        article {
+          width: 100%;
+          height: auto;
+          aspect-ratio: 16/9;
+          iframe {
+            width: 100%;
+          }
+        }
+      }
+      .LikesAndComments {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin: 0.5rem;
+
+        margin-bottom: 1rem;
+        .AnimationForLikeClass {
+          animation-name: AnimationForLike;
+          animation-duration: 1.5s;
+          animation-iteration-count: 1;
+        }
+        img {
+          position: relative;
+          cursor: pointer;
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+    .PostFooter {
+      grid-area: 3 / 1 / 4 / 2;
+      display: flex;
+      height: 100%;
+      align-items: center;
+      flex-direction: column;
+      // padding-top: 0.5rem;
+      position: relative;
+      // min-height: 180px;
+      .CommentList {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        gap: 0.5rem;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        word-break: break-word;
+      }
+      .TopComment {
+        // border: 1px gold solid;
+        p {
+          width: 90%;
+          @include SemiCirleBG();
+          padding: 0.7rem;
+          text-align: center;
+        }
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        word-break: break-all;
+        @include BreakAllWords();
+        .ant-comment {
+          margin: 0.5rem 1rem 0.5rem 1rem;
+        }
+      }
+      .addComment {
+        width: fit-content;
+        @include SemiCirleBG();
+        width: 85%;
+        input {
+          width: 80%;
+          margin: 0 0.75rem;
+          border-radius: 0.5rem;
+        }
+        button {
+          @include PostButton();
+          margin-right: 0.75rem;
+          width: 3rem;
+        }
+        margin: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+    .PostFooterModal {
+      @extend .PostFooter;
+      min-height: 0;
+    }
+  }
+}
+.NewPostsAreReadyMobile {
+  background-color: white;
+  position: fixed;
+  padding: 0.25rem;
+  margin: 0;
+  border-radius: 0.25rem 0.25rem 0 0;
+  left: 0%;
+  top: 50%;
+  transform: rotate(90deg);
+  transform-origin: left bottom;
+  font-weight: bold;
+}
+.AppendToScreenAnimation {
+  animation: AppendToScreen 1.5s ease-out 1;
+  animation-fill-mode: forwards;
+}
+.RemoveFromScreenAnimation {
+  animation: RemoveFromScreen 1.5s ease-out 1;
+  animation-fill-mode: forwards;
+}
+@keyframes AppendToScreen {
+  from {
+    top: 100%;
+    opacity: 0;
+  }
+  to {
+    top: 50%;
+    opacity: 1;
+  }
+}
+@keyframes RemoveFromScreen {
+  to {
+    top: 50%;
+    opacity: 1;
+  }
+}
+@keyframes AnimationForLike {
+  from {
+    transform: scale(0.5) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
+.MainContentGrid {
+  position: absolute;
+  top: 10vh;
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-template-rows: 0.15fr 0.4fr 2.2fr;
+  gap: 0px 0px;
+  width: 100%;
+  height: 90%;
+}
+.PersonalNav {
+  grid-area: 1 / 1 / 2 / 2;
+  position: relative;
+  width: 100%;
+  background-color: hsl(0, 0%, 100%);
+  button {
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+    width: 2.5rem;
+    height: 2.5rem;
+    img {
+      width: 100%;
+      height: auto;
+      transition: border 0.1s;
+    }
+  }
+}
+.flexWrapForComment {
+  @include FlexCenterHV();
+  svg {
+    margin-right: 0.25rem;
+  }
+}
+.ant-comment-actions {
+  margin-top: 0 !important;
+}
+.ant-comment-inner {
+  max-width: 100% !important;
+}
+.InvalidLinkAlert {
+  position: fixed;
+  top: 0vh;
+  width: 100vw;
+}
+.modal-content {
+  @include PostSchema();
+  .Post {
+    .PostHeader {
+      @media (max-width: 700px) {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+.createPost {
+  font-family: "Source Code Pro", monospace;
+  position: relative;
+  width: 40vw;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  background-color: $white;
+  box-shadow: 0px 0px 15px 4px rgba(0, 0, 0, 0.5);
+  border-radius: 0.5rem;
+  justify-self: center;
+  @media (max-width: 900px) {
+    width: 80vw;
+  }
+  .NewPostBody {
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    textarea {
+      resize: none;
+      width: 100%;
+      border-radius: 0.5rem;
+      padding: 0.25rem;
+      &::-webkit-scrollbar {
+        width: 0.5rem;
+        border-radius: 0.5rem;
+        background-color: $black;
+        box-shadow: 0 20px 25px -5px rgb(0, 0, 0 / 0.1),
+          0 8px 10px -6px rgb(0, 0, 0 / 0.1);
+      }
+      &::-webkit-scrollbar-thumb {
+        border-radius: 0.75rem;
+        height: 25%;
+        background-color: skyblue;
+      }
+    }
+  }
+
+  .UrlUploader {
+    @include Link();
+  }
+  .NewPostFeatures {
+    padding-bottom: 0.25rem;
+    .CanBeAddedContainer {
+      font-size: 1rem;
+    }
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .YoutubeUrl {
+      flex-grow: 2;
+      margin-left: 2rem;
+      @include FlexCenterHV();
+      input[type="text"] {
+        width: 60%;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+      }
+      .BackArrow {
+        cursor: pointer;
+        margin-right: 1rem;
+      }
+    }
+    .PictureAndSubmit {
+      margin-left: auto;
+      @include FlexCenterHV();
+      img {
+        margin: 0.25rem;
+        cursor: pointer;
+        height: 4ch;
+      }
+      .Picture {
+        @include FlexCenterHV();
+        font-size: 0.75rem;
+        font-weight: bold;
+        #file-input {
+          display: none;
+        }
+      }
+    }
+  }
+}
+.divList {
+  // !POST
+  padding: 0;
+  list-style-type: none;
+  position: relative;
+  top: 6vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .LoadNewPostsButton {
+    @include PostButton();
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .ListWrapper {
+    margin-bottom: 0.75rem;
+    width: 40%;
+    @include PostSchema();
+    .GoldenBorder {
+      border-color: gold !important;
+    }
+    .Post {
+      transition: border 0.5s;
+      background-color: #fefefe;
+      border: 3px black solid;
+      border-radius: 1rem;
+    }
+  }
+}
+.CssButtonContainer {
+  hr {
+    width: 100%;
+    margin: 0.25rem;
+  }
+  .wrapperForPrevievButton {
+    @include FlexCenterHV();
+    .PrevievInModal {
+      @include PostButton();
+    }
+  }
+}
+.tippyLikes {
+  overflow-y: auto;
+  max-height: 150px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  .LikedPostContainer {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    span {
+      all: revert;
+      font-size: 1.25rem !important;
+      margin-right: 0.5rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      width: 40px !important;
+      aspect-ratio: 1/1;
+      margin-right: 0.5rem;
+    }
+  }
+}
+@media (max-width: 1080px) {
+  textarea {
+    text-align: center;
+  }
+  .divList {
+    .ListWrapper {
+      width: 80%;
+    }
+  }
+  .PrevievPicture {
+    height: 5vh;
+    width: 5vw;
+    img {
+      margin-left: 0.5rem;
+      height: 100%;
+      width: 200%;
+    }
+  }
+}
+@media (max-width: 700px) {
+  .divList {
+    .ListWrapper {
+      .Post {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}

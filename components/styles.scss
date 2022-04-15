@@ -1,0 +1,31 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import url("https://fonts.googleapis.com/css2?family=Hahmlet:wght@100&display=swap");
+@import "~antd/dist/antd.css";
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap");
+a {
+  color: hsl(209, 100%, 45%);
+}
+body {
+  background-color: #fafafa;
+  font-family: "Roboto Condensed", sans-serif;
+  // font-family: "Oswald", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #36096d;
+  background: -webkit-linear-gradient(
+    to bottom,
+    #7f53ac 0%,
+    #647dee 25%,
+    #7f53ac 75%
+  );
+  background: linear-gradient(to bottom, #7f53ac 0%, #647dee 25%, #7f53ac 75%);
+  background-color: #7f53ac;
+  width: 100%;
+  background-repeat: repeat;
+}
+.screenCenter {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,65 @@
+@mixin HeaderIcon {
+  cursor: pointer;
+  position: absolute;
+  font-size: 1.5rem;
+  svg {
+    transition: all 0.3s;
+    &:hover {
+      color: skyblue;
+    }
+  }
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
+}
+header {
+  position: absolute;
+  min-height: 10vh;
+  color: white;
+  background-color: hsl(0, 0%, 10%);
+  // background: linear-gradient(
+  //   62deg,
+  //   rgb(21, 213, 235) 0%,
+  //   rgb(255, 0, 191) 100%
+  // );
+  width: 100%;
+  border-bottom: 0.25rem #dbdbdb solid;
+  .HOFContainer {
+    left: 45px;
+    color: gold;
+    @include HeaderIcon();
+    a {
+      color: inherit;
+    }
+  }
+  .AlignLogo {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    height: 10vh;
+    gap: 0.5rem;
+    img {
+      height: 2.5rem;
+      margin-left: 10px;
+      transition: transform 0.5s;
+      &:hover {
+        transform: rotate(60deg);
+      }
+    }
+    .FAContainer {
+      @include HeaderIcon();
+      right: 15px;
+    }
+    .FAContainerBell {
+      @include HeaderIcon();
+      left: 15px;
+    }
+  }
+}
+@media (max-height: 300px) {
+  header {
+    height: 20vh;
+  }
+}

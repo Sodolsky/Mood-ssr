@@ -1,0 +1,298 @@
+@import "./MainPageStyles.scss";
+@mixin FlexCenter {
+  display: flex;
+  justify-content: center;
+}
+.Spin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  h1 {
+    font-size: 4rem;
+    color: white;
+    font-weight: bold;
+  }
+  img {
+    width: 15vw;
+    animation: Rotate infinite 1s ease-out;
+  }
+  @keyframes Rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+.LoaderBox {
+  @include FlexCenter();
+  align-items: center;
+}
+
+//! Real CSS Starts Here
+.dim {
+  filter: brightness(80%);
+  :hover {
+    filter: none;
+  }
+}
+.normalize {
+  filter: brightness(100%) !important;
+}
+.CoverEntireBackground {
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+}
+.BackGroundLayer {
+  // background-image: url("../img/half-moon.svg");
+  background-color: purple;
+  background-repeat: repeat;
+  background-position: center;
+  // background-size: cover;
+  height: auto;
+  .UserInfoContainer {
+    position: relative;
+    display: grid;
+    margin: calc(2vh + 10px) auto 0 auto;
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    // backdrop-filter: blur(2px);
+    // -webkit-backdrop-filter: blur(2px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    grid-template-columns: 0.8fr 1.2fr;
+    grid-auto-rows: auto;
+    gap: 0px 0px;
+    grid-template-areas:
+      "UserImage UserNameAndDescription"
+      "Stats Post";
+    height: auto;
+    max-width: 80vw;
+    @media (min-width: 1024px) {
+      width: 60vw;
+    }
+    @media (max-width: 768px) {
+      grid-template-columns: auto;
+      grid-template-areas:
+        "UserImage"
+        "UserNameAndDescription"
+        "Post"
+        "Stats";
+    }
+    padding: 1rem;
+    .UserImage {
+      position: relative;
+      @include FlexCenter();
+      align-items: center;
+      grid-area: UserImage;
+      max-width: 100%;
+      padding-bottom: 1rem;
+      img {
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+          rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+          rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        max-height: 250px;
+        aspect-ratio: 1/1;
+        max-width: 100%;
+        border-radius: 50%;
+        @media (max-width: 768px) {
+          max-height: 125px;
+        }
+      }
+      .FAContainer {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        svg {
+          color: black;
+          font-size: 45px;
+        }
+      }
+    }
+    .ChangeImage {
+      cursor: pointer;
+      transition: all 0.5s;
+      filter: brightness(70%);
+      &:hover {
+        filter: none;
+      }
+    }
+    .UserNameAndDescription {
+      word-wrap: break-word;
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      max-width: 100%;
+      padding-bottom: 1rem;
+      @include FlexCenter();
+      flex-wrap: wrap;
+      flex-direction: column;
+      span {
+        min-width: 20%;
+        text-align: center;
+        font-size: 3vw;
+        letter-spacing: 1.5px;
+        font-weight: bold;
+        white-space: pre-wrap;
+        @media (max-width: 768px) {
+          font-size: 8vw;
+        }
+      }
+      div {
+        text-align: center;
+        font-size: 1.75vw;
+        min-width: 20%;
+        word-break: break-all;
+        @media (max-width: 768px) {
+          font-size: 6vw;
+        }
+      }
+      grid-area: UserNameAndDescription;
+    }
+    .Stats {
+      grid-area: Stats;
+      font-size: 3vw;
+      @media (max-width: 768px) {
+        font-size: 6vw;
+      }
+      span {
+        @include FlexCenter();
+        align-items: center;
+        h3 {
+          margin: 0 !important;
+          font-size: 3vw !important;
+          @media (max-width: 768px) {
+            font-size: 6vw !important;
+          }
+        }
+        span {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+    .LatestPost {
+      max-width: 100%;
+      .VievAllPosts {
+        @include PostButton();
+      }
+      .biggerText {
+        text-align: center;
+        font-size: 3vw;
+        margin: 1rem 0;
+        font-weight: bold;
+        @include FlexCenter();
+        align-items: center;
+        @media (max-width: 768px) {
+          font-size: 8vw;
+        }
+        img {
+          aspect-ratio: 1/1;
+          width: 32px;
+          margin-left: 0.5rem;
+          cursor: pointer;
+        }
+      }
+      grid-area: Post;
+      @include FlexCenter();
+      flex-direction: column;
+      align-items: center;
+      @include PostSchema();
+      .Post {
+        max-width: 100%;
+        background-color: #fefefe;
+        border: 2px black solid;
+        border-radius: 0.5rem;
+        @media (max-width: 768px) {
+          font-size: 0.75rem;
+        }
+        .PostUserInfo {
+          .userDescription {
+            font-size: 1rem;
+          }
+          span {
+            font-size: 1.5vw;
+            @media (max-width: 768px) {
+              font-size: 1rem;
+            }
+          }
+        }
+      }
+      padding: 0.5rem;
+    }
+  }
+}
+.changeProfile {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  transition: transform 0.5s;
+  z-index: 9999;
+  img {
+    width: 40px;
+    aspect-ratio: 1/1;
+    cursor: pointer;
+  }
+  &:hover {
+    transform: rotate(-60deg);
+  }
+}
+.ChangeColorContainer {
+  z-index: 9999;
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  z-index: 999;
+  input {
+    width: 40px;
+    aspect-ratio: 1/1;
+    cursor: pointer;
+    margin: 10px 0;
+  }
+}
+.AcceptOrDiscardChanges {
+  position: absolute;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 15px;
+  top: 15px;
+  img {
+    cursor: pointer;
+    margin: 0 10px;
+    @media (max-width: 700px) {
+      flex-direction: column;
+      margin: 10px 0;
+    }
+  }
+  @media (max-width: 700px) {
+    flex-direction: column;
+    margin: 10px 0;
+  }
+}
+.Filters {
+  @include FlexCenter();
+  margin-top: 1rem;
+  .ActiveButton {
+    background-color: #e4b4e4;
+  }
+  button {
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0 0.5rem;
+    border: 2px solid black;
+    border-radius: 0.5rem;
+    background-color: #fefefe;
+    transition: all 0.3s ease-out;
+    &:hover {
+      background-color: #e4b4e4;
+    }
+  }
+}
+.ant-comment-content-detail {
+  font-size: 0.75rem;
+}
