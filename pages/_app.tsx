@@ -114,16 +114,16 @@ function MyApp({ Component, pageProps }: AppProps) {
             value={{ isUserLoggedIn, setIfUserIsLoggedIn }}
           >
             <allUsersArrayContext.Provider value={usersLoginArray.current}>
-              {isAuthBeingProccesed ? (
+              {/* {isAuthBeingProccesed ? (
                 <div className="screenCenter">
                   <LoadingRing colorVariant="black" />
                 </div>
-              ) : (
-                <>
-                  <Header />
-                  <Component {...pageProps} />
-                </>
-              )}
+              ) : ( */}
+              <>
+                <Header />
+                <Component {...pageProps} />
+              </>
+              {/* )} */}
             </allUsersArrayContext.Provider>
           </userLogInContext.Provider>
         </currentlyLoggedInUserContext.Provider>
