@@ -132,10 +132,10 @@ const showSuccessMesssage = (
       2
     );
 };
-export const Post: React.FC<{ date: string }> = ({ date }) => {
+export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
   //We are defining date as another variable to avoid name collison when passing props to comment element
-  const parentDate = date;
+  const parentDate = props.date;
 
   const myDate = moment(parentDate, "DD-MM-YYYY  HH:mm:ss").toDate();
   const [allComments, setAllComments] = useState<CommentInterface[]>([]);
@@ -151,8 +151,9 @@ export const Post: React.FC<{ date: string }> = ({ date }) => {
   const firstRender = React.useRef<boolean>(true);
   // Here we are fetching the comments data and setting up top comment
   useEffect(() => {
-    const refForComments = collection(db, "Posts", `${date}`, "comments");
-    const refForPost = doc(db, "Posts", `${date}`);
+    console.log(props);
+    const refForComments = collection(db, "Posts", `${props.date}`, "comments");
+    const refForPost = doc(db, "Posts", `${props.date}`);
     let DataContainer: PostPropsInteface = {
       date: "",
       postType: "",
@@ -170,6 +171,7 @@ export const Post: React.FC<{ date: string }> = ({ date }) => {
       img: "",
       hallOfFame: false,
     };
+
     const PostSubscription = onSnapshot(refForPost, (doc) => {
       const data = doc.data() as PostPropsInteface;
       DataContainer = data;
@@ -270,14 +272,14 @@ export const Post: React.FC<{ date: string }> = ({ date }) => {
                   src={PinIcon.src}
                   alt={"Pin Post"}
                   onClick={() =>
-                    pinPost(date, currentlyLoggedInUser.Login as string)
+                    pinPost(props.date, currentlyLoggedInUser.Login as string)
                   }
                 />
                 <LazyLoadedImage
                   alt="Add to Hall Of Fame"
                   src={postData.hallOfFame ? StarIcon.src : EmptyStarIcon.src}
                   onClick={() => {
-                    handleHallOfFameChange(postData, date);
+                    handleHallOfFameChange(postData, props.date);
                   }}
                 />
               </Accordion.Body>
@@ -364,7 +366,7 @@ export const Post: React.FC<{ date: string }> = ({ date }) => {
               poepleThatLiked={
                 postData?.poepleThatLiked ? postData.poepleThatLiked : []
               }
-              date={date}
+              date={props.date}
               postId={postData.URL}
               userThatPostedLogin={postData.userThatPostedThis.Login as string}
             />
@@ -396,7 +398,7 @@ export const Post: React.FC<{ date: string }> = ({ date }) => {
               <button
                 onClick={() => {
                   addCommentToDataBase(
-                    date,
+                    props.date,
                     commentVal,
                     moment(new Date()).utc().toDate(),
                     currentlyLoggedInUser,
@@ -424,7 +426,7 @@ export const Post: React.FC<{ date: string }> = ({ date }) => {
                       usersThatLikedThisComment={
                         topComment.usersThatLikedThisComment
                       }
-                      parentPostRef={date}
+                      parentPostRef={props.date}
                       id={topComment.id}
                     />
                   </>
@@ -448,7 +450,7 @@ export const Post: React.FC<{ date: string }> = ({ date }) => {
                           item.usersThatLikedThisComment
                         }
                         id={item.id}
-                        parentPostRef={date}
+                        parentPostRef={props.date}
                       />
                     );
                   })}
