@@ -19,32 +19,32 @@ import { app } from "../../../firebase/firebase";
 
 const SinglePostPage: NextPage<SerializedFirebasePostData> = (props) => {
   const { authStatus } = useLoginRedirect();
-  return authStatus ? (
+  return (
     <>
-      <UIWrapper>
-        {props.date === "" ? (
-          <NotFoundComponent />
-        ) : (
-          <>
-            <Head>
-              <meta property="og:description" content={props.text} />
-              <meta
-                property="og:title"
-                content={`Post added by${props.userThatPostedThis.Login}`}
-              />
-              <meta property="og:image" content={props.img} />
-              <meta
-                property="og:url"
-                content={`https://mood-ssr.vercel.app/explore/posts/${props.URL}`}
-              />
-              <meta property="og:type" content="website" />
-            </Head>
+      <Head>
+        <meta property="og:description" content={props.text} />
+        <meta
+          property="og:title"
+          content={`Post added by${props.userThatPostedThis.Login}`}
+        />
+        <meta property="og:image" content={props.img} />
+        <meta
+          property="og:url"
+          content={`https://mood-ssr.vercel.app/explore/posts/${props.URL}`}
+        />
+        <meta property="og:type" content="website" />
+      </Head>
+      {authStatus ? (
+        <UIWrapper>
+          {props.date === "" ? (
+            <NotFoundComponent />
+          ) : (
             <SinglePost {...(props as PostPropsInteface)} />
-          </>
-        )}
-      </UIWrapper>
+          )}
+        </UIWrapper>
+      ) : null}
     </>
-  ) : null;
+  );
 };
 export interface FirebasePostData extends PostPropsInteface {
   timestamp: {
