@@ -31,21 +31,20 @@ const SinglePostPage: NextPage<PostPropsInteface> = (props) => {
         ) : (
           <>
             <Head>
+              <meta property="og:description" content={props.text} />
               <meta
-                name="og:description"
-                content={props.text}
-                key="titleDescription"
-              />
-              <meta
-                name="og:title"
+                property="og:title"
                 content={`Post added by${props.userThatPostedThis.Login}`}
-                key="titleDescription"
               />
               <meta
-                name="og:image"
+                property="og:image"
                 content={`New Post added by${props.img}`}
-                key="titleDescription"
               />
+              <meta
+                property="og:url"
+                content="https://mood-ssr.vercel.app/explore/posts/f4e458e7-4e16-411c-baf7-5a84a35f27f6/"
+              />
+              <meta property="og:type" content="website" />
             </Head>
             <SinglePost {...(props as PostPropsInteface)} />
           </>
