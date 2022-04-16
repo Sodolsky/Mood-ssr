@@ -20,6 +20,7 @@ import {
   userLogInContext,
 } from "../utils/interfaces";
 import { Header } from "../components/Header";
+import "../components/styles.scss";
 import "../components/Styles/AddPostIcon.scss";
 import "../components/Styles/BackArrow.scss";
 import "../components/Styles/CustomToggle.scss";
@@ -32,7 +33,6 @@ import "../components/Styles/NotFound.scss";
 import "../components/Styles/RankingComponent.scss";
 import "../components/Styles/UserProfile.scss";
 import "../components/Styles/tippyStyles.scss";
-import "../components/styles.scss";
 import { useRouter } from "next/router";
 import { LoadingRing } from "../components/LoadingRing";
 import Head from "next/head";

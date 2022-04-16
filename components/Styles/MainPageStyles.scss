@@ -1,7 +1,6 @@
 $white: #fefefe;
 $black: #2f2f2f;
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;400&display=swap");
+
 //TODO On small screen Post Text is getting out of frame
 @mixin FlexCenterHV {
   display: flex;
@@ -412,6 +411,7 @@ $black: #2f2f2f;
     width: 100%;
     .YoutubeUrl {
       flex-grow: 2;
+      gap: 0.5rem;
       margin-left: 2rem;
       @include FlexCenterHV();
       input[type="text"] {

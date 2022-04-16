@@ -264,7 +264,8 @@ export const CreatePost: React.FC = () => {
                     setIfLinkIsChoosen(false);
                   }}
                   className="BackArrow"
-                  layout="fill"
+                  width={32}
+                  height={32}
                   src={BackArrowIcon}
                   alt="Go back and select Post Type Again"
                 />
