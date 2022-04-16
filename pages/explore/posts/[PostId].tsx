@@ -11,23 +11,19 @@ import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 import { useLoginRedirect } from "../../../components/hooks/useLoginRedirect";
+import { NotFoundComponent } from "../../../components/NotFound";
 import { PostPropsInteface } from "../../../components/Post";
 import { SinglePost } from "../../../components/SinglePost";
 import { UIWrapper } from "../../../components/UIWrapper";
 import { app } from "../../../firebase/firebase";
 
-const SinglePostPage: NextPage<PostPropsInteface> = (props) => {
+const SinglePostPage: NextPage<SerializedFirebasePostData> = (props) => {
   const { authStatus } = useLoginRedirect();
   return authStatus ? (
     <>
       <UIWrapper>
-        {isEmpty(props) ? (
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Empty
-              style={{ fontSize: 20 }}
-              description="This Post doesn't exist :("
-            />
-          </div>
+        {props.date === "" ? (
+          <NotFoundComponent />
         ) : (
           <>
             <Head>
@@ -50,17 +46,28 @@ const SinglePostPage: NextPage<PostPropsInteface> = (props) => {
     </>
   ) : null;
 };
+export interface FirebasePostData extends PostPropsInteface {
+  timestamp: {
+    seconds: number;
+    miliseconds: number;
+  };
+}
+export interface SerializedFirebasePostData
+  extends Omit<FirebasePostData, "timestamp"> {
+  timestamp: number;
+}
 export const getServerSideProps: GetServerSideProps<
-  PostPropsInteface
+  SerializedFirebasePostData
 > = async ({ params }) => {
   const postId = params?.PostId;
   const db = getFirestore(app);
   const q = query(collection(db, "Posts"), where("URL", "==", postId));
+
   try {
     const post = await getDocs(q);
-    const postData = post.docs[0].data() as PostPropsInteface;
+    const postData = post.docs[0].data() as FirebasePostData;
     return {
-      props: { ...postData },
+      props: { ...postData, timestamp: postData.timestamp.seconds },
     };
   } catch (error) {
     return {
@@ -71,12 +78,13 @@ export const getServerSideProps: GetServerSideProps<
         hashtags: [],
         likeCount: 0,
         poepleThatLiked: [],
-        postType: "image",
+        postType: "",
         text: "",
         userThatPostedThis: { Avatar: "", Login: "" },
         YTLink: "",
         fileType: "",
         img: "",
+        timestamp: 0,
       },
     };
   }
