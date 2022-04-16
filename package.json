@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "resolutions": {
+    "@types/react": "17.0.30"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.0.0-beta3",
@@ -22,7 +26,7 @@
     "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.172",
     "@types/node": "^12.20.19",
-    "@types/react": "^17.0.16",
+    "@types/react": "17.0.30",
     "@types/react-dom": "^17.0.9",
     "antd": "^4.16.13",
     "bootstrap": "^5.0.2",
