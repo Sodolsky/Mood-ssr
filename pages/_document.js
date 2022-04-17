@@ -18,21 +18,6 @@ class MyDocument extends Document {
             name="description"
             content="MOOD is a social media app where you can share your current mood with everyone!"
           />
-          <meta
-            name="description"
-            content="MOOD is a social media app where you can share your current mood with everyone!"
-          />
-          <meta property="og:url" content="https://mood-23f44.web.app/home" />
-          <meta property="og:type" content="website" />
-          <meta property="og:title" content="MOOD" />
-          <meta
-            property="og:description"
-            content="MOOD is a social media app where you can share your current mood with everyone!"
-          />
-          <meta
-            property="og:image"
-            content="https://i.ibb.co/Dw0r08f/logo512.png"
-          />
           <meta name="twitter:card" content="summary_large_image" />
           <meta property="twitter:domain" content="mood-23f44.web.app" />
           <meta

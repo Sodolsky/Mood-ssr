@@ -22,12 +22,12 @@ const SinglePostPage: NextPage<SerializedFirebasePostData> = (props) => {
   return (
     <>
       <Head>
-        <meta property="og:description" content={props.text} />
         <meta
           property="og:title"
           content={`Post added by${props.userThatPostedThis.Login}`}
         />
-        <meta property="og:image" content={props.img} />
+        <meta property="og:description" content={props.text} key={props.text} />
+        <meta property="og:image" content={props.img} key={props.img} />
         <meta
           property="og:url"
           content={`https://mood-ssr.vercel.app/explore/posts/${props.URL}`}
