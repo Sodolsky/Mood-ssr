@@ -152,7 +152,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const firstRender = React.useRef<boolean>(true);
   // Here we are fetching the comments data and setting up top comment
   useEffect(() => {
-    const PostSubscription = () => {};
+    let PostSubscription = () => {};
     if (has(props, "URL")) {
       setPostData(props as PostPropsInteface);
     } else {
