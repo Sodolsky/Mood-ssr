@@ -39,6 +39,7 @@ import PinIcon from "../public/pin.png";
 import LinkIcon from "../public/link.png";
 import CommentIcon from "../public/Comment.svg";
 import Image from "next/image";
+import { has } from "lodash";
 const bottomStyle: React.CSSProperties = {
   borderTop: "black 1px solid",
 };
@@ -151,32 +152,17 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const firstRender = React.useRef<boolean>(true);
   // Here we are fetching the comments data and setting up top comment
   useEffect(() => {
-    console.log(props);
+    const PostSubscription = () => {};
+    if (has(props, "URL")) {
+      setPostData(props as PostPropsInteface);
+    } else {
+      const refForPost = doc(db, "Posts", `${props.date}`);
+      PostSubscription = onSnapshot(refForPost, (doc) => {
+        const data = doc.data() as PostPropsInteface;
+        setPostData(data);
+      });
+    }
     const refForComments = collection(db, "Posts", `${props.date}`, "comments");
-    const refForPost = doc(db, "Posts", `${props.date}`);
-    let DataContainer: PostPropsInteface = {
-      date: "",
-      postType: "",
-      userThatPostedThis: {
-        Login: "",
-        Avatar: "",
-      },
-      text: "",
-      likeCount: 0,
-      hashtags: [],
-      poepleThatLiked: [],
-      URL: "",
-      YTLink: "",
-      fileType: "",
-      img: "",
-      hallOfFame: false,
-    };
-
-    const PostSubscription = onSnapshot(refForPost, (doc) => {
-      const data = doc.data() as PostPropsInteface;
-      DataContainer = data;
-      setPostData(data);
-    });
     const Unsubscribe = onSnapshot(refForComments, (doc) => {
       if (doc.docs.length > 0) {
         const arrayForSave: CommentInterface[] = [];
@@ -222,7 +208,6 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
           }
         }
       }
-      setPostData(DataContainer);
     });
     return () => {
       Unsubscribe();

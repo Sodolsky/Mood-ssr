@@ -1,4 +1,3 @@
-import { Empty } from "antd";
 import {
   collection,
   getDocs,
@@ -6,7 +5,6 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { isEmpty } from "lodash";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import React from "react";
@@ -61,10 +59,10 @@ export const getServerSideProps: GetServerSideProps<
 > = async ({ params }) => {
   const postId = params?.PostId;
   const db = getFirestore(app);
-  const q = query(collection(db, "Posts"), where("URL", "==", postId));
-
+  const postQuery = query(collection(db, "Posts"), where("URL", "==", postId));
+  const commentQuery = collection(db, "Posts", `${postId}`, "comments");
   try {
-    const post = await getDocs(q);
+    const post = await getDocs(postQuery);
     const postData = post.docs[0].data() as FirebasePostData;
     return {
       props: { ...postData, timestamp: postData.timestamp.seconds },

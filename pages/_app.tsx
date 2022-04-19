@@ -46,7 +46,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   });
   const [isAuthBeingProccesed, setIsAuthBeingProccesed] =
     useState<boolean>(true);
-  const router = useRouter();
   const usersLoginArray = useRef<string[]>([]);
   const getUsersLoginsUtility = async () => {
     const ref = doc(db, "Utility", "UserLogins");
@@ -114,16 +113,16 @@ function MyApp({ Component, pageProps }: AppProps) {
             value={{ isUserLoggedIn, setIfUserIsLoggedIn }}
           >
             <allUsersArrayContext.Provider value={usersLoginArray.current}>
-              {/* {isAuthBeingProccesed ? (
+              {isAuthBeingProccesed ? (
                 <div className="screenCenter">
                   <LoadingRing colorVariant="black" />
                 </div>
-              ) : ( */}
-              <>
-                <Header />
-                <Component {...pageProps} />
-              </>
-              {/* )} */}
+              ) : (
+                <>
+                  <Header />
+                  <Component {...pageProps} />
+                </>
+              )}
             </allUsersArrayContext.Provider>
           </userLogInContext.Provider>
         </currentlyLoggedInUserContext.Provider>
