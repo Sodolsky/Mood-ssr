@@ -22,7 +22,7 @@ const SinglePostPage: NextPage<SerializedFirebasePostData> = (props) => {
       <Head>
         <meta
           property="og:title"
-          content={`Post added by${props.userThatPostedThis.Login}`}
+          content={`Post added by ${props.userThatPostedThis.Login}`}
         />
         <meta property="og:description" content={props.text} key={props.text} />
         <meta
