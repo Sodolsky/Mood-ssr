@@ -10,10 +10,11 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { isEqual } from "lodash";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { db, auth } from "../firebase/firebase";
 import {
   allUsersArrayContext,
+  authProcessStatusContext,
   currentlyLoggedInUserContext,
   setCurrentlyLoggedInUserContext,
   UserData,
@@ -34,7 +35,6 @@ import "../components/Styles/NotFound.scss";
 import "../components/Styles/RankingComponent.scss";
 import "../components/Styles/UserProfile.scss";
 import "../components/Styles/tippyStyles.scss";
-import { LoadingRing } from "../components/LoadingRing";
 import Head from "next/head";
 function MyApp({ Component, pageProps }: AppProps) {
   const [isUserLoggedIn, setIfUserIsLoggedIn] = useState<boolean | undefined>(
@@ -44,9 +44,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     Login: "",
     Email: "",
   });
-  const [isAuthBeingProccesed, setIsAuthBeingProccesed] =
-    useState<boolean>(true);
   const usersLoginArray = useRef<string[]>([]);
+  const [authIsBeingProccesed, setAuthIsBeingProccesed] =
+    useState<boolean>(true);
   const getUsersLoginsUtility = async () => {
     const ref = doc(db, "Utility", "UserLogins");
     try {
@@ -91,10 +91,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         getDataAboutUser(user.uid);
-        setIsAuthBeingProccesed(false);
+        setAuthIsBeingProccesed(false);
       } else {
         setIfUserIsLoggedIn(false);
-        setIsAuthBeingProccesed(false);
+        setAuthIsBeingProccesed(false);
       }
     });
     return () => unsub();
@@ -113,16 +113,10 @@ function MyApp({ Component, pageProps }: AppProps) {
             value={{ isUserLoggedIn, setIfUserIsLoggedIn }}
           >
             <allUsersArrayContext.Provider value={usersLoginArray.current}>
-              {isAuthBeingProccesed ? (
-                <div className="screenCenter">
-                  <LoadingRing colorVariant="black" />
-                </div>
-              ) : (
-                <>
-                  <Header />
-                  <Component {...pageProps} />
-                </>
-              )}
+              <authProcessStatusContext.Provider value={authIsBeingProccesed}>
+                <Header />
+                <Component {...pageProps} />
+              </authProcessStatusContext.Provider>
             </allUsersArrayContext.Provider>
           </userLogInContext.Provider>
         </currentlyLoggedInUserContext.Provider>

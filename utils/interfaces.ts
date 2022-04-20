@@ -9,6 +9,7 @@ export const currentlyLoggedInUserContext = createContext<UserData>({
   Email: "",
   UserPosts: [],
 });
+export const authProcessStatusContext = createContext<boolean>(true);
 export type notificationTypes = "comment" | "like";
 export interface NotificationInterface {
   type: notificationTypes;
