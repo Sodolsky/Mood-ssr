@@ -4,9 +4,9 @@ main {
   left: 80%;
   position: absolute;
   width: 30vw;
-  border-radius: 1rem;
   height: auto;
   transform: translate(-50%, -50%);
+  border-radius: 1rem;
   padding: 4em 0.3rem 4em 0.3rem;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   opacity: 0.87;
@@ -66,7 +66,7 @@ main {
     }
 
     input[type="password"] {
-      margin-top: 2rem;
+      margin-top: 0.75rem;
     }
 
     .buttonFlexWrap {
@@ -74,7 +74,7 @@ main {
       display: flex;
       justify-content: space-around;
       width: 80%;
-
+      gap: 0.5rem;
       button {
         font-size: 1.5rem;
         padding: 0.5rem 1rem;
@@ -82,13 +82,13 @@ main {
         background: none;
         border: none;
         border-radius: 1.5rem;
-
         color: #7f53ac;
-        background-color: hsl(0, 0%, 100%);
+        background-color: white;
         cursor: pointer;
+
         &:hover,
         &:focus {
-          background-color: hsl(0, 0%, 100%);
+          background-color: rgb(255, 255, 255);
           text-decoration: underline;
         }
       }
@@ -103,6 +103,7 @@ main {
         background-color: #7f53ac;
         color: white;
         border-radius: 1.5rem;
+
         &:hover,
         &:focus {
           background-color: #5f1ca2;
@@ -130,7 +131,6 @@ main {
   position: absolute;
   width: 100%;
   top: 9vh;
-  z-index: 3;
 }
 
 .fadeIn {
@@ -159,7 +159,7 @@ main {
     }
 
     @media (max-width: 300px) {
-      height: 35vh;
+      height: 30vh;
     }
   }
 

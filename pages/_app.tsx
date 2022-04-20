@@ -28,12 +28,12 @@ import "../components/Styles/Explore.scss";
 import "../components/Styles/Header.scss";
 import "../components/Styles/LoadingRingStyles.scss";
 import "../components/Styles/LogIn.scss";
+import "../components/Styles/SignUp.scss";
 import "../components/Styles/MainPageStyles.scss";
 import "../components/Styles/NotFound.scss";
 import "../components/Styles/RankingComponent.scss";
 import "../components/Styles/UserProfile.scss";
 import "../components/Styles/tippyStyles.scss";
-import { useRouter } from "next/router";
 import { LoadingRing } from "../components/LoadingRing";
 import Head from "next/head";
 function MyApp({ Component, pageProps }: AppProps) {

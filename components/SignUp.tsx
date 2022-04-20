@@ -1,9 +1,4 @@
 import * as React from "react";
-import {
-  setCurrentlyLoggedInUserContext,
-  userPrefferedPostType,
-} from "../utils/interfaces";
-import { Container, Row, Col } from "react-bootstrap";
 import { useState } from "react";
 import { auth, db } from "../firebase/firebase";
 import {
@@ -16,9 +11,14 @@ import {
 } from "@firebase/firestore";
 import { collection } from "firebase/firestore";
 import { PostPropsInteface } from "./Post";
+import {
+  userPrefferedPostType,
+  setCurrentlyLoggedInUserContext,
+} from "../utils/interfaces";
 import { createUserWithEmailAndPassword, UserCredential } from "@firebase/auth";
 import { FirebaseError } from "@firebase/util";
 import nProgress from "nprogress";
+import Logo from "../public/icon-512.png";
 interface SignUpProps {
   setIfUserIsSigningUp: React.Dispatch<React.SetStateAction<boolean>>;
   setIfUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -211,73 +211,57 @@ export const SignUp: React.FC<SignUpProps> = (props) => {
     );
   };
   return (
-    <main>
-      <Row>
-        <Col className="LogInText">SIGN UP</Col>
-      </Row>
-      <Container className="LogInForm">
-        <form>
-          <Row>
-            <Col>
-              <input
-                type="text"
-                name="Login"
-                id="Login"
-                placeholder="Username"
-                autoComplete="on"
-                onChange={handleChange}
-                value={registerData?.Login}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <input
-                type="email"
-                name="Email"
-                id="Email"
-                placeholder="Email"
-                autoComplete="on"
-                onChange={handleChange}
-                value={registerData?.Email}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <input
-                type="Password"
-                name="Password"
-                id="Password"
-                placeholder="Password"
-                autoComplete="on"
-                onChange={handleChange}
-                value={registerData.Password}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <input
-                type="submit"
-                id="SubmitSignUp"
-                value="SIGN UP"
-                onClick={handleSubmit}
-              />
-            </Col>
-          </Row>
-        </form>
-        <Row>
-          <Col>
-            <p>
-              Hava a account?
+    <>
+      <div className="background_box_cover">
+        <img src="https://picsum.photos/1920/1080" alt="apiPicture" />
+        <img src={Logo.src} alt="logo" className="logo" />
+        <div className="loginBGcover"></div>
+      </div>
+      <main>
+        <div className="LogInText">
+          <h1>Create Your Account</h1>
+          <p>It's free!</p>
+        </div>
+        <div className="LogInForm">
+          <form>
+            <input
+              type="text"
+              name="Login"
+              id="Login"
+              placeholder="username"
+              autoComplete="on"
+              onChange={handleChange}
+              value={registerData?.Login}
+            />
+            <input
+              type="email"
+              name="Email"
+              id="Email"
+              placeholder="email"
+              autoComplete="on"
+              onChange={handleChange}
+              value={registerData?.Email}
+            />
+            <input
+              type="Password"
+              name="Password"
+              id="Password"
+              placeholder="password"
+              autoComplete="on"
+              onChange={handleChange}
+              value={registerData.Password}
+            />
+            <div className="buttonFlexWrap">
               <button onClick={() => props.setIfUserIsSigningUp(false)}>
-                Log In Now
+                Go to Login
               </button>
-            </p>
-          </Col>
-        </Row>
-      </Container>
-    </main>
+              <button className="submitButton" onClick={handleSubmit}>
+                Create account
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
+    </>
   );
 };
