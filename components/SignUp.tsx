@@ -220,7 +220,7 @@ export const SignUp: React.FC<SignUpProps> = (props) => {
       <main>
         <div className="LogInText">
           <h1>Create Your Account</h1>
-          <p>It's free!</p>
+          <p>{"It's free!"}</p>
         </div>
         <div className="LogInForm">
           <form>
