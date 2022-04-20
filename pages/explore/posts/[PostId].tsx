@@ -25,11 +25,15 @@ const SinglePostPage: NextPage<SerializedFirebasePostData> = (props) => {
           content={`Post added by${props.userThatPostedThis.Login}`}
         />
         <meta property="og:description" content={props.text} key={props.text} />
-        <meta property="og:image" content={props.img} key={props.img} />
         <meta
           property="og:url"
           content={`https://mood-ssr.vercel.app/explore/posts/${props.URL}`}
         />
+        {props.postType === "photo" ? (
+          <meta property="og:image" content={props.img} key={props.img} />
+        ) : (
+          <meta property="og:video" content={props.YTLink} />
+        )}
         <meta property="og:type" content="website" />
       </Head>
       {authStatus ? (
@@ -60,7 +64,7 @@ export const getServerSideProps: GetServerSideProps<
   const postId = params?.PostId;
   const db = getFirestore(app);
   const postQuery = query(collection(db, "Posts"), where("URL", "==", postId));
-  const commentQuery = collection(db, "Posts", `${postId}`, "comments");
+  // const commentQuery = collection(db, "Posts", `${postId}`, "comments");
   try {
     const post = await getDocs(postQuery);
     const postData = post.docs[0].data() as FirebasePostData;
