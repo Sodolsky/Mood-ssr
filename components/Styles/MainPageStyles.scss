@@ -157,12 +157,19 @@ $black: #2f2f2f;
         flex-grow: 3;
         width: 80%;
         .userImageContainer {
-          max-width: 100%;
-          img {
-            max-width: 100%;
-            height: auto;
-            // min-height: 300px;
+          width: 100%;
+
+          span {
+            position: unset !important;
           }
+
+          .image {
+            object-fit: contain;
+            width: 100% !important;
+            position: relative !important;
+            height: unset !important;
+          }
+
           video {
             aspect-ratio: 16/9;
             max-width: 100%;

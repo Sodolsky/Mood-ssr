@@ -36,25 +36,41 @@ class MyDocument extends Document {
           <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
           <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="true"
+          />
           <link
             href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap"
             rel="stylesheet"
           />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="true"
+          />
           <link
             href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;400&display=swap"
             rel="stylesheet"
           />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="true"
+          />
           <link
             href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@100&display=swap"
             rel="stylesheet"
           />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="true"
+          />
           <link
             href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap"
             rel="stylesheet"

@@ -324,9 +324,15 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
             {postData?.postType === "photo" ? (
               <div className="userImageContainer">
                 {postData?.fileType === "image" ? (
-                  <LazyLoadedImage
+                  // <LazyLoadedImage
+                  //   src={postData?.img as string}
+                  //   alt={"Post Photo"}
+                  // />
+                  <Image
                     src={postData?.img as string}
                     alt={"Post Photo"}
+                    layout="fill"
+                    className="image"
                   />
                 ) : (
                   <video controls src={postData?.img} />
