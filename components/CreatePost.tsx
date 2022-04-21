@@ -357,7 +357,12 @@ export const CreatePost: React.FC = () => {
                 ) : !isLinkChoosen ? (
                   <div className="userImageContainer">
                     {checkFileType(rawImageBlob) ? (
-                      <img src={imgPrevievSrc} alt="Your Uploaded Mood" />
+                      <Image
+                        src={imgPrevievSrc as string}
+                        alt={"Preview Photo"}
+                        layout="fill"
+                        className="image"
+                      />
                     ) : (
                       <video controls src={imgPrevievSrc} />
                     )}
