@@ -40,6 +40,7 @@ import LinkIcon from "../public/link.png";
 import CommentIcon from "../public/Comment.svg";
 import Image from "next/image";
 import { has } from "lodash";
+import AddImageToPostIcon from "../public/insertpic.svg";
 const bottomStyle: React.CSSProperties = {
   borderTop: "black 1px solid",
 };
@@ -324,15 +325,12 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
             {postData?.postType === "photo" ? (
               <div className="userImageContainer">
                 {postData?.fileType === "image" ? (
-                  // <LazyLoadedImage
-                  //   src={postData?.img as string}
-                  //   alt={"Post Photo"}
-                  // />
                   <Image
                     src={postData?.img as string}
                     alt={"Post Photo"}
                     layout="fill"
                     className="image"
+                    priority={true}
                   />
                 ) : (
                   <video controls src={postData?.img} />
@@ -386,6 +384,23 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                 onChange={handleChange}
                 placeholder="Your comment"
               />
+              <label htmlFor="comment-image-uploader">
+                <Image
+                  src={AddImageToPostIcon}
+                  alt="Add Image to Post"
+                  width={32}
+                  height={32}
+                  className="AddImageToCommentIcon"
+                />
+              </label>
+              <input
+                type="file"
+                id="comment-image-uploader"
+                name="Img"
+                accept="image/png, image/gif, image/jpeg "
+                style={{ display: "none" }}
+              />
+
               <button
                 onClick={() => {
                   addCommentToDataBase(
