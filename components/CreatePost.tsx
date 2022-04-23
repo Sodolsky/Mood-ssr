@@ -42,6 +42,7 @@ export interface CommentInterface {
   content: string;
   date: any;
   usersThatLikedThisComment: UserForFirebase[];
+  img: string;
   id?: string;
   parentPostRef?: string;
 }

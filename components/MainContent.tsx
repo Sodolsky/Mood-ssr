@@ -24,6 +24,7 @@ import { isEqual } from "lodash";
 import { usePageVisibility } from "./hooks/usePageVisibility";
 import { getElementCountBetween2ElementsInArray } from "./likeFunctions";
 import nProgress from "nprogress";
+import Head from "next/head";
 
 type incomingPostsType = {
   ready: boolean;
@@ -191,8 +192,8 @@ export const MainContent: React.FC = () => {
       });
     });
   };
-  //https:firebase.google.com/docs/firestore/query-data/order-limit-data
-  return isLaoding ? (
+  return <Head>{/* <title key={"title"}>{title}</title> */}</Head> &&
+    isLaoding ? (
     <div className="MainContentGrid">
       <div
         style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}

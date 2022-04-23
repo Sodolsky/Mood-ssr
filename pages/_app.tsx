@@ -103,7 +103,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>MOOD</title>
+        <title key={"title"}>MOOD TRUP</title>
       </Head>
       <setCurrentlyLoggedInUserContext.Provider
         value={setCurrentlyLoggedInUser}
