@@ -10,7 +10,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { isEqual } from "lodash";
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect } from "react";
 import { db, auth } from "../firebase/firebase";
 import {
   allUsersArrayContext,

@@ -1,4 +1,3 @@
-// Key to download image files is  `${userThatPostedThis.Login}${text}`;
 import * as React from "react";
 import "tippy.js/animations/scale.css";
 import { currentlyLoggedInUserContext, UserData } from "../utils/interfaces";
@@ -8,7 +7,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { getRandomInt } from "./likeFunctions";
-import { getDownloadURL, ref } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storageRef } from "../firebase/firebase";
 import {
   addDoc,
@@ -26,7 +25,7 @@ import moment from "moment";
 import { LikePost } from "./LikePost";
 import { LazyLoadedImage } from "./LazyLoadedImage";
 import Link from "next/link";
-import { message } from "antd";
+import { message, Spin } from "antd";
 import SkeletonPost from "./SkeletonPost";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import { NotificationInterface } from "../utils/interfaces";
@@ -41,6 +40,9 @@ import CommentIcon from "../public/Comment.svg";
 import Image from "next/image";
 import { has } from "lodash";
 import AddImageToPostIcon from "../public/insertpic.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import { v4 } from "uuid";
 const bottomStyle: React.CSSProperties = {
   borderTop: "black 1px solid",
 };
@@ -78,8 +80,16 @@ export const addCommentToDataBase = async (
   userThatAddedComment: UserData,
   userThatPostedLogin: string,
   postId: string,
-  img: string
+  img: Blob | File | null,
+  setCommentIsBeingAdded: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  let imageUrl: string = "";
+  if (img) {
+    const pathRef = ref(storageRef, "CommentImages");
+    const fileRef = ref(pathRef, `${v4()}`);
+    await uploadBytes(fileRef, img);
+    await getDownloadURL(fileRef).then((x) => (imageUrl = x));
+  }
   const postRef = collection(db, "Posts", `${key}`, "comments");
   const userRef = doc(db, "Users", `${userThatAddedComment.Login}`);
   const userRefNotification = doc(
@@ -95,7 +105,7 @@ export const addCommentToDataBase = async (
     content: text,
     date: date,
     usersThatLikedThisComment: [],
-    img: img,
+    img: imageUrl,
   };
   const userData = await getDoc(userRef);
   const userDataObject = userData.data() as UserData;
@@ -112,6 +122,7 @@ export const addCommentToDataBase = async (
     });
   }
   await addDoc(postRef, newCommentObj).then(async (doc) => {
+    setCommentIsBeingAdded(false);
     if (commentsRefArray) {
       commentsRefArray.push(doc.path);
       await updateDoc(userData.ref, {
@@ -142,9 +153,15 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const parentDate = props.date;
 
   const myDate = moment(parentDate, "DD-MM-YYYY  HH:mm:ss").toDate();
+  const [commentIsBeingAdded, setCommentIsBeingAdded] =
+    useState<boolean>(false);
   const [allComments, setAllComments] = useState<CommentInterface[]>([]);
   const [topComment, setTopComment] = useState<null | CommentInterface>(null);
-  const [commentVal, changeCommentVal] = useState<string>("");
+  const [commentVal, changeCommentVal] = useState<{
+    text: string;
+    img: string;
+    imgBlob: File | Blob | null;
+  }>({ text: "", img: "", imgBlob: null });
   const [commentCount, setCommentCount] = useState<number>(0);
   const [postData, setPostData] = useState<Omit<
     PostPropsInteface,
@@ -232,7 +249,19 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const currentlyLoggedInUser = useContext(currentlyLoggedInUserContext);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
-    changeCommentVal(val);
+    changeCommentVal((prev) => ({ ...prev, text: val }));
+  };
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files![0];
+    if (file.size > 15000000) {
+      return alert("Your File is bigger than 15MB Try to upload smaller one");
+    } else {
+      changeCommentVal((prev) => ({
+        ...prev,
+        img: URL.createObjectURL(file),
+        imgBlob: file,
+      }));
+    }
   };
   return !postData ? (
     <SkeletonPost />
@@ -382,44 +411,69 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
             <div className="addComment">
               <input
                 type="text"
-                value={commentVal}
+                value={commentVal.text}
                 onChange={handleChange}
                 placeholder="Your comment"
               />
-              <label htmlFor="comment-image-uploader">
-                <Image
-                  src={AddImageToPostIcon}
-                  alt="Add Image to Post"
-                  width={32}
-                  height={32}
-                  className="AddImageToCommentIcon"
+              {commentIsBeingAdded ? (
+                <Spin />
+              ) : commentVal.img === "" ? (
+                <>
+                  <label htmlFor="comment-image-uploader">
+                    <Image
+                      src={AddImageToPostIcon}
+                      alt="Add Image to Post"
+                      width={32}
+                      height={32}
+                      className="AddImageToCommentIcon"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    id="comment-image-uploader"
+                    name="Img"
+                    accept="image/png, image/gif, image/jpeg "
+                    style={{ display: "none" }}
+                    onChange={handleFileInput}
+                  />
+                </>
+              ) : (
+                <FontAwesomeIcon
+                  icon={faWindowClose}
+                  className="FAIcon"
+                  onClick={() =>
+                    changeCommentVal((prev) => ({
+                      ...prev,
+                      img: "",
+                      imgBlob: null,
+                    }))
+                  }
                 />
-              </label>
-              <input
-                type="file"
-                id="comment-image-uploader"
-                name="Img"
-                accept="image/png, image/gif, image/jpeg "
-                style={{ display: "none" }}
-              />
-
+              )}
               <button
                 onClick={() => {
+                  setCommentIsBeingAdded(true);
                   addCommentToDataBase(
                     props.date,
-                    commentVal,
+                    commentVal.text,
                     moment(new Date()).utc().toDate(),
                     currentlyLoggedInUser,
                     postData.userThatPostedThis.Login as string,
                     postData.URL,
-                    ""
+                    commentVal.imgBlob,
+                    setCommentIsBeingAdded
                   );
-                  changeCommentVal("");
+                  changeCommentVal({ text: "", img: "", imgBlob: null });
                 }}
-                disabled={commentVal.length < 1}
+                disabled={commentVal.text.length < 1}
               >
                 Add
               </button>
+              {commentVal.img !== "" && (
+                <figure className="ImageContainer">
+                  <img src={commentVal.img} alt="Your image added to comment" />
+                </figure>
+              )}
             </div>
           )}
           <div className="TopComment">

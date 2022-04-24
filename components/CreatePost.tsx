@@ -25,6 +25,7 @@ import { uniq } from "lodash";
 import moment from "moment";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import Image from "next/image";
+import { getDownloadURL } from "firebase/storage";
 //Key needs to be changed
 const uploadUserImageToStorageBucket = async (
   key: string,
@@ -33,6 +34,7 @@ const uploadUserImageToStorageBucket = async (
   const pathRef = ref(storageRef, "PostImages");
   const fileRef = ref(pathRef, `${key}`);
   await uploadBytes(fileRef, img);
+  await getDownloadURL(fileRef).then((x) => console.log(x));
 };
 export interface CommentInterface {
   userThatAddedComment: {

@@ -28,6 +28,7 @@ export const CommentComponent: React.FC<CommentInterface> = (props) => {
     usersThatLikedThisComment,
     parentPostRef,
     id,
+    img,
   } = props;
   const AvatarRef = useRef(null);
   const saveLikedUsers = (): void => {
@@ -110,7 +111,12 @@ export const CommentComponent: React.FC<CommentInterface> = (props) => {
           </Link>
         }
         datetime={moment(formatedDate).fromNow()}
-        content={content}
+        content={
+          <div className="singleComment">
+            <span>{content}</span>
+            {img !== "" && <img src={img} alt="Comment image" />}
+          </div>
+        }
       />
       {/* <Tippy
         interactive={true}
