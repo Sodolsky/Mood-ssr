@@ -24,13 +24,13 @@ import { isEqual } from "lodash";
 import { usePageVisibility } from "./hooks/usePageVisibility";
 import { getElementCountBetween2ElementsInArray } from "./likeFunctions";
 import nProgress from "nprogress";
-import Head from "next/head";
 
 type incomingPostsType = {
   ready: boolean;
   count: number;
 };
 export const MainContent: React.FC = () => {
+  let windowContext: any = window.window;
   const currentlyLoggedInUser = React.useContext(currentlyLoggedInUserContext);
   const firstBatch = React.useRef<boolean>(true);
   const divListRef = React.useRef<HTMLDivElement | null>(null);
@@ -171,6 +171,7 @@ export const MainContent: React.FC = () => {
   }, [rawPosts]);
   // const currentUser = React.useContext(currentlyLoggedInUserContext);
   const loadFunc = async (): Promise<void> => {
+    console.log("load");
     const ref = collection(db, "Posts");
     const q = query(
       ref,
@@ -192,8 +193,7 @@ export const MainContent: React.FC = () => {
       });
     });
   };
-  return <Head>{/* <title key={"title"}>{title}</title> */}</Head> &&
-    isLaoding ? (
+  return isLaoding ? (
     <div className="MainContentGrid">
       <div
         style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}
@@ -203,10 +203,6 @@ export const MainContent: React.FC = () => {
     </div>
   ) : (
     <>
-      {/* <ShowUserThatWeAreChaningSingInSystem
-        wasShown={localStorageinfo}
-        userObject={currentlyLoggedInUser}
-      /> */}
       <BackTop duration={300} />
       {newPostsAreReady.ready && (
         <div className={`NewPostsAreReadyMobile`}>
@@ -232,6 +228,7 @@ export const MainContent: React.FC = () => {
           }
           hasMore={lastDoc !== undefined}
           next={loadFunc}
+          inverse={false}
           dataLength={rawPosts.length}
           endMessage={
             <div style={{ display: "flex", justifyContent: "center" }}>

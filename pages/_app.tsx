@@ -60,7 +60,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const getDataAboutUser = async (UID: string) => {
     const uRef = collection(db, "Users");
     const q = query(uRef, where("UID", "==", `${UID}`));
-
     const userDoc = await getDocs(q);
     userDoc.forEach((item) => {
       const obj = item.data() as UserData;
