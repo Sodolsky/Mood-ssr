@@ -209,44 +209,42 @@ export const MainContent: React.FC = () => {
           {newPostsAreReady.count} New Posts
         </div>
       )}
-      <div className="MainContentGrid">
-        <Navigation />
-        <CreatePost />
-        <InfiniteScroll
-          scrollThreshold={0.7}
-          style={{ overflow: "hidden" }}
-          loader={
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                width: "100vw",
-              }}
-            >
-              <LoadingRing colorVariant={"white"} />
-            </div>
-          }
-          hasMore={lastDoc !== undefined}
-          next={loadFunc}
-          inverse={false}
-          dataLength={rawPosts.length}
-          endMessage={
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              Youve seen all the posts :D
-            </div>
-          }
-        >
-          <div className="divList" ref={divListRef}>
-            {newPostsAreReady.ready && (
-              <button className="LoadNewPostsButton" onClick={showNewPosts}>
-                Load {newPostsAreReady.count} new Posts
-              </button>
-            )}
-            {Posts}
+      <CreatePost />
+      <InfiniteScroll
+        scrollThreshold={0.7}
+        style={{ overflow: "hidden" }}
+        loader={
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: "100vw",
+            }}
+          >
+            <LoadingRing colorVariant={"white"} />
           </div>
-        </InfiniteScroll>
-        );
-      </div>
+        }
+        hasMore={lastDoc !== undefined}
+        next={loadFunc}
+        inverse={false}
+        dataLength={rawPosts.length}
+        scrollableTarget={this}
+        endMessage={
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            Youve seen all the posts :D
+          </div>
+        }
+      >
+        <div className="divList" ref={divListRef} id="divList">
+          {newPostsAreReady.ready && (
+            <button className="LoadNewPostsButton" onClick={showNewPosts}>
+              Load {newPostsAreReady.count} new Posts
+            </button>
+          )}
+          {Posts}
+        </div>
+      </InfiniteScroll>
+      );
     </>
   );
 };

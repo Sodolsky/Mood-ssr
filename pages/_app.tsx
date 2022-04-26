@@ -101,9 +101,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
   return (
     <>
-      <Head>
-        <title key={"title"}>MOOD TRUP</title>
-      </Head>
+      <Head>{<title>MOOD TRUP</title>}</Head>
       <setCurrentlyLoggedInUserContext.Provider
         value={setCurrentlyLoggedInUser}
       >
@@ -113,7 +111,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           >
             <allUsersArrayContext.Provider value={usersLoginArray.current}>
               <authProcessStatusContext.Provider value={authIsBeingProccesed}>
-                <Header />
                 <Component {...pageProps} />
               </authProcessStatusContext.Provider>
             </allUsersArrayContext.Provider>
