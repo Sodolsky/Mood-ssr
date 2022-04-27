@@ -80,7 +80,7 @@ export const CommentComponent: React.FC<CommentInterface> = (props) => {
       {createElement(isLiked ? LikeFilled : LikeOutlined)}
       {likeCount}
     </span>,
-    <span key={1}>Reply To</span>,
+    // <span key={1}>Reply To</span>,
   ];
   return (
     <>

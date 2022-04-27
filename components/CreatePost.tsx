@@ -21,7 +21,7 @@ import { LoadingRing } from "./LoadingRing";
 import commentSVG from "../public/Comment.svg";
 import { useMediaQuery } from "@react-hook/media-query";
 import { checkIfTextHaveHashtags } from "./likeFunctions";
-import { uniq } from "lodash";
+import { create, uniq } from "lodash";
 import moment from "moment";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import Image from "next/image";
@@ -49,6 +49,7 @@ export interface CommentInterface {
   parentPostRef?: string;
 }
 export const CreatePost: React.FC = () => {
+  const createPostRef = React.useRef<HTMLDivElement | null>(null);
   const [addPostIconClicked, setAddPostIconClicked] = useState<boolean>(false);
   const [newPostText, setNewPostText] = useState<string>("");
   const [userImage, setUserImage] = useState<File>();
@@ -129,62 +130,64 @@ export const CreatePost: React.FC = () => {
     isLinkChoosen ? setPostType("video") : setPostType("photo");
   }, [isLinkChoosen]);
   useEffect(() => {
-    document.onpaste = function (event) {
-      if (!addPostIconClicked) return;
-      if (event.clipboardData) {
-        var items = event.clipboardData.items;
-        for (var index in items) {
-          var item = items[index];
-          if (item.kind === "string") {
-            item.getAsString((mess) => {
-              if (validateYouTubeUrl(mess)) {
-                if (document.activeElement !== textareaRef.current) {
-                  setIfLinkIsChoosen(true);
-                  setYTLink(mess);
+    if (createPostRef.current) {
+      createPostRef.current.onpaste = function (event) {
+        if (!addPostIconClicked) return;
+        if (event.clipboardData) {
+          var items = event.clipboardData.items;
+          for (var index in items) {
+            var item = items[index];
+            if (item.kind === "string") {
+              item.getAsString((mess) => {
+                if (validateYouTubeUrl(mess)) {
+                  if (document.activeElement !== textareaRef.current) {
+                    setIfLinkIsChoosen(true);
+                    setYTLink(mess);
+                  }
                 }
-              }
-            });
-          }
-          if (item.kind === "file") {
-            var blob = item.getAsFile();
-            var reader = new FileReader();
-            reader.onload = function (event) {
-              if (event.target) {
-                // console.log(event.target.result?.toString()); // data url!
-              }
-            };
-            if (blob) {
-              if (
-                blob.type === "video/mp4" ||
-                blob.type === "video/ogg" ||
-                blob.type === "video/webm"
-              ) {
-                if (blob.size > 40000000) {
-                  //Normal value 800000000
-                  return alert(
-                    "Your File is bigger than 40MB Try to paste smaller one"
-                  );
+              });
+            }
+            if (item.kind === "file") {
+              var blob = item.getAsFile();
+              var reader = new FileReader();
+              reader.onload = function (event) {
+                if (event.target) {
+                  // console.log(event.target.result?.toString()); // data url!
+                }
+              };
+              if (blob) {
+                if (
+                  blob.type === "video/mp4" ||
+                  blob.type === "video/ogg" ||
+                  blob.type === "video/webm"
+                ) {
+                  if (blob.size > 40000000) {
+                    //Normal value 800000000
+                    return alert(
+                      "Your File is bigger than 40MB Try to paste smaller one"
+                    );
+                  } else {
+                  }
                 } else {
-                }
-              } else {
-                if (blob.size > 15000000) {
-                  return alert(
-                    "Your File is bigger than 15MB Try to paste smaller one"
-                  );
-                }
-                setRawImageBlob(blob);
+                  if (blob.size > 15000000) {
+                    return alert(
+                      "Your File is bigger than 15MB Try to paste smaller one"
+                    );
+                  }
+                  setRawImageBlob(blob);
 
-                checkFileType(blob);
-                setUserImage(blob);
-                const data = URL.createObjectURL(blob);
-                setImgPrevievSrc(data);
-                reader.readAsDataURL(blob);
+                  checkFileType(blob);
+                  setUserImage(blob);
+                  const data = URL.createObjectURL(blob);
+                  setImgPrevievSrc(data);
+                  reader.readAsDataURL(blob);
+                }
               }
             }
           }
         }
-      }
-    };
+      };
+    }
   }, [addPostIconClicked]);
   //When User decides to dismiss his current Post we need to reset everything
   const dismissPost = (): void => {
@@ -245,7 +248,7 @@ export const CreatePost: React.FC = () => {
   return (
     <>
       {addPostIconClicked ? (
-        <div className="createPost">
+        <div className="createPost" ref={createPostRef}>
           <div className="NewPostBody">
             <TextareAutosize
               autoFocus={true}

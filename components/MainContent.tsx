@@ -1,6 +1,5 @@
 import * as React from "react";
 import { CreatePost } from "./CreatePost";
-import { Navigation } from "./Navigation";
 import { Post, PostPropsInteface } from "./Post";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -30,7 +29,6 @@ type incomingPostsType = {
   count: number;
 };
 export const MainContent: React.FC = () => {
-  let windowContext: any = window.window;
   const currentlyLoggedInUser = React.useContext(currentlyLoggedInUserContext);
   const firstBatch = React.useRef<boolean>(true);
   const divListRef = React.useRef<HTMLDivElement | null>(null);

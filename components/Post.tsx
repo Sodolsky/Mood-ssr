@@ -43,112 +43,10 @@ import AddImageToPostIcon from "../public/insertpic.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { v4 } from "uuid";
-const bottomStyle: React.CSSProperties = {
-  borderTop: "black 1px solid",
-};
-export interface UserForFirebase {
-  Login: string;
-  Avatar: string;
-}
-export interface PostPropsInteface {
-  postType: string;
-  userThatPostedThis: UserForFirebase;
-  text: string;
-  fileType?: string;
-  img?: string;
-  YTLink?: string;
-  likeCount: number;
-  hashtags: string[];
-  poepleThatLiked: UserForFirebase[];
-  date: string;
-  URL: string;
-  hallOfFame: boolean;
-}
-export const downloadImageIfPostHasOne = async (key: string) => {
-  const pathRef = ref(storageRef, "PostImages");
-  const fileRef = ref(pathRef, `${key}`);
-  let returnImgURL: string = "";
-  await getDownloadURL(fileRef).then((downloadedImage) => {
-    returnImgURL = downloadedImage;
-  });
-  return returnImgURL;
-};
-export const addCommentToDataBase = async (
-  key: string,
-  text: string,
-  date: Date,
-  userThatAddedComment: UserData,
-  userThatPostedLogin: string,
-  postId: string,
-  img: Blob | File | null,
-  setCommentIsBeingAdded: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-  let imageUrl: string = "";
-  if (img) {
-    const pathRef = ref(storageRef, "CommentImages");
-    const fileRef = ref(pathRef, `${v4()}`);
-    await uploadBytes(fileRef, img);
-    await getDownloadURL(fileRef).then((x) => (imageUrl = x));
-  }
-  const postRef = collection(db, "Posts", `${key}`, "comments");
-  const userRef = doc(db, "Users", `${userThatAddedComment.Login}`);
-  const userRefNotification = doc(
-    db,
-    "Notifications",
-    `${userThatPostedLogin}`
-  );
-  const newCommentObj: CommentInterface = {
-    userThatAddedComment: {
-      Login: userThatAddedComment.Login as string,
-      Avatar: userThatAddedComment.Avatar as string,
-    },
-    content: text,
-    date: date,
-    usersThatLikedThisComment: [],
-    img: imageUrl,
-  };
-  const userData = await getDoc(userRef);
-  const userDataObject = userData.data() as UserData;
-  const commentsRefArray = userDataObject.commentsRef;
-  if (userThatPostedLogin !== userThatAddedComment.Login) {
-    const NotificationObj: NotificationInterface = {
-      postId: postId,
-      type: "comment",
-      whoDid: userThatAddedComment.Login as string,
-      date: moment(new Date()).unix(),
-    };
-    await updateDoc(userRefNotification, {
-      Notifications: arrayUnion(NotificationObj),
-    });
-  }
-  await addDoc(postRef, newCommentObj).then(async (doc) => {
-    setCommentIsBeingAdded(false);
-    if (commentsRefArray) {
-      commentsRefArray.push(doc.path);
-      await updateDoc(userData.ref, {
-        commentsRef: commentsRefArray,
-      });
-    }
-  });
-};
-const showSuccessMesssage = (
-  type: "Link" | "Pin" | "HOF",
-  HOFtype?: "Added" | "Removed"
-) => {
-  type === "Link" && message.success("Link was Copied to your clipboard 👍", 2);
-  type === "Pin" && message.success("Post was selected as Pinned 👍", 2);
-  type === "HOF" &&
-    message.success(
-      `Post was ${
-        HOFtype === "Added"
-          ? "added to Hall Of Fame"
-          : "removed from Hall Of Fame"
-      } 👍`,
-      2
-    );
-};
+
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
+  const postRef = React.useRef<HTMLDivElement | null>(null);
   //We are defining date as another variable to avoid name collison when passing props to comment element
   const parentDate = props.date;
 
@@ -235,6 +133,45 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (postRef.current) {
+      postRef.current.onpaste = function (event) {
+        if (!addingCommentSelected) return;
+        if (event.clipboardData) {
+          var items = event.clipboardData.items;
+          for (var index in items) {
+            var item = items[index];
+            if (item.kind === "file") {
+              var blob = item.getAsFile();
+              var reader = new FileReader();
+              reader.onload = function (event) {
+                if (event.target) {
+                  // console.log(event.target.result?.toString()); // data url!
+                }
+              };
+              if (blob) {
+                if (blob.type.split("/")[0] !== "image")
+                  return alert(
+                    "We are sorry your current file format is not supported"
+                  );
+                if (blob.size > 15000000) {
+                  return alert(
+                    "Your File is bigger than 15MB Try to paste smaller one"
+                  );
+                }
+                const data = URL.createObjectURL(blob);
+                changeCommentVal((prev) => ({
+                  ...prev,
+                  imgBlob: blob,
+                  img: data,
+                }));
+              }
+            }
+          }
+        }
+      };
+    }
+  }, [addingCommentSelected]);
   const pinPost = async (postDate: string, userLogin: string) => {
     const userRef = doc(db, "Users", userLogin);
     try {
@@ -268,8 +205,8 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   return !postData ? (
     <SkeletonPost />
   ) : (
-    <div className="ListWrapper">
-      <div className={`Post ${postData.hallOfFame && "GoldenBorder"}`}>
+    <div className="ListWrapper" ref={postRef}>
+      <div className={`Post ${postData.hallOfFame ? "GoldenBorder" : ""}`}>
         <div className="PostHeader">
           <Accordion className="LinkToPost">
             <Accordion.Item eventKey="0">
@@ -528,6 +465,111 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
       </div>
     </div>
   );
+};
+//? Utility Functions and interfaces
+const bottomStyle: React.CSSProperties = {
+  borderTop: "black 1px solid",
+};
+export interface UserForFirebase {
+  Login: string;
+  Avatar: string;
+}
+export interface PostPropsInteface {
+  postType: string;
+  userThatPostedThis: UserForFirebase;
+  text: string;
+  fileType?: string;
+  img?: string;
+  YTLink?: string;
+  likeCount: number;
+  hashtags: string[];
+  poepleThatLiked: UserForFirebase[];
+  date: string;
+  URL: string;
+  hallOfFame: boolean;
+}
+export const downloadImageIfPostHasOne = async (key: string) => {
+  const pathRef = ref(storageRef, "PostImages");
+  const fileRef = ref(pathRef, `${key}`);
+  let returnImgURL: string = "";
+  await getDownloadURL(fileRef).then((downloadedImage) => {
+    returnImgURL = downloadedImage;
+  });
+  return returnImgURL;
+};
+export const addCommentToDataBase = async (
+  key: string,
+  text: string,
+  date: Date,
+  userThatAddedComment: UserData,
+  userThatPostedLogin: string,
+  postId: string,
+  img: Blob | File | null,
+  setCommentIsBeingAdded: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  let imageUrl: string = "";
+  if (img) {
+    const pathRef = ref(storageRef, "CommentImages");
+    const fileRef = ref(pathRef, `${v4()}`);
+    await uploadBytes(fileRef, img);
+    await getDownloadURL(fileRef).then((x) => (imageUrl = x));
+  }
+  const postRef = collection(db, "Posts", `${key}`, "comments");
+  const userRef = doc(db, "Users", `${userThatAddedComment.Login}`);
+  const userRefNotification = doc(
+    db,
+    "Notifications",
+    `${userThatPostedLogin}`
+  );
+  const newCommentObj: CommentInterface = {
+    userThatAddedComment: {
+      Login: userThatAddedComment.Login as string,
+      Avatar: userThatAddedComment.Avatar as string,
+    },
+    content: text,
+    date: date,
+    usersThatLikedThisComment: [],
+    img: imageUrl,
+  };
+  const userData = await getDoc(userRef);
+  const userDataObject = userData.data() as UserData;
+  const commentsRefArray = userDataObject.commentsRef;
+  if (userThatPostedLogin !== userThatAddedComment.Login) {
+    const NotificationObj: NotificationInterface = {
+      postId: postId,
+      type: "comment",
+      whoDid: userThatAddedComment.Login as string,
+      date: moment(new Date()).unix(),
+    };
+    await updateDoc(userRefNotification, {
+      Notifications: arrayUnion(NotificationObj),
+    });
+  }
+  await addDoc(postRef, newCommentObj).then(async (doc) => {
+    setCommentIsBeingAdded(false);
+    if (commentsRefArray) {
+      commentsRefArray.push(doc.path);
+      await updateDoc(userData.ref, {
+        commentsRef: commentsRefArray,
+      });
+    }
+  });
+};
+const showSuccessMesssage = (
+  type: "Link" | "Pin" | "HOF",
+  HOFtype?: "Added" | "Removed"
+) => {
+  type === "Link" && message.success("Link was Copied to your clipboard 👍", 2);
+  type === "Pin" && message.success("Post was selected as Pinned 👍", 2);
+  type === "HOF" &&
+    message.success(
+      `Post was ${
+        HOFtype === "Added"
+          ? "added to Hall Of Fame"
+          : "removed from Hall Of Fame"
+      } 👍`,
+      2
+    );
 };
 export const handleHallOfFameChange = async (
   post: Omit<PostPropsInteface, "date">,
