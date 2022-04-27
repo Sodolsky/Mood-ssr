@@ -1,5 +1,5 @@
 import React, { createElement, useContext, useRef, useState } from "react";
-import { Comment, Avatar } from "antd";
+import { Comment, Avatar, Image } from "antd";
 import { CommentInterface } from "./CreatePost";
 import moment from "moment";
 import { isEqual } from "lodash";
@@ -114,7 +114,7 @@ export const CommentComponent: React.FC<CommentInterface> = (props) => {
         content={
           <div className="singleComment">
             <span>{content}</span>
-            {img !== "" && <img src={img} alt="Comment image" />}
+            {img !== "" && <Image src={img} alt="Comment image" />}
           </div>
         }
       />
