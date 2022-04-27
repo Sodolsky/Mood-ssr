@@ -25,7 +25,7 @@ import moment from "moment";
 import { LikePost } from "./LikePost";
 import { LazyLoadedImage } from "./LazyLoadedImage";
 import Link from "next/link";
-import { message, Spin } from "antd";
+import { Input, InputRef, message, Spin } from "antd";
 import SkeletonPost from "./SkeletonPost";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import { NotificationInterface } from "../utils/interfaces";
@@ -47,6 +47,8 @@ import { v4 } from "uuid";
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
   const postRef = React.useRef<HTMLDivElement | null>(null);
+  const commentTextInputRef = React.useRef<InputRef | null>(null);
+  const submitCommentButtonRef = React.useRef<HTMLButtonElement | null>(null);
   //We are defining date as another variable to avoid name collison when passing props to comment element
   const parentDate = props.date;
 
@@ -170,6 +172,16 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
           }
         }
       };
+    }
+    if (commentTextInputRef.current && submitCommentButtonRef.current) {
+      commentTextInputRef.current.input?.addEventListener(
+        "keydown",
+        (event) => {
+          if (event.key === "Enter") {
+            submitCommentButtonRef.current?.click();
+          }
+        }
+      );
     }
   }, [addingCommentSelected]);
   const pinPost = async (postDate: string, userLogin: string) => {
@@ -348,11 +360,12 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
         >
           {!addingCommentSelected ? null : (
             <div className="addComment" key={postData.URL}>
-              <input
+              <Input
                 type="text"
                 value={commentVal.text}
                 onChange={handleChange}
                 placeholder="Your comment"
+                ref={commentTextInputRef}
               />
               {commentIsBeingAdded ? (
                 <Spin />
@@ -390,6 +403,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                 />
               )}
               <button
+                ref={submitCommentButtonRef}
                 onClick={() => {
                   setCommentIsBeingAdded(true);
                   addCommentToDataBase(
