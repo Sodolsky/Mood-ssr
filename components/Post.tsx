@@ -253,6 +253,8 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   };
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0];
+    if (file.type.split("/")[0] !== "image")
+      return alert("We are sorry your current file format is not supported");
     if (file.size > 15000000) {
       return alert("Your File is bigger than 15MB Try to upload smaller one");
     } else {
@@ -408,7 +410,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
           style={commentCount > 0 || addingCommentSelected ? bottomStyle : {}}
         >
           {!addingCommentSelected ? null : (
-            <div className="addComment">
+            <div className="addComment" key={postData.URL}>
               <input
                 type="text"
                 value={commentVal.text}
@@ -419,7 +421,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                 <Spin />
               ) : commentVal.img === "" ? (
                 <>
-                  <label htmlFor="comment-image-uploader">
+                  <label htmlFor={`comment-image-uploader-${postData.URL}`}>
                     <Image
                       src={AddImageToPostIcon}
                       alt="Add Image to Post"
@@ -430,7 +432,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                   </label>
                   <input
                     type="file"
-                    id="comment-image-uploader"
+                    id={`comment-image-uploader-${postData.URL}`}
                     name="Img"
                     accept="image/png, image/gif, image/jpeg "
                     style={{ display: "none" }}

@@ -130,6 +130,7 @@ export const CreatePost: React.FC = () => {
   }, [isLinkChoosen]);
   useEffect(() => {
     document.onpaste = function (event) {
+      if (!addPostIconClicked) return;
       if (event.clipboardData) {
         var items = event.clipboardData.items;
         for (var index in items) {

@@ -159,6 +159,7 @@ $black: #2f2f2f;
         .userImageContainer {
           width: 100%;
           position: relative;
+          @include FlexCenterHV();
           span {
             position: unset !important;
           }
