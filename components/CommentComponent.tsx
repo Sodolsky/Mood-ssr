@@ -114,7 +114,7 @@ export const CommentComponent: React.FC<CommentInterface> = (props) => {
         content={
           <div className="singleComment">
             <span>{content}</span>
-            {img !== "" && <Image src={img} alt="Comment image" />}
+            {img && img !== "" && <Image src={img} alt="Comment image" />}
           </div>
         }
       />

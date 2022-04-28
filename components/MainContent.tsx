@@ -23,6 +23,8 @@ import { isEqual } from "lodash";
 import { usePageVisibility } from "./hooks/usePageVisibility";
 import { getElementCountBetween2ElementsInArray } from "./likeFunctions";
 import nProgress from "nprogress";
+import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 
 type incomingPostsType = {
   ready: boolean;
@@ -30,6 +32,7 @@ type incomingPostsType = {
 };
 export const MainContent: React.FC = () => {
   const currentlyLoggedInUser = React.useContext(currentlyLoggedInUserContext);
+  const [title, setTitle] = useState<string>("MOOD");
   const firstBatch = React.useRef<boolean>(true);
   const divListRef = React.useRef<HTMLDivElement | null>(null);
   const [lastDoc, setLastDoc] = useState<null | DocumentData>(null);
@@ -48,10 +51,10 @@ export const MainContent: React.FC = () => {
   useEffect(() => {
     if (visible) {
       if (newPostsAreReady.count === 0) {
-        document.title = `MOOD`;
+        setTitle(`MOOD`);
       } else {
         const count = newPostsAreReady.count;
-        document.title = `MOOD (${count}) New Posts`;
+        setTitle(`MOOD (${count}) New Posts`);
       }
       lastPostSeen.current = rawPosts[0];
     } else {
@@ -64,29 +67,29 @@ export const MainContent: React.FC = () => {
           //Handle Normal logic when there are no new Posts in Cache.
           if (newPostsAreReady.count === 0) {
             if (diff === "n") {
-              document.title = `MOOD (4+) New Posts`;
+              setTitle(`MOOD (4+) New Posts`);
             } else {
               //We need to check if post that is being added is user post if not we handle normal logic else we dont change the title
               diff === 0
-                ? (document.title = `MOOD`)
+                ? setTitle(`MOOD`)
                 : diff === 1
                 ? rawPosts[0].userThatPostedThis.Login ===
                   currentlyLoggedInUser.Login
-                  ? (document.title = `MOOD`)
-                  : (document.title = `MOOD (${diff}) New Posts`)
-                : (document.title = `MOOD (${diff}) New Posts`);
+                  ? setTitle(`MOOD`)
+                  : setTitle(`MOOD (${diff}) New Posts`)
+                : setTitle(`MOOD (${diff}) New Posts`);
             }
             //Handle logic when there are Posts in cache and normal Posts Unseen
           } else if (diff !== "n") {
             const Total = newPostsAreReady.count + diff;
-            document.title = `MOOD (${Total}) New Posts`;
+            setTitle(`MOOD (${Total}) New Posts`);
             // new Notification("2 new Posts are Rdy");
           } else {
-            document.title = `Mood (4+) New Posts`;
+            setTitle(`Mood (4+) New Posts`);
           }
         } else {
           if (newPostsAreReady.count !== 0) {
-            document.title = `MOOD (${newPostsAreReady.count}) New Posts`;
+            setTitle(`MOOD (${newPostsAreReady.count}) New Posts`);
           }
         }
       }
@@ -200,6 +203,10 @@ export const MainContent: React.FC = () => {
     </div>
   ) : (
     <>
+      <NextSeo
+        title={title}
+        description="Share your current mood with your friends"
+      />
       <BackTop duration={300} />
       {newPostsAreReady.ready && (
         <div className={`NewPostsAreReadyMobile`}>
