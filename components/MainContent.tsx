@@ -205,7 +205,7 @@ export const MainContent: React.FC = () => {
     <>
       <NextSeo
         title={title}
-        description="Share your current mood with your friends"
+        description="Share your current mood with your friends and family"
       />
       <BackTop duration={300} />
       {newPostsAreReady.ready && (
