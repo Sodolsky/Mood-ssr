@@ -235,7 +235,7 @@ export const MainContent: React.FC = () => {
         scrollableTarget={this}
         endMessage={
           <div style={{ display: "flex", justifyContent: "center" }}>
-            Youve seen all the posts :D
+            All the posts have been displayed
           </div>
         }
       >
