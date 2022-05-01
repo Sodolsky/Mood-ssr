@@ -10,7 +10,7 @@ import { UserData } from "../../../utils/interfaces";
 const UserProfilePage: NextPage<UserProfileProps> = ({ userData }) => {
   const { authStatus } = useLoginRedirect();
 
-  return authStatus ? (
+  return (
     <>
       <NextSeo
         title={`${userData.Login}`}
@@ -31,11 +31,15 @@ const UserProfilePage: NextPage<UserProfileProps> = ({ userData }) => {
           site_name: "MOOD",
         }}
       />
-      <UIWrapper>
-        <UserProfile userData={userData} />
-      </UIWrapper>
+      {authStatus ? (
+        <>
+          <UIWrapper>
+            <UserProfile userData={userData} />
+          </UIWrapper>
+        </>
+      ) : null}
     </>
-  ) : null;
+  );
 };
 export const getServerSideProps: GetServerSideProps<UserProfileProps> = async ({
   params,
