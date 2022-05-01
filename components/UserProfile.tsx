@@ -21,7 +21,7 @@ import No from "../public/no.png";
 import ChangeBackgroundIcon from "../public/backgroundicon.png";
 import Dropzone, { useDropzone } from "react-dropzone";
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
-import { Dropdown, Empty, Menu, message, Switch } from "antd";
+import { Dropdown, Menu, message, Switch } from "antd";
 import Link from "next/link";
 
 import TextareAutosize from "react-textarea-autosize";
@@ -106,10 +106,12 @@ const uploadUserImageToStorageBucket = async (
   const fileRef = ref(pathRef, `${key}`);
   await uploadBytes(fileRef, img);
 };
-const UserProfile: React.FC = () => {
+export interface UserProfileProps {
+  userData: UserData;
+}
+const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
   const router = useRouter();
   const [isContentLoaded, setIsContentLoaded] = useState<boolean>(false);
-  const [isUserValid, setIfUserIsValid] = useState<boolean>(true);
   const [displayBGImage, setDisplayBGImage] = useState<boolean>(true);
   const [shouldBackgroundCover, setshouldBackgroundCover] =
     useState<boolean>(false);
@@ -120,7 +122,7 @@ const UserProfile: React.FC = () => {
   const setCurrentlyLoggedInUser = useContext(setCurrentlyLoggedInUserContext);
   const [highlightedPost, sethighlightedPost] =
     useState<PostPropsInteface | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [_, setUserData] = useState<UserData | null>(null);
   const [userPrefferedPost, setUserPrefferedPost] =
     useState<userPrefferedPostType | null>(null);
   const profilePathLogin = router.query.login as string;
@@ -196,27 +198,13 @@ const UserProfile: React.FC = () => {
   });
   useEffect(() => {
     //Function to get UserProfile data invoked on mount
-    const getUserProfileData = async (profilePath: string) => {
-      const ref = doc(db, "Users", `${profilePath}`);
-      nProgress.start();
-      const userDataFeched = await getDoc(ref);
-      const userobj = userDataFeched.data() as UserData;
-      if (!userobj) {
-        setIfUserIsValid(false);
-        return;
-      }
-      const userPrefferedPost = userobj.userPrefferedPost;
-      setUserData(userobj as UserData);
-      setUserPrefferedPost(userPrefferedPost as userPrefferedPostType);
-      setUserDescription(userobj.Description as string);
-      setUserAvatar(userobj.Avatar as string);
-      nProgress.done();
-    };
-    // console.log(profilePathLogin);
-    getUserProfileData(profilePathLogin);
+    setUserPrefferedPost(userData.userPrefferedPost as userPrefferedPostType);
+    setUserDescription(userData.Description as string);
+    setUserAvatar(userData.Avatar as string);
+    nProgress.done();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.pathname]);
+  }, [router.query]);
   useEffect(() => {
     if (userData?.BackgroundImage !== "") {
       const img = new Image();
@@ -515,16 +503,9 @@ const UserProfile: React.FC = () => {
         </div>
       </div>
     </>
-  ) : isUserValid ? (
+  ) : (
     <div className="LoaderBox">
       <LoadingRing colorVariant={"white"} />
-    </div>
-  ) : (
-    <div className="LoaderBox" style={{ marginTop: "1rem", color: "white" }}>
-      <Empty
-        style={{ fontSize: 20 }}
-        description="This User doesn't exist :("
-      />
     </div>
   );
 };

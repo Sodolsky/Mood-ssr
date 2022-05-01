@@ -34,7 +34,7 @@ const uploadUserImageToStorageBucket = async (
   const pathRef = ref(storageRef, "PostImages");
   const fileRef = ref(pathRef, `${key}`);
   await uploadBytes(fileRef, img);
-  await getDownloadURL(fileRef).then((x) => console.log(x));
+  await getDownloadURL(fileRef);
 };
 export interface CommentInterface {
   userThatAddedComment: {
