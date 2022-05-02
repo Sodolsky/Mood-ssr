@@ -9,7 +9,6 @@ import { UserData } from "../../../utils/interfaces";
 
 const UserProfilePage: NextPage<UserProfileProps> = ({ userData }) => {
   const { authStatus } = useLoginRedirect();
-
   return (
     <>
       <NextSeo

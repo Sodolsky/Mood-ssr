@@ -20,7 +20,6 @@ import {
   UserData,
   userLogInContext,
 } from "../utils/interfaces";
-import { Header } from "../components/Header";
 import "../components/styles.scss";
 import "../components/Styles/AddPostIcon.scss";
 import "../components/Styles/BackArrow.scss";
@@ -35,6 +34,9 @@ import "../components/Styles/NotFound.scss";
 import "../components/Styles/RankingComponent.scss";
 import "../components/Styles/UserProfile.scss";
 import "../components/Styles/tippyStyles.scss";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+config.autoAddCss = false;
 import Head from "next/head";
 function MyApp({ Component, pageProps }: AppProps) {
   const [isUserLoggedIn, setIfUserIsLoggedIn] = useState<boolean | undefined>(
