@@ -107,9 +107,9 @@ const uploadUserImageToStorageBucket = async (
   await uploadBytes(fileRef, img);
 };
 export interface UserProfileProps {
-  userData: UserData;
+  userDataFromNextJS: UserData;
 }
-const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ userDataFromNextJS }) => {
   const router = useRouter();
   const [isContentLoaded, setIsContentLoaded] = useState<boolean>(false);
   const [displayBGImage, setDisplayBGImage] = useState<boolean>(true);
@@ -122,7 +122,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
   const setCurrentlyLoggedInUser = useContext(setCurrentlyLoggedInUserContext);
   const [highlightedPost, sethighlightedPost] =
     useState<PostPropsInteface | null>(null);
-  const [_, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [userPrefferedPost, setUserPrefferedPost] =
     useState<userPrefferedPostType | null>(null);
   const profilePathLogin = router.query.login as string;
@@ -198,9 +198,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
   });
   useEffect(() => {
     //Function to get UserProfile data invoked on mount
-    setUserPrefferedPost(userData.userPrefferedPost as userPrefferedPostType);
-    setUserDescription(userData.Description as string);
-    setUserAvatar(userData.Avatar as string);
+    setUserData(userDataFromNextJS);
+    setUserPrefferedPost(
+      userDataFromNextJS.userPrefferedPost as userPrefferedPostType
+    );
+    setUserDescription(userDataFromNextJS.Description as string);
+    setUserAvatar(userDataFromNextJS.Avatar as string);
     nProgress.done();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

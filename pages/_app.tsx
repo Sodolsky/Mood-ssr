@@ -34,11 +34,25 @@ import "../components/Styles/NotFound.scss";
 import "../components/Styles/RankingComponent.scss";
 import "../components/Styles/UserProfile.scss";
 import "../components/Styles/tippyStyles.scss";
+import "nprogress/nprogress.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
 import Head from "next/head";
+import nProgress from "nprogress";
+import { Router } from "next/router";
 function MyApp({ Component, pageProps }: AppProps) {
+  Router.events.on("routeChangeStart", () => {
+    nProgress.start();
+  });
+
+  Router.events.on("routeChangeComplete", () => {
+    nProgress.done();
+  });
+
+  Router.events.on("routeChangeError", () => {
+    nProgress.done();
+  });
   const [isUserLoggedIn, setIfUserIsLoggedIn] = useState<boolean | undefined>(
     false
   );
