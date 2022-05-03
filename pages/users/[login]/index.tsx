@@ -82,6 +82,7 @@ export const getStaticProps: GetStaticProps<UserProfileProps> = async ({
       props: {
         userDataFromNextJS: userData,
       },
+      revalidate: 1,
     };
   } catch (error) {
     return {
