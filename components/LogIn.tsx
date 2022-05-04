@@ -121,15 +121,15 @@ export const LogIn: React.FC = () => {
                 value={userData?.Password}
               />
               <div className="buttonFlexWrap">
-                <button onClick={() => setIfUserIsSigningUp(true)}>
-                  Sign Up
-                </button>
                 <button
                   className="submitButton"
                   id="Submit"
                   onClick={handleSubmit}
                 >
                   Log in
+                </button>
+                <button onClick={() => setIfUserIsSigningUp(true)}>
+                  Sign Up
                 </button>
               </div>
             </form>
