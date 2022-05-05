@@ -25,7 +25,7 @@ import moment from "moment";
 import { LikePost } from "./LikePost";
 import { LazyLoadedImage } from "./LazyLoadedImage";
 import Link from "next/link";
-import { Input, InputRef, message, Spin } from "antd";
+import { Image, Input, InputRef, message, Spin } from "antd";
 import SkeletonPost from "./SkeletonPost";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import { NotificationInterface } from "../utils/interfaces";
@@ -37,13 +37,11 @@ import StarIcon from "../public/star.png";
 import PinIcon from "../public/pin.png";
 import LinkIcon from "../public/link.png";
 import CommentIcon from "../public/Comment.svg";
-import Image from "next/image";
 import { has } from "lodash";
 import AddImageToPostIcon from "../public/insertpic.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { v4 } from "uuid";
-
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
   const postRef = React.useRef<HTMLDivElement | null>(null);
@@ -307,13 +305,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
             {postData?.postType === "photo" ? (
               <div className="userImageContainer">
                 {postData?.fileType === "image" ? (
-                  <Image
-                    src={postData?.img as string}
-                    alt={"Post Photo"}
-                    layout="fill"
-                    className="image"
-                    priority={true}
-                  />
+                  <Image src={postData?.img as string} alt={"Post Photo"} />
                 ) : (
                   <video controls src={postData?.img} />
                 )}
