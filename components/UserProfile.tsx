@@ -5,6 +5,7 @@ import {
   getDocs,
   limit,
   updateDoc,
+  writeBatch,
 } from "@firebase/firestore";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
@@ -91,12 +92,17 @@ const applyChanges = async (
     await uploadBytes(fileRef, Avatar).then((snapshot) => {});
     const uploadedFile = await getDownloadURL(fileRef);
     nProgress.inc();
-    await updateDoc(userRef, {
+    const newBatch = writeBatch(db);
+    newBatch.update(userRef, {
       BackgroundColor: color,
       userPrefferedPost: userPrefferedPost,
       Description: Description,
       Avatar: uploadedFile,
     });
+    newBatch.update(doc(db, "Utility", "UserAvatars"), {
+      [user]: uploadedFile,
+    });
+    await newBatch.commit();
     nProgress.done();
   } else {
     nProgress.start();

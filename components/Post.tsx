@@ -70,6 +70,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const [addingCommentSelected, setIfAddingCommentIsSelected] =
     useState<boolean>(false);
   const firstRender = React.useRef<boolean>(true);
+
   // Here we are fetching the comments data and setting up top comment
   useEffect(() => {
     let PostSubscription = () => {};

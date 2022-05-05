@@ -521,15 +521,15 @@ $black: #2f2f2f;
     width: 40%;
     @include PostSchema();
     opacity: 0;
-
-    .GoldenBorder {
-      border-color: gold !important;
-    }
     .Post {
       transition: border 0.5s;
       background-color: #fefefe;
       border: 3px black solid;
       border-radius: 1rem;
+    }
+
+    .GoldenBorder {
+      border-color: gold !important;
     }
   }
 }

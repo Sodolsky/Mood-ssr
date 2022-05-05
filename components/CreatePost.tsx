@@ -14,14 +14,20 @@ import { AddPostIcon } from "./AddPostIcon";
 import { currentlyLoggedInUserContext, UserData } from "../utils/interfaces";
 import { useContext } from "react";
 import { db, storageRef } from "../firebase/firebase";
-import { doc, setDoc, Timestamp, updateDoc } from "@firebase/firestore";
+import {
+  doc,
+  setDoc,
+  Timestamp,
+  updateDoc,
+  writeBatch,
+} from "@firebase/firestore";
 import { ref, uploadBytes } from "@firebase/storage";
 import { downloadImageIfPostHasOne, UserForFirebase } from "./Post";
 import { LoadingRing } from "./LoadingRing";
 import commentSVG from "../public/Comment.svg";
 import { useMediaQuery } from "@react-hook/media-query";
 import { checkIfTextHaveHashtags } from "./likeFunctions";
-import { create, uniq } from "lodash";
+import { uniq } from "lodash";
 import moment from "moment";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import Image from "next/image";
@@ -84,7 +90,8 @@ export const CreatePost: React.FC = () => {
   ) => {
     // const userRef = doc(db, "Users", `${currentlyLoggedInUser.Login}`);
     try {
-      await setDoc(doc(db, "Posts", `${date}`), {
+      const newPostBatch = writeBatch(db);
+      newPostBatch.set(doc(db, "Posts", `${date}`), {
         postType: postType,
         userThatPostedThis: {
           Login: userThatPostedThis.Login,
@@ -105,10 +112,14 @@ export const CreatePost: React.FC = () => {
       currentlyLoggedInUser.UserPosts?.push(date);
       //Evil Sodol is my testing account and i dont want to update its UserPosts Reference.
       if (currentlyLoggedInUser.Login !== "EVILSODOL") {
-        await updateDoc(doc(db, "Users", `${currentlyLoggedInUser.Login}`), {
-          UserPosts: currentlyLoggedInUser.UserPosts,
-        });
+        newPostBatch.update(
+          doc(db, "Users", `${currentlyLoggedInUser.Login}`),
+          {
+            UserPosts: currentlyLoggedInUser.UserPosts,
+          }
+        );
       }
+      await newPostBatch.commit();
     } catch (error) {
       console.log("Error with adding document", error);
     }
@@ -342,64 +353,66 @@ export const CreatePost: React.FC = () => {
       )}
       <Modal show={showModal} centered={true}>
         <ModalBody>
-          <div className="Post">
-            <div className="PostHeader">
-              <div className="NameAndDescription">
-                {currentlyLoggedInUser.Avatar && (
-                  <img
-                    src={currentlyLoggedInUser.Avatar}
-                    className="userAvatar"
-                    alt="Your Icon"
+          <div className="ListWrapper">
+            <div className="Post">
+              <div className="PostHeader">
+                <div className="NameAndDescription">
+                  {currentlyLoggedInUser.Avatar && (
+                    <img
+                      src={currentlyLoggedInUser.Avatar}
+                      className="userAvatar"
+                      alt="Your Icon"
+                    />
+                  )}
+                  <span>{currentlyLoggedInUser.Login}</span>
+                </div>
+              </div>
+              <div className="PostBody">
+                <div className="PostText">{newPostText}</div>
+                <div className="PostPhoto">
+                  {postLoading ? (
+                    <LoadingRing colorVariant={"black"} />
+                  ) : !isLinkChoosen ? (
+                    <div className="userImageContainer">
+                      {checkFileType(rawImageBlob) ? (
+                        <img
+                          src={imgPrevievSrc}
+                          alt={"Preview Photo"}
+                          style={{ width: "100%", height: "100%" }}
+                        />
+                      ) : (
+                        <video controls src={imgPrevievSrc} />
+                      )}
+                    </div>
+                  ) : (
+                    <LiteYouTubeEmbed
+                      id={getLinkId(YTLink as string).id}
+                      params={getLinkId(YTLink as string).timestamp || ""}
+                      title="YouTube video player"
+                      adNetwork={false}
+                      playlist={false}
+                      noCookie={true}
+                      webp={true}
+                    ></LiteYouTubeEmbed>
+                  )}
+                </div>
+                <span className="LikesAndComments">
+                  <Image
+                    src={heartLiked}
+                    width={32}
+                    height={32}
+                    alt="Place where you love someone post"
                   />
-                )}
-                <span>{currentlyLoggedInUser.Login}</span>
+                  {match && "Hearts"} {1}
+                  <Image
+                    src={commentSVG}
+                    width={32}
+                    height={32}
+                    alt="Place where you can comment someone poost"
+                  />
+                  {match && "Comments"} {0}
+                </span>
               </div>
-            </div>
-            <div className="PostBody">
-              <div className="PostText">{newPostText}</div>
-              <div className="PostPhoto">
-                {postLoading ? (
-                  <LoadingRing colorVariant={"black"} />
-                ) : !isLinkChoosen ? (
-                  <div className="userImageContainer">
-                    {checkFileType(rawImageBlob) ? (
-                      <img
-                        src={imgPrevievSrc}
-                        alt={"Preview Photo"}
-                        style={{ width: "100%", height: "100%" }}
-                      />
-                    ) : (
-                      <video controls src={imgPrevievSrc} />
-                    )}
-                  </div>
-                ) : (
-                  <LiteYouTubeEmbed
-                    id={getLinkId(YTLink as string).id}
-                    params={getLinkId(YTLink as string).timestamp || ""}
-                    title="YouTube video player"
-                    adNetwork={false}
-                    playlist={false}
-                    noCookie={true}
-                    webp={true}
-                  ></LiteYouTubeEmbed>
-                )}
-              </div>
-              <span className="LikesAndComments">
-                <Image
-                  src={heartLiked}
-                  width={32}
-                  height={32}
-                  alt="Place where you love someone post"
-                />
-                {match && "Hearts"} {1}
-                <Image
-                  src={commentSVG}
-                  width={32}
-                  height={32}
-                  alt="Place where you can comment someone poost"
-                />
-                {match && "Comments"} {0}
-              </span>
             </div>
           </div>
         </ModalBody>

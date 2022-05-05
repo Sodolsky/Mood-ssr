@@ -16,14 +16,13 @@ import {
   startAfter,
 } from "@firebase/firestore";
 import { db } from "../firebase/firebase";
-import { currentlyLoggedInUserContext, UserData } from "../utils/interfaces";
+import { currentlyLoggedInUserContext } from "../utils/interfaces";
 import { LoadingRing } from "./LoadingRing";
 import { BackTop } from "antd";
 import { isEqual } from "lodash";
 import { usePageVisibility } from "./hooks/usePageVisibility";
 import { getElementCountBetween2ElementsInArray } from "./likeFunctions";
 import nProgress from "nprogress";
-import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 
 type incomingPostsType = {
@@ -100,6 +99,7 @@ export const MainContent: React.FC = () => {
     const ref = collection(db, "Posts");
     const q = query(ref, orderBy("timestamp", "desc"), limit(4));
     const Unsubscibe = onSnapshot(q, (doc) => {
+      if (doc.metadata.fromCache) return;
       let shouldLoad: boolean = true;
       doc.docChanges().forEach((change) => {
         if (change.type === "modified") {
@@ -141,9 +141,7 @@ export const MainContent: React.FC = () => {
         }
       });
     });
-    return () => {
-      Unsubscibe();
-    };
+    return () => Unsubscibe();
   }, []);
   const showNewPosts = async () => {
     nProgress.start();
@@ -187,6 +185,7 @@ export const MainContent: React.FC = () => {
           const val = doc.docs.map((item) => {
             return item.data() as PostPropsInteface;
           });
+          console.log("setuje");
           setLastDoc(doc.docs[doc.docs.length - 1]);
           setRawPosts([...rawPosts, ...val]);
         }
