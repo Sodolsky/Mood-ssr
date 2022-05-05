@@ -42,6 +42,7 @@ import AddImageToPostIcon from "../public/insertpic.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { v4 } from "uuid";
+import { default as NextImage } from "next/image";
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
   const postRef = React.useRef<HTMLDivElement | null>(null);
@@ -333,7 +334,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
               postId={postData.URL}
               userThatPostedLogin={postData.userThatPostedThis.Login as string}
             />
-            <Image
+            <NextImage
               className="Comment on Someone's post"
               src={CommentIcon.src}
               onClick={() => {
@@ -364,7 +365,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
               ) : commentVal.img === "" ? (
                 <>
                   <label htmlFor={`comment-image-uploader-${postData.URL}`}>
-                    <Image
+                    <NextImage
                       src={AddImageToPostIcon}
                       alt="Add Image to Post"
                       width={32}
