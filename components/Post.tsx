@@ -48,6 +48,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const postRef = React.useRef<HTMLDivElement | null>(null);
   const commentTextInputRef = React.useRef<InputRef | null>(null);
   const submitCommentButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const [wasFadedIn, setWasFadedIn] = useState<boolean>(false);
   //We are defining date as another variable to avoid name collison when passing props to comment element
   const parentDate = props.date;
 
@@ -128,6 +129,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
         }
       }
     });
+    setWasFadedIn(true);
     return () => {
       Unsubscribe();
       PostSubscription();
@@ -216,7 +218,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   return !postData ? (
     <SkeletonPost />
   ) : (
-    <div className="ListWrapper" ref={postRef}>
+    <div className={`ListWrapper ${wasFadedIn ? "fadeIn" : ""}`} ref={postRef}>
       <div className={`Post ${postData.hallOfFame ? "GoldenBorder" : ""}`}>
         <div className="PostHeader">
           <Accordion className="LinkToPost">

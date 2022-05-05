@@ -299,6 +299,14 @@ $black: #2f2f2f;
     }
   }
 }
+.fadeIn {
+  animation: fadeInAnimation 0.25s forwards;
+}
+@keyframes fadeInAnimation {
+  to {
+    opacity: 1;
+  }
+}
 .singleComment {
   display: flex;
   flex-direction: column;
@@ -512,6 +520,8 @@ $black: #2f2f2f;
     margin-bottom: 0.75rem;
     width: 40%;
     @include PostSchema();
+    opacity: 0;
+
     .GoldenBorder {
       border-color: gold !important;
     }
