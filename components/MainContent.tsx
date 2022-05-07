@@ -16,10 +16,13 @@ import {
   startAfter,
 } from "@firebase/firestore";
 import { db } from "../firebase/firebase";
-import { currentlyLoggedInUserContext } from "../utils/interfaces";
+import {
+  currentlyLoggedInUserContext,
+  firstLoadContext,
+} from "../utils/interfaces";
 import { LoadingRing } from "./LoadingRing";
 import { BackTop } from "antd";
-import { first, isEqual } from "lodash";
+import { isEqual } from "lodash";
 import { usePageVisibility } from "./hooks/usePageVisibility";
 import { getElementCountBetween2ElementsInArray } from "./likeFunctions";
 import nProgress from "nprogress";
@@ -29,8 +32,11 @@ type incomingPostsType = {
   ready: boolean;
   count: number;
 };
+
 export const MainContent: React.FC = () => {
   const currentlyLoggedInUser = React.useContext(currentlyLoggedInUserContext);
+  const { isItTheFirstLoad, setIsItTheFirstLoad } =
+    React.useContext(firstLoadContext);
   const [title, setTitle] = useState<string>("MOOD");
   const firstBatch = React.useRef<boolean>(true);
   const divListRef = React.useRef<HTMLDivElement | null>(null);
@@ -43,9 +49,9 @@ export const MainContent: React.FC = () => {
       count: 0,
       ready: false,
     });
-  const cachedPosts = React.useRef<DocumentData[]>([]);
   const potentialNewPostsCount = React.useRef<number>(0);
   const visible = usePageVisibility();
+  const cachedPosts = React.useRef<DocumentData[]>([]);
   const lastPostSeen = React.useRef<PostPropsInteface | null>(null);
   useEffect(() => {
     if (visible) {
@@ -98,7 +104,8 @@ export const MainContent: React.FC = () => {
     const ref = collection(db, "Posts");
     const q = query(ref, orderBy("timestamp", "desc"), limit(4));
     const Unsubscibe = onSnapshot(q, (doc) => {
-      if (doc.metadata.fromCache && !firstBatch.current) return;
+      if (doc.metadata.fromCache && !isItTheFirstLoad) return;
+      setIsItTheFirstLoad(false);
       let shouldLoad: boolean = true;
       doc.docChanges().forEach((change) => {
         if (change.type === "modified") {
@@ -140,7 +147,9 @@ export const MainContent: React.FC = () => {
         }
       });
     });
-    return () => Unsubscibe();
+    return () => {
+      Unsubscibe();
+    };
   }, []);
   const showNewPosts = async () => {
     nProgress.start();

@@ -10,6 +10,10 @@ export const currentlyLoggedInUserContext = createContext<UserData>({
   UserPosts: [],
 });
 export const authProcessStatusContext = createContext<boolean>(true);
+export const firstLoadContext = createContext<FirstLoadContext>({
+  isItTheFirstLoad: true,
+  setIsItTheFirstLoad: () => {},
+});
 export type notificationTypes = "comment" | "like";
 export interface NotificationInterface {
   type: notificationTypes;
@@ -50,4 +54,8 @@ export interface UserData {
 export interface LogInInterface {
   isUserLoggedIn: boolean | undefined;
   setIfUserIsLoggedIn: any;
+}
+export interface FirstLoadContext {
+  isItTheFirstLoad: boolean;
+  setIsItTheFirstLoad: React.Dispatch<React.SetStateAction<boolean>>;
 }

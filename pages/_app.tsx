@@ -16,6 +16,7 @@ import {
   allUsersArrayContext,
   authProcessStatusContext,
   currentlyLoggedInUserContext,
+  firstLoadContext,
   setCurrentlyLoggedInUserContext,
   UserData,
   userLogInContext,
@@ -56,6 +57,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [isUserLoggedIn, setIfUserIsLoggedIn] = useState<boolean | undefined>(
     false
   );
+  const [isItFirstLoad, setIsItFirstLoad] = useState<boolean>(true);
   const [currentlyLoggedInUser, setCurrentlyLoggedInUser] = useState<UserData>({
     Login: "",
     Email: "",
@@ -118,21 +120,28 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>{<title>MOOD</title>}</Head>
-      <setCurrentlyLoggedInUserContext.Provider
-        value={setCurrentlyLoggedInUser}
+      <firstLoadContext.Provider
+        value={{
+          isItTheFirstLoad: isItFirstLoad,
+          setIsItTheFirstLoad: setIsItFirstLoad,
+        }}
       >
-        <currentlyLoggedInUserContext.Provider value={currentlyLoggedInUser}>
-          <userLogInContext.Provider
-            value={{ isUserLoggedIn, setIfUserIsLoggedIn }}
-          >
-            <allUsersArrayContext.Provider value={usersLoginArray.current}>
-              <authProcessStatusContext.Provider value={authIsBeingProccesed}>
-                <Component {...pageProps} />
-              </authProcessStatusContext.Provider>
-            </allUsersArrayContext.Provider>
-          </userLogInContext.Provider>
-        </currentlyLoggedInUserContext.Provider>
-      </setCurrentlyLoggedInUserContext.Provider>
+        <setCurrentlyLoggedInUserContext.Provider
+          value={setCurrentlyLoggedInUser}
+        >
+          <currentlyLoggedInUserContext.Provider value={currentlyLoggedInUser}>
+            <userLogInContext.Provider
+              value={{ isUserLoggedIn, setIfUserIsLoggedIn }}
+            >
+              <allUsersArrayContext.Provider value={usersLoginArray.current}>
+                <authProcessStatusContext.Provider value={authIsBeingProccesed}>
+                  <Component {...pageProps} />
+                </authProcessStatusContext.Provider>
+              </allUsersArrayContext.Provider>
+            </userLogInContext.Provider>
+          </currentlyLoggedInUserContext.Provider>
+        </setCurrentlyLoggedInUserContext.Provider>
+      </firstLoadContext.Provider>
     </>
   );
 }
