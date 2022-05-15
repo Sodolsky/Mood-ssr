@@ -16,28 +16,21 @@ import {
   startAfter,
 } from "@firebase/firestore";
 import { db } from "../firebase/firebase";
-import {
-  currentlyLoggedInUserContext,
-  firstLoadContext,
-} from "../utils/interfaces";
+import { firstLoadContext } from "../utils/interfaces";
 import { LoadingRing } from "./LoadingRing";
 import { BackTop } from "antd";
-import { isEqual } from "lodash";
-import { usePageVisibility } from "./hooks/usePageVisibility";
-import { getElementCountBetween2ElementsInArray } from "./likeFunctions";
 import nProgress from "nprogress";
 import { NextSeo } from "next-seo";
+import { useTitleNotifications } from "./hooks/useTitleNotification";
 
-type incomingPostsType = {
+export type incomingPostsType = {
   ready: boolean;
   count: number;
 };
 
 export const MainContent: React.FC = () => {
-  const currentlyLoggedInUser = React.useContext(currentlyLoggedInUserContext);
   const { isItTheFirstLoad, setIsItTheFirstLoad } =
     React.useContext(firstLoadContext);
-  const [title, setTitle] = useState<string>("MOOD");
   const firstBatch = React.useRef<boolean>(true);
   const divListRef = React.useRef<HTMLDivElement | null>(null);
   const [lastDoc, setLastDoc] = useState<null | DocumentData>(null);
@@ -50,56 +43,13 @@ export const MainContent: React.FC = () => {
       ready: false,
     });
   const potentialNewPostsCount = React.useRef<number>(0);
-  const visible = usePageVisibility();
   const cachedPosts = React.useRef<DocumentData[]>([]);
   const lastPostSeen = React.useRef<PostPropsInteface | null>(null);
-  useEffect(() => {
-    if (visible) {
-      if (newPostsAreReady.count === 0) {
-        setTitle(`MOOD`);
-      } else {
-        const count = newPostsAreReady.count;
-        setTitle(`MOOD (${count}) New Posts`);
-      }
-      lastPostSeen.current = rawPosts[0];
-    } else {
-      if (lastPostSeen.current) {
-        if (!isEqual(rawPosts[0], lastPostSeen.current)) {
-          const diff = getElementCountBetween2ElementsInArray(
-            rawPosts,
-            lastPostSeen.current
-          );
-          //Handle Normal logic when there are no new Posts in Cache.
-          if (newPostsAreReady.count === 0) {
-            if (diff === "n") {
-              setTitle(`MOOD (4+) New Posts`);
-            } else {
-              //We need to check if post that is being added is user post if not we handle normal logic else we dont change the title
-              diff === 0
-                ? setTitle(`MOOD`)
-                : diff === 1
-                ? rawPosts[0].userThatPostedThis.Login ===
-                  currentlyLoggedInUser.Login
-                  ? setTitle(`MOOD`)
-                  : setTitle(`MOOD (${diff}) New Posts`)
-                : setTitle(`MOOD (${diff}) New Posts`);
-            }
-            //Handle logic when there are Posts in cache and normal Posts Unseen
-          } else if (diff !== "n") {
-            const Total = newPostsAreReady.count + diff;
-            setTitle(`MOOD (${Total}) New Posts`);
-            // new Notification("2 new Posts are Rdy");
-          } else {
-            setTitle(`Mood (4+) New Posts`);
-          }
-        } else {
-          if (newPostsAreReady.count !== 0) {
-            setTitle(`MOOD (${newPostsAreReady.count}) New Posts`);
-          }
-        }
-      }
-    }
-  }, [rawPosts, visible, newPostsAreReady, currentlyLoggedInUser.UID]);
+  const { title } = useTitleNotifications(
+    newPostsAreReady,
+    lastPostSeen,
+    rawPosts
+  );
   useEffect(() => {
     const ref = collection(db, "Posts");
     const q = query(ref, orderBy("timestamp", "desc"), limit(4));
