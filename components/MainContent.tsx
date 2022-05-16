@@ -152,7 +152,7 @@ export const MainContent: React.FC = () => {
   return isLaoding ? (
     <div className="MainContentGrid">
       <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}
+        style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}
       >
         <LoadingRing colorVariant="white" />
       </div>
