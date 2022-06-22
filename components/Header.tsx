@@ -34,6 +34,7 @@ import { NotificationInterface } from "../utils/interfaces";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useThemeSwitcher } from "./hooks/useThemeSwitcher";
 
 export const Header: React.FC = () => {
   const match = useMediaQuery("only screen and (min-width:450px");
@@ -42,6 +43,7 @@ export const Header: React.FC = () => {
   const [notifications, setNotifications] = React.useState<
     NotificationInterface[]
   >([]);
+  const { theme, setTheme } = useThemeSwitcher();
   React.useEffect(() => {
     const subscribeToNotifications = (UID: string) => {
       const notificationRef = collection(db, "Notifications");
@@ -92,6 +94,7 @@ export const Header: React.FC = () => {
                 width={45}
                 height={45}
                 alt="Logo of a moon"
+                onClick={() => setTheme(theme === "bright" ? "dark" : "bright")}
               />
               {auth.currentUser && (
                 <>

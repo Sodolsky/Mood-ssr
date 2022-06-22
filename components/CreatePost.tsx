@@ -32,6 +32,7 @@ import moment from "moment";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import Image from "next/image";
 import { getDownloadURL } from "firebase/storage";
+import { useThemeSwitcher } from "./hooks/useThemeSwitcher";
 //Key needs to be changed
 const uploadUserImageToStorageBucket = async (
   key: string,
@@ -56,6 +57,7 @@ export interface CommentInterface {
 }
 export const CreatePost: React.FC = () => {
   const createPostRef = React.useRef<HTMLDivElement | null>(null);
+  const { theme } = useThemeSwitcher();
   const [addPostIconClicked, setAddPostIconClicked] = useState<boolean>(false);
   const [newPostText, setNewPostText] = useState<string>("");
   const [userImage, setUserImage] = useState<File>();
@@ -349,7 +351,10 @@ export const CreatePost: React.FC = () => {
             )}
         </div>
       ) : (
-        <AddPostIcon setAddPostIconClicked={setAddPostIconClicked} />
+        <AddPostIcon
+          setAddPostIconClicked={setAddPostIconClicked}
+          theme={theme}
+        />
       )}
       <Modal show={showModal} centered={true}>
         <ModalBody>

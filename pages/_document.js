@@ -76,7 +76,7 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body className="bg-secondary dark:bg-black overflow-x-hidden ">
+        <body className="overflow-x-hidden ">
           <Main />
           <NextScript />
         </body>

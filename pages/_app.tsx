@@ -42,6 +42,7 @@ config.autoAddCss = false;
 import Head from "next/head";
 import nProgress from "nprogress";
 import { Router } from "next/router";
+import { useThemeSwitcher } from "../components/hooks/useThemeSwitcher";
 function MyApp({ Component, pageProps }: AppProps) {
   Router.events.on("routeChangeStart", () => {
     nProgress.start();

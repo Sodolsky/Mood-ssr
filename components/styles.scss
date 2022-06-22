@@ -9,15 +9,28 @@ body {
   // font-family: "Oswald", sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #36096d;
-  background: -webkit-linear-gradient(
+  // background-color: #36096d;
+  // background: linear-gradient(to bottom, #7f53ac 0%, #647dee 25%, #7f53ac 75%);
+  // background: -webkit-linear-gradient(
+  //   to bottom,
+  //   #7f53ac 0%,
+  //   #647dee 25%,
+  //   #7f53ac 75%
+  // );
+  background-color: #a9c9ff;
+  background-image: -webkit-linear-gradient(
     to bottom,
-    #7f53ac 0%,
-    #647dee 25%,
-    #7f53ac 75%
+    #a9c9ff 0%,
+    #ffbbec 25%,
+    #a9c9ff 75%
   );
-  background: linear-gradient(to bottom, #7f53ac 0%, #647dee 25%, #7f53ac 75%);
-  background-color: #7f53ac;
+  background-image: linear-gradient(
+    to bottom,
+    #a9c9ff 0%,
+    #ffbbec 25%,
+    #a9c9ff 75%
+  );
+  transition: background-color 0.3s;
   width: 100%;
   background-repeat: repeat;
 }

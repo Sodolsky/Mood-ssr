@@ -4,6 +4,14 @@ export const userLogInContext = createContext<LogInInterface>({
   isUserLoggedIn: false,
   setIfUserIsLoggedIn: null,
 });
+interface themeContextInteface {
+  theme: "bright" | "dark";
+  // setTheme: React.Dispatch<React.SetStateAction<"bright" | "dark">> | null;
+}
+export const themeContext = createContext<themeContextInteface>({
+  theme: "bright",
+  // setTheme: null,
+});
 export const currentlyLoggedInUserContext = createContext<UserData>({
   Login: "",
   Email: "",
