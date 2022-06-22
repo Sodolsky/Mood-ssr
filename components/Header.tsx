@@ -91,8 +91,8 @@ export const Header: React.FC = () => {
               MOOD
               <Image
                 src={HalfMoonIcon}
-                width={45}
-                height={45}
+                width={40}
+                height={40}
                 alt="Logo of a moon"
                 onClick={() => setTheme(theme === "bright" ? "dark" : "bright")}
               />
