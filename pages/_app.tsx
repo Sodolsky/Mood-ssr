@@ -18,6 +18,8 @@ import {
   currentlyLoggedInUserContext,
   firstLoadContext,
   setCurrentlyLoggedInUserContext,
+  themeContext,
+  themeTypes,
   UserData,
   userLogInContext,
 } from "../utils/interfaces";
@@ -42,7 +44,6 @@ config.autoAddCss = false;
 import Head from "next/head";
 import nProgress from "nprogress";
 import { Router } from "next/router";
-import { useThemeSwitcher } from "../components/hooks/useThemeSwitcher";
 function MyApp({ Component, pageProps }: AppProps) {
   Router.events.on("routeChangeStart", () => {
     nProgress.start();
@@ -63,9 +64,24 @@ function MyApp({ Component, pageProps }: AppProps) {
     Login: "",
     Email: "",
   });
+  const [theme, setTheme] = useState<themeTypes>(null);
+  useEffect(() => {
+    if (theme === "dark") {
+      document.body.style.backgroundImage = "none";
+      document.body.style.backgroundColor = "#1a1a1a";
+    } else {
+      document.body.style.backgroundImage =
+        "linear-gradient(  to bottom, #a9c9ff 0%,#ffbbec 25%,#a9c9ff 75%)";
+      document.body.style.backgroundColor = "#a9c9ff";
+    }
+    if (theme) {
+      localStorage.setItem("theme", theme);
+    }
+  }, [theme]);
   const usersLoginArray = useRef<string[]>([]);
   const [authIsBeingProccesed, setAuthIsBeingProccesed] =
     useState<boolean>(true);
+  const [, set] = useState();
   const getUsersLoginsUtility = async () => {
     const ref = doc(db, "Utility", "UserLogins");
     try {
@@ -106,6 +122,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     });
   };
   useEffect(() => {
+    const theme = localStorage.getItem("theme") as themeTypes;
+    setTheme(!theme ? "bright" : theme);
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         getDataAboutUser(user.uid);
@@ -136,7 +154,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             >
               <allUsersArrayContext.Provider value={usersLoginArray.current}>
                 <authProcessStatusContext.Provider value={authIsBeingProccesed}>
-                  <Component {...pageProps} />
+                  <themeContext.Provider value={{ theme, setTheme }}>
+                    <Component {...pageProps} />
+                  </themeContext.Provider>
                 </authProcessStatusContext.Provider>
               </allUsersArrayContext.Provider>
             </userLogInContext.Provider>

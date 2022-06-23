@@ -11,7 +11,11 @@ import heartLiked from "../public/heartLiked.svg";
 import { UrlUploader } from "./UrlOploader";
 import { getLinkId, validateYouTubeUrl } from "./ValidateYoutubeUrl";
 import { AddPostIcon } from "./AddPostIcon";
-import { currentlyLoggedInUserContext, UserData } from "../utils/interfaces";
+import {
+  currentlyLoggedInUserContext,
+  themeContext,
+  UserData,
+} from "../utils/interfaces";
 import { useContext } from "react";
 import { db, storageRef } from "../firebase/firebase";
 import {
@@ -32,7 +36,6 @@ import moment from "moment";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import Image from "next/image";
 import { getDownloadURL } from "firebase/storage";
-import { useThemeSwitcher } from "./hooks/useThemeSwitcher";
 //Key needs to be changed
 const uploadUserImageToStorageBucket = async (
   key: string,
@@ -57,7 +60,7 @@ export interface CommentInterface {
 }
 export const CreatePost: React.FC = () => {
   const createPostRef = React.useRef<HTMLDivElement | null>(null);
-  const { theme } = useThemeSwitcher();
+  const themeCTX = useContext(themeContext);
   const [addPostIconClicked, setAddPostIconClicked] = useState<boolean>(false);
   const [newPostText, setNewPostText] = useState<string>("");
   const [userImage, setUserImage] = useState<File>();
@@ -353,7 +356,7 @@ export const CreatePost: React.FC = () => {
       ) : (
         <AddPostIcon
           setAddPostIconClicked={setAddPostIconClicked}
-          theme={theme}
+          theme={themeCTX.theme}
         />
       )}
       <Modal show={showModal} centered={true}>

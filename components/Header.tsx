@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, ThemeProvider } from "react-bootstrap";
 import { auth, db } from "../firebase/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,6 +15,7 @@ import {
   currentlyLoggedInUserContext,
   NotificationDataFromFirebase,
   setCurrentlyLoggedInUserContext,
+  themeContext,
 } from "../utils/interfaces";
 import Tippy from "@tippyjs/react";
 import { Button } from "antd";
@@ -34,7 +35,6 @@ import { NotificationInterface } from "../utils/interfaces";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useThemeSwitcher } from "./hooks/useThemeSwitcher";
 
 export const Header: React.FC = () => {
   const match = useMediaQuery("only screen and (min-width:450px");
@@ -43,7 +43,7 @@ export const Header: React.FC = () => {
   const [notifications, setNotifications] = React.useState<
     NotificationInterface[]
   >([]);
-  const { theme, setTheme } = useThemeSwitcher();
+  const themeCTX = React.useContext(themeContext);
   React.useEffect(() => {
     const subscribeToNotifications = (UID: string) => {
       const notificationRef = collection(db, "Notifications");
@@ -94,7 +94,12 @@ export const Header: React.FC = () => {
                 width={40}
                 height={40}
                 alt="Logo of a moon"
-                onClick={() => setTheme(theme === "bright" ? "dark" : "bright")}
+                onClick={() =>
+                  themeCTX.setTheme &&
+                  themeCTX.setTheme(
+                    themeCTX.theme === "bright" ? "dark" : "bright"
+                  )
+                }
               />
               {auth.currentUser && (
                 <>

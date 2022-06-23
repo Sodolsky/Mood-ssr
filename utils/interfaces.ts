@@ -1,16 +1,19 @@
-import { createContext } from "react";
+import React, { createContext } from "react";
 
 export const userLogInContext = createContext<LogInInterface>({
   isUserLoggedIn: false,
   setIfUserIsLoggedIn: null,
 });
+export type themeTypes = "bright" | "dark" | null;
 interface themeContextInteface {
-  theme: "bright" | "dark";
-  // setTheme: React.Dispatch<React.SetStateAction<"bright" | "dark">> | null;
+  theme: themeTypes;
+  setTheme: React.Dispatch<
+    React.SetStateAction<"bright" | "dark" | null>
+  > | null;
 }
 export const themeContext = createContext<themeContextInteface>({
   theme: "bright",
-  // setTheme: null,
+  setTheme: null,
 });
 export const currentlyLoggedInUserContext = createContext<UserData>({
   Login: "",
