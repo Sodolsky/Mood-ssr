@@ -3,7 +3,10 @@ import { Comment, Avatar, Image } from "antd";
 import { CommentInterface } from "./CreatePost";
 import moment from "moment";
 import { isEqual } from "lodash";
-import { currentlyLoggedInUserContext } from "../utils/interfaces";
+import {
+  currentlyLoggedInUserContext,
+  themeContext,
+} from "../utils/interfaces";
 import { LikeOutlined, LikeFilled } from "@ant-design/icons";
 import { removeUserFromLikedArray } from "./likeFunctions";
 import { doc, updateDoc } from "@firebase/firestore";
@@ -42,6 +45,7 @@ export const CommentComponent: React.FC<CommentInterface> = (props) => {
   const isThisFuckingShitLiked = usersThatLikedThisComment.some((x) => {
     return isEqual(x.Login, currentlyLoggedInUser.Login);
   });
+  const themeCTX = useContext(themeContext);
   const [isLiked, setIfIsLiked] = useState<boolean>(isThisFuckingShitLiked);
   const [likeCount, setLikeCount] = useState<number>(
     usersThatLikedThisComment.length
@@ -111,6 +115,7 @@ export const CommentComponent: React.FC<CommentInterface> = (props) => {
           </Link>
         }
         datetime={moment(formatedDate).fromNow()}
+        className={`${themeCTX.theme === "dark" && "DarkComment"}`}
         content={
           <div className="singleComment">
             <span>{content}</span>

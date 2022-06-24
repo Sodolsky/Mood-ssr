@@ -1,6 +1,10 @@
 import * as React from "react";
 import "tippy.js/animations/scale.css";
-import { currentlyLoggedInUserContext, UserData } from "../utils/interfaces";
+import {
+  currentlyLoggedInUserContext,
+  themeContext,
+  UserData,
+} from "../utils/interfaces";
 import { getLinkId } from "./ValidateYoutubeUrl";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import { useState } from "react";
@@ -49,6 +53,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const commentTextInputRef = React.useRef<InputRef | null>(null);
   const submitCommentButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const [wasFadedIn, setWasFadedIn] = useState<boolean>(false);
+  const themeCTX = useContext(themeContext);
   //We are defining date as another variable to avoid name collison when passing props to comment element
   const parentDate = props.date;
 
@@ -220,7 +225,11 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
     <SkeletonPost />
   ) : (
     <div className={`ListWrapper ${wasFadedIn ? "fadeIn" : ""}`} ref={postRef}>
-      <div className={`Post ${postData.hallOfFame ? "GoldenBorder" : ""}`}>
+      <div
+        className={`Post ${postData.hallOfFame ? "GoldenBorder" : ""} ${
+          themeCTX.theme === "dark" && "PostDark"
+        }`}
+      >
         <div className="PostHeader">
           <Accordion className="LinkToPost">
             <Accordion.Item eventKey="0">

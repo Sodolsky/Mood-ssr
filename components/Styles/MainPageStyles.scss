@@ -37,6 +37,15 @@ $black: #2f2f2f;
   color: blue;
   text-decoration: underline;
 }
+.DarkComment {
+  background-color: hsl(0, 0%, 30%) !important;
+  color: $white;
+}
+.PostDark {
+  background-color: hsl(15, 0%, 18%) !important;
+  border: 3px $white solid !important;
+  color: $white !important;
+}
 @mixin PostSchema {
   .Post {
     @media (max-width: 700px) {
@@ -527,7 +536,6 @@ $black: #2f2f2f;
       border: 3px black solid;
       border-radius: 1rem;
     }
-
     .GoldenBorder {
       border-color: gold !important;
     }
