@@ -15,6 +15,14 @@ export const themeContext = createContext<themeContextInteface>({
   theme: "bright",
   setTheme: null,
 });
+interface isaudioMutedContextInteface {
+  isAudioMuted: boolean | null;
+  setIsAudioMuted: React.Dispatch<React.SetStateAction<boolean | null>> | null;
+}
+export const isaudioMutedContext = createContext<isaudioMutedContextInteface>({
+  isAudioMuted: false,
+  setIsAudioMuted: null,
+});
 export const currentlyLoggedInUserContext = createContext<UserData>({
   Login: "",
   Email: "",

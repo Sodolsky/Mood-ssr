@@ -16,7 +16,7 @@ import {
   startAfter,
 } from "@firebase/firestore";
 import { db } from "../firebase/firebase";
-import { firstLoadContext } from "../utils/interfaces";
+import { firstLoadContext, isaudioMutedContext } from "../utils/interfaces";
 import { LoadingRing } from "./LoadingRing";
 import { BackTop } from "antd";
 import nProgress from "nprogress";
@@ -32,6 +32,7 @@ export const MainContent: React.FC = () => {
   const { isItTheFirstLoad, setIsItTheFirstLoad } =
     React.useContext(firstLoadContext);
   const firstBatch = React.useRef<boolean>(true);
+  const audioElement = React.useRef<HTMLAudioElement | null>(null);
   const divListRef = React.useRef<HTMLDivElement | null>(null);
   const [lastDoc, setLastDoc] = useState<null | DocumentData>(null);
   const [isLaoding, setIsLaoding] = useState<boolean>(true);
@@ -48,7 +49,8 @@ export const MainContent: React.FC = () => {
   const { title } = useTitleNotifications(
     newPostsAreReady,
     lastPostSeen,
-    rawPosts
+    rawPosts,
+    audioElement.current
   );
   useEffect(() => {
     const ref = collection(db, "Posts");
@@ -164,6 +166,7 @@ export const MainContent: React.FC = () => {
         description="Share your current mood with your friends and family"
       />
       <BackTop duration={300} />
+      <audio src="notificationSound.wav" ref={audioElement}></audio>
       {newPostsAreReady.ready && (
         <div className={`NewPostsAreReadyMobile`}>
           {newPostsAreReady.count} New Posts

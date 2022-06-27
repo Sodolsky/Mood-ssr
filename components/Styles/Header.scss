@@ -50,7 +50,14 @@ header {
     }
     .FAContainer {
       @include HeaderIcon();
-      right: 15px;
+      right: 5px;
+    }
+    .FAMuteContainer {
+      @include HeaderIcon();
+      right: 60px;
+      @media (max-width: 768px) {
+        right: 35px;
+      }
     }
     .FAContainerBell {
       @include HeaderIcon();

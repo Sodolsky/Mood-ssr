@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Container, Row, Col, ThemeProvider } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { auth, db } from "../firebase/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,9 +10,11 @@ import {
   faHeart,
   faStar,
   faTrash,
+  faMicrophone,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   currentlyLoggedInUserContext,
+  isaudioMutedContext,
   NotificationDataFromFirebase,
   setCurrentlyLoggedInUserContext,
   themeContext,
@@ -39,6 +41,7 @@ import { useRouter } from "next/router";
 export const Header: React.FC = () => {
   const match = useMediaQuery("only screen and (min-width:450px");
   const router = useRouter();
+  const muteAudioContext = React.useContext(isaudioMutedContext);
   const currentlyLoggedInUser = React.useContext(currentlyLoggedInUserContext);
   const [notifications, setNotifications] = React.useState<
     NotificationInterface[]
@@ -126,6 +129,20 @@ export const Header: React.FC = () => {
                           console.log(error);
                         }
                       }}
+                    />
+                  </div>
+                  <div className="FAMuteContainer">
+                    <FontAwesomeIcon
+                      icon={faMicrophone}
+                      style={{
+                        color: muteAudioContext.isAudioMuted ? "red" : "green",
+                      }}
+                      onClick={() =>
+                        muteAudioContext.setIsAudioMuted &&
+                        muteAudioContext.setIsAudioMuted(
+                          !muteAudioContext.isAudioMuted
+                        )
+                      }
                     />
                   </div>
                   <Tippy

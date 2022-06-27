@@ -17,6 +17,7 @@ import {
   authProcessStatusContext,
   currentlyLoggedInUserContext,
   firstLoadContext,
+  isaudioMutedContext,
   setCurrentlyLoggedInUserContext,
   themeContext,
   themeTypes,
@@ -64,6 +65,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     Login: "",
     Email: "",
   });
+  const [isAudioMuted, setIsAudioMuted] = useState<boolean | null>(null);
   const [theme, setTheme] = useState<themeTypes>(null);
   useEffect(() => {
     if (theme === "dark") {
@@ -78,10 +80,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       localStorage.setItem("theme", theme);
     }
   }, [theme]);
+  useEffect(() => {
+    if (typeof isAudioMuted === "boolean") {
+      localStorage.setItem("muted", String(isAudioMuted));
+    }
+  }, [isAudioMuted]);
   const usersLoginArray = useRef<string[]>([]);
   const [authIsBeingProccesed, setAuthIsBeingProccesed] =
     useState<boolean>(true);
-  const [, set] = useState();
   const getUsersLoginsUtility = async () => {
     const ref = doc(db, "Utility", "UserLogins");
     try {
@@ -123,7 +129,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   };
   useEffect(() => {
     const theme = localStorage.getItem("theme") as themeTypes;
+    const isAudioMutedlocalStorage = localStorage.getItem("muted");
     setTheme(!theme ? "bright" : theme);
+    setIsAudioMuted(isAudioMutedlocalStorage === "true");
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         getDataAboutUser(user.uid);
@@ -155,7 +163,14 @@ function MyApp({ Component, pageProps }: AppProps) {
               <allUsersArrayContext.Provider value={usersLoginArray.current}>
                 <authProcessStatusContext.Provider value={authIsBeingProccesed}>
                   <themeContext.Provider value={{ theme, setTheme }}>
-                    <Component {...pageProps} />
+                    <isaudioMutedContext.Provider
+                      value={{
+                        isAudioMuted: isAudioMuted,
+                        setIsAudioMuted: setIsAudioMuted,
+                      }}
+                    >
+                      <Component {...pageProps} />
+                    </isaudioMutedContext.Provider>
                   </themeContext.Provider>
                 </authProcessStatusContext.Provider>
               </allUsersArrayContext.Provider>
