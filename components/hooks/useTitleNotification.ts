@@ -21,7 +21,7 @@ export const useTitleNotifications = (
   const [title, setTitle] = useState<string>("MOOD");
   useEffect(() => {
     if (audio) {
-      muteAudioContext.isAudioMuted ? (audio.volume = 0) : (audio.volume = 0.5);
+      muteAudioContext.isAudioMuted ? (audio.volume = 0) : (audio.volume = 0.4);
       if (visible) {
         if (newPostsAreReady.count === 0) {
           setTitle(`MOOD`);
