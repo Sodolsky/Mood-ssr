@@ -10,7 +10,7 @@ import {
   faHeart,
   faStar,
   faTrash,
-  faMicrophone,
+  faVolumeMute,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   currentlyLoggedInUserContext,
@@ -133,7 +133,7 @@ export const Header: React.FC = () => {
                   </div>
                   <div className="FAMuteContainer">
                     <FontAwesomeIcon
-                      icon={faMicrophone}
+                      icon={faVolumeMute}
                       style={{
                         color: muteAudioContext.isAudioMuted ? "red" : "green",
                       }}
