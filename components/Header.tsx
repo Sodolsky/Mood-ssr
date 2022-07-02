@@ -126,7 +126,7 @@ export const Header: React.FC = () => {
                         try {
                           auth.signOut();
                         } catch (error) {
-                          console.log(error);
+                          alert(error);
                         }
                       }}
                     />
