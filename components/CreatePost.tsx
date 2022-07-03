@@ -268,7 +268,7 @@ export const CreatePost: React.FC = () => {
           <div className="NewPostBody">
             <TextareAutosize
               autoFocus={true}
-              maxLength={200}
+              maxLength={250}
               ref={textareaRef}
               maxRows={3}
               onChange={handleChange}
