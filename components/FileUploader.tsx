@@ -9,15 +9,17 @@ export const FileUploader: React.FC<any> = ({ onFileSelect }) => {
       file.type === "video/ogg" ||
       file.type === "video/webm"
     ) {
-      if (file.size > 40000000) {
+      if (file.size > 100000000) {
         //Normal value 800000000
-        return alert("Your File is bigger than 40MB Try to upload smaller one");
+        return alert(
+          "Your File is bigger than 100MB Try to upload smaller one"
+        );
       } else {
         onFileSelect(file);
       }
     } else {
-      if (file.size > 15000000) {
-        return alert("Your File is bigger than 15MB Try to upload smaller one");
+      if (file.size > 30000000) {
+        return alert("Your File is bigger than 30MB Try to upload smaller one");
       } else {
         onFileSelect(file);
       }
