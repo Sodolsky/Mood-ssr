@@ -127,6 +127,9 @@ export const Header: React.FC = () => {
                           auth.signOut();
                         } catch (error) {
                           console.log(error);
+                          alert(
+                            "An error has occured. We couldn't sign you out :("
+                          );
                         }
                       }}
                     />
