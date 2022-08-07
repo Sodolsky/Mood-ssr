@@ -119,6 +119,7 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
         <Tippy
           interactive={true}
           delay={200}
+          zIndex={10000}
           placement={"left"}
           content={
             <div className="tippyLikes">
