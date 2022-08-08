@@ -118,7 +118,7 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
       {match && (
         <Tippy
           interactive={true}
-          delay={200}
+          delay={150}
           zIndex={10000}
           placement={"left"}
           content={
