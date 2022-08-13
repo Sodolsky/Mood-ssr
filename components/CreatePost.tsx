@@ -327,31 +327,31 @@ export const CreatePost: React.FC = () => {
               </div>
             </div>
           </div>
-          {(YTLink !== "" || userImage !== undefined) &&
-            newPostText.replaceAll(/\s/g, "").length > 0 && (
-              <div className="CssButtonContainer">
-                <hr />
-                <div className="wrapperForPrevievButton">
-                  <button
-                    onClick={() => {
-                      //TODO Tutaj dodac sprawdzanie czy jest link wybrany i wtedy podjac odpowiednia akcje
-                      if (isLinkChoosen) {
-                        if (validateYouTubeUrl(YTLink || "") === false) {
-                          return setShowAlert(true);
-                        } else {
-                          return setShowModal(true);
-                        }
-                      } else if (rawImageBlob && imgPrevievSrc !== "") {
+          {((YTLink !== "" && newPostText.replaceAll(/\s/g, "").length > 0) ||
+            userImage !== undefined) && (
+            <div className="CssButtonContainer">
+              <hr />
+              <div className="wrapperForPrevievButton">
+                <button
+                  onClick={() => {
+                    //TODO Tutaj dodac sprawdzanie czy jest link wybrany i wtedy podjac odpowiednia akcje
+                    if (isLinkChoosen) {
+                      if (validateYouTubeUrl(YTLink || "") === false) {
+                        return setShowAlert(true);
+                      } else {
                         return setShowModal(true);
                       }
-                    }}
-                    className="PrevievInModal"
-                  >
-                    See your Own Post
-                  </button>
-                </div>
+                    } else if (rawImageBlob && imgPrevievSrc !== "") {
+                      return setShowModal(true);
+                    }
+                  }}
+                  className="PrevievInModal"
+                >
+                  See your Own Post
+                </button>
               </div>
-            )}
+            </div>
+          )}
         </div>
       ) : (
         <AddPostIcon

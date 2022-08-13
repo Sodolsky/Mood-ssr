@@ -423,7 +423,11 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                   );
                   changeCommentVal({ text: "", img: "", imgBlob: null });
                 }}
-                disabled={commentVal.text.length < 1}
+                disabled={
+                  !commentVal.imgBlob
+                    ? commentVal.text.length < 1
+                    : !commentVal.imgBlob
+                }
               >
                 Add
               </button>
