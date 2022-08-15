@@ -270,7 +270,7 @@ export const CreatePost: React.FC = () => {
               autoFocus={true}
               maxLength={250}
               ref={textareaRef}
-              maxRows={4}
+              maxRows={3}
               onChange={handleChange}
               value={newPostText}
               name="Text"
