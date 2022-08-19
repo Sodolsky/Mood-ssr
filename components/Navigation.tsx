@@ -3,6 +3,7 @@ import { Container, Navbar } from "react-bootstrap";
 import Home from "../public/home.svg";
 import Explore from "../public/explore.png";
 import UserProfileIcon from "../public/userprofile.png";
+import Search from "../public/search.png";
 import Link from "next/link";
 import { currentlyLoggedInUserContext } from "../utils/interfaces";
 import { LazyLoadedImage } from "./LazyLoadedImage";
@@ -41,6 +42,21 @@ export const Navigation: React.FC = () => {
                       paddingBottom: "0.25rem",
                       borderBottom:
                         splited[1] === "explore" ? "3px solid purple" : "",
+                    }}
+                  />
+                </section>
+              </Link>
+            </button>
+            <button>
+              <Link href={`/search`}>
+                <section>
+                  <LazyLoadedImage
+                    src={Search.src}
+                    alt="Search Posts"
+                    style={{
+                      paddingBottom: "0.25rem",
+                      borderBottom:
+                        splited[1] === "search" ? "3px solid purple" : "",
                     }}
                   />
                 </section>
