@@ -39,7 +39,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 export const Header: React.FC = () => {
-  const match = useMediaQuery("only screen and (min-width:450px");
+  const match = useMediaQuery("only screen and (min-width:440px");
   const router = useRouter();
   const muteAudioContext = React.useContext(isaudioMutedContext);
   const currentlyLoggedInUser = React.useContext(currentlyLoggedInUserContext);
