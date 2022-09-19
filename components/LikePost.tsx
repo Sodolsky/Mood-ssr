@@ -4,7 +4,7 @@ import { isEqual } from "lodash";
 import moment from "moment";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { UserData } from "../utils/interfaces";
+import { peopleThatLikedInterface, UserData } from "../utils/interfaces";
 import { db } from "../firebase/firebase";
 import { NotificationInterface } from "../utils/interfaces";
 import heart from "../public/heart.svg";
@@ -16,17 +16,18 @@ import {
 } from "./likeFunctions";
 import { UserForFirebase } from "./Post";
 import Link from "next/link";
+
 interface LikePostInterface {
   match: boolean;
   currentlyLoggedInUser: UserData;
-  poepleThatLiked: UserForFirebase[];
+  poepleThatLiked: peopleThatLikedInterface[];
   date: string;
   postId: string;
   userThatPostedLogin: string;
 }
 export const savePoepleThatLikedPost = async (
   key: string,
-  poepleThatLikedArray: UserForFirebase[],
+  poepleThatLikedArray: peopleThatLikedInterface[],
   postId: string,
   login: string,
   userThatPostedLogin: string
@@ -61,15 +62,15 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
   const isLiked = poepleThatLiked.some((x) => {
     return isEqual(x.Login, currentlyLoggedInUser.Login);
   });
-  const [wasLiked, setWasLiked] = useState<boolean>(isLiked);
   const [likes, setLikes] = useState<number>(0);
   const handleLikeChange = (
     event: React.MouseEvent<HTMLImageElement, MouseEvent>
   ) => {
     event.preventDefault();
-    const obj: UserForFirebase = {
+    const obj: peopleThatLikedInterface = {
       Login: currentlyLoggedInUser.Login as string,
       Avatar: currentlyLoggedInUser.Avatar as string,
+      type: "heart",
     };
     if (
       poepleThatLiked.some((x) => {
@@ -80,6 +81,7 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
       removeLikeClass(heartRef);
     } else {
       poepleThatLiked.push(obj);
+      playLikeAnimation(heartRef);
       playLikeAnimation(heartRef);
     }
     saveLikedUsers();
@@ -110,7 +112,6 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
             : heart.src
         }
         onClick={(event) => {
-          setWasLiked(!wasLiked);
           handleLikeChange(event);
         }}
         alt="Place where you love someone post"

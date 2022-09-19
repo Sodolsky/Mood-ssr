@@ -2,6 +2,7 @@ import * as React from "react";
 import "tippy.js/animations/scale.css";
 import {
   currentlyLoggedInUserContext,
+  peopleThatLikedInterface,
   themeContext,
   UserData,
 } from "../utils/interfaces";
@@ -506,7 +507,7 @@ export interface PostPropsInteface {
   YTLink?: string;
   likeCount: number;
   hashtags: string[];
-  poepleThatLiked: UserForFirebase[];
+  poepleThatLiked: peopleThatLikedInterface[];
   date: string;
   URL: string;
   hallOfFame: boolean;

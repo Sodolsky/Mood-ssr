@@ -13,18 +13,13 @@ import { getLinkId, validateYouTubeUrl } from "./ValidateYoutubeUrl";
 import { AddPostIcon } from "./AddPostIcon";
 import {
   currentlyLoggedInUserContext,
+  peopleThatLikedInterface,
   themeContext,
   UserData,
 } from "../utils/interfaces";
 import { useContext } from "react";
 import { db, storageRef } from "../firebase/firebase";
-import {
-  doc,
-  setDoc,
-  Timestamp,
-  updateDoc,
-  writeBatch,
-} from "@firebase/firestore";
+import { doc, Timestamp, writeBatch } from "@firebase/firestore";
 import { ref, uploadBytes } from "@firebase/storage";
 import { downloadImageIfPostHasOne, UserForFirebase } from "./Post";
 import { LoadingRing } from "./LoadingRing";
@@ -83,7 +78,7 @@ export const CreatePost: React.FC = () => {
     userThatPostedThis: UserData,
     text: string,
     likeCount: number,
-    poepleThatLiked: UserForFirebase[],
+    poepleThatLiked: peopleThatLikedInterface[],
     date: string,
     timestamp: Timestamp,
     hashtags: string[],
@@ -240,9 +235,10 @@ export const CreatePost: React.FC = () => {
     checkFileType(rawImageBlob)
       ? (fileType = "image")
       : (fileType = "uservideo");
-    const userObjForFirebase: UserForFirebase = {
+    const userObjForFirebase: peopleThatLikedInterface = {
       Login: currentlyLoggedInUser.Login as string,
       Avatar: currentlyLoggedInUser.Avatar as string,
+      type: "heart",
     };
     addNewPostIntoDataBase(
       postType,

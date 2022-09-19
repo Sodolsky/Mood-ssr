@@ -1,4 +1,5 @@
 import React, { createContext } from "react";
+import { UserForFirebase } from "../components/Post";
 
 export const userLogInContext = createContext<LogInInterface>({
   isUserLoggedIn: false,
@@ -77,4 +78,8 @@ export interface LogInInterface {
 export interface FirstLoadContext {
   isItTheFirstLoad: boolean;
   setIsItTheFirstLoad: React.Dispatch<React.SetStateAction<boolean>>;
+}
+type likeTypes = "heart" | "poop" | "laughing";
+export interface peopleThatLikedInterface extends UserForFirebase {
+  type: likeTypes;
 }
