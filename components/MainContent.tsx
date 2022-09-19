@@ -27,7 +27,6 @@ export type incomingPostsType = {
   ready: boolean;
   count: number;
 };
-
 export const MainContent: React.FC = () => {
   const { isItTheFirstLoad, setIsItTheFirstLoad } =
     React.useContext(firstLoadContext);

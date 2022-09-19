@@ -14,7 +14,6 @@ import {
   removeLikeClass,
   removeUserFromLikedArray,
 } from "./likeFunctions";
-import { UserForFirebase } from "./Post";
 import Link from "next/link";
 
 interface LikePostInterface {
@@ -101,21 +100,49 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
   }, [poepleThatLiked]);
   return (
     <>
-      <img
-        className="HeartToLike"
-        ref={heartRef}
-        src={
-          poepleThatLiked.some((x) => {
-            return isEqual(x.Login, currentlyLoggedInUser.Login);
-          })
-            ? heartLiked.src
-            : heart.src
+      <Tippy
+        interactive={true}
+        delay={400}
+        zIndex={10001}
+        placement="top"
+        allowHTML={true}
+        animation={"scale"}
+        content={
+          <div className="likeTypesContainer">
+            <img
+              src={
+                poepleThatLiked.some((x) => {
+                  return (
+                    isEqual(x.Login, currentlyLoggedInUser.Login) &&
+                    x.type === "heart"
+                  );
+                })
+                  ? heart.src
+                  : heartLiked.src
+              }
+              alt="Poop"
+            />
+            <img src="poop.png" alt="Poop" />
+            <img src="laughing.png" alt="Poop" />
+          </div>
         }
-        onClick={(event) => {
-          handleLikeChange(event);
-        }}
-        alt="Place where you love someone post"
-      />
+      >
+        <img
+          className="HeartToLike"
+          ref={heartRef}
+          src={
+            poepleThatLiked.some((x) => {
+              return isEqual(x.Login, currentlyLoggedInUser.Login);
+            })
+              ? heartLiked.src
+              : heart.src
+          }
+          onClick={(event) => {
+            handleLikeChange(event);
+          }}
+          alt="Place where you love someone post"
+        />
+      </Tippy>
       {match && (
         <Tippy
           interactive={true}
@@ -140,7 +167,7 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
           animation={"scale"}
           appendTo={"parent"}
         >
-          <div>Hearts</div>
+          <div>Reactions</div>
         </Tippy>
       )}{" "}
       {likes}

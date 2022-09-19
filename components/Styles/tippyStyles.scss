@@ -85,6 +85,17 @@
     }
   }
 }
+.likeTypesContainer {
+  display: flex;
+  gap: 0.25rem;
+  background-color: white;
+  border-radius: 0.25rem;
+  border: 1px solid black;
+  padding: 0.25rem;
+  img {
+    cursor: pointer;
+  }
+}
 .NotificationContainer {
   color: black;
   display: grid;
