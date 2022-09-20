@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import TextareAutosize from "react-textarea-autosize";
 import { FileUploader } from "./FileUploader";
 import { useEffect } from "react";
-import heartLiked from "../public/heartLiked.svg";
+import heart from "../public/heart.png";
 import { UrlUploader } from "./UrlOploader";
 import { getLinkId, validateYouTubeUrl } from "./ValidateYoutubeUrl";
 import { AddPostIcon } from "./AddPostIcon";
@@ -402,7 +402,7 @@ export const CreatePost: React.FC = () => {
                 </div>
                 <span className="LikesAndComments">
                   <Image
-                    src={heartLiked}
+                    src={heart}
                     width={32}
                     height={32}
                     alt="Place where you love someone post"

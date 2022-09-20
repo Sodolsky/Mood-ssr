@@ -79,7 +79,7 @@ export interface FirstLoadContext {
   isItTheFirstLoad: boolean;
   setIsItTheFirstLoad: React.Dispatch<React.SetStateAction<boolean>>;
 }
-type likeTypes = "heart" | "poop" | "laughing";
+export type likeTypes = "heart" | "poop" | "laughing";
 export interface peopleThatLikedInterface extends UserForFirebase {
   type: likeTypes;
 }

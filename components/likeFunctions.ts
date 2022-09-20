@@ -1,4 +1,5 @@
 import { isEqual } from "lodash";
+import { peopleThatLikedInterface } from "../utils/interfaces";
 import { PostPropsInteface, UserForFirebase } from "./Post";
 export const getIndexOf = (
   array: UserForFirebase[],
@@ -13,8 +14,8 @@ export const getIndexOf = (
   return val;
 };
 export const removeUserFromLikedArray = (
-  array: UserForFirebase[],
-  currentUser: UserForFirebase
+  array: peopleThatLikedInterface[],
+  currentUser: peopleThatLikedInterface
 ): void => {
   if (array.length === 1) {
     array.pop();

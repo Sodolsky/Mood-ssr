@@ -4,18 +4,42 @@ import { isEqual } from "lodash";
 import moment from "moment";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { peopleThatLikedInterface, UserData } from "../utils/interfaces";
+import {
+  likeTypes,
+  peopleThatLikedInterface,
+  UserData,
+} from "../utils/interfaces";
 import { db } from "../firebase/firebase";
 import { NotificationInterface } from "../utils/interfaces";
-import heart from "../public/heart.svg";
-import heartLiked from "../public/heartLiked.svg";
+import heart from "../public/heart.png";
+import poop from "../public/poop.png";
+import laughing from "../public/laughing.png";
+import heartOutline from "../public/heartoutline.png";
+import poopOutline from "../public/poopoutline.png";
+import laughingOutline from "../public/laughingOutline.png";
 import {
   playLikeAnimation,
   removeLikeClass,
   removeUserFromLikedArray,
 } from "./likeFunctions";
 import Link from "next/link";
-
+import { UserForFirebase } from "./Post";
+import { StaticImageData } from "next/image";
+const getProperImage = (
+  isLiked: boolean,
+  likePostType: likeTypes
+): StaticImageData => {
+  switch (likePostType) {
+    case "heart":
+      return isLiked ? heart : heartOutline;
+    case "laughing":
+      return isLiked ? laughing : laughingOutline;
+    case "poop":
+      return isLiked ? poop : poopOutline;
+    default:
+      return isLiked ? heart : heartOutline;
+  }
+};
 interface LikePostInterface {
   match: boolean;
   currentlyLoggedInUser: UserData;
@@ -49,40 +73,56 @@ export const savePoepleThatLikedPost = async (
   });
 };
 export const LikePost: React.FC<LikePostInterface> = (props) => {
-  const {
-    match,
-    currentlyLoggedInUser,
-    poepleThatLiked,
-    date,
-    postId,
-    userThatPostedLogin,
-  } = props;
-  const heartRef = React.useRef<any>(null);
+  const { match, currentlyLoggedInUser, date, postId, userThatPostedLogin } =
+    props;
+  let { poepleThatLiked } = props;
+  const likeRef = React.useRef<any>(null);
+  const [likeType, setLikeType] = useState<likeTypes>(
+    poepleThatLiked.find((x) => {
+      return isEqual(x.Login, currentlyLoggedInUser.Login);
+    })?.type ?? "heart"
+  );
   const isLiked = poepleThatLiked.some((x) => {
     return isEqual(x.Login, currentlyLoggedInUser.Login);
   });
   const [likes, setLikes] = useState<number>(0);
   const handleLikeChange = (
-    event: React.MouseEvent<HTMLImageElement, MouseEvent>
+    event: React.MouseEvent<HTMLImageElement, MouseEvent>,
+    likeTypelocal: likeTypes
   ) => {
     event.preventDefault();
-    const obj: peopleThatLikedInterface = {
+
+    const baseObj: UserForFirebase = {
       Login: currentlyLoggedInUser.Login as string,
       Avatar: currentlyLoggedInUser.Avatar as string,
-      type: "heart",
     };
-    if (
-      poepleThatLiked.some((x) => {
-        return isEqual(x.Login, currentlyLoggedInUser.Login);
-      })
-    ) {
-      removeUserFromLikedArray(poepleThatLiked, obj);
-      removeLikeClass(heartRef);
+    if (!isLiked) {
+      //?Here we handle liking post logic, doesn't matter what type of reaction
+      const fullObj: peopleThatLikedInterface = {
+        ...baseObj,
+        type: likeTypelocal,
+      };
+      poepleThatLiked.push(fullObj);
+      playLikeAnimation(likeRef);
     } else {
-      poepleThatLiked.push(obj);
-      playLikeAnimation(heartRef);
-      playLikeAnimation(heartRef);
+      if (likeType === likeTypelocal) {
+        //?Here we handle removing user reaction when the same type is selected.
+        const fullObj: peopleThatLikedInterface = {
+          ...baseObj,
+          type: likeTypelocal,
+        };
+        removeLikeClass(likeRef);
+        removeUserFromLikedArray(poepleThatLiked, fullObj);
+      }
+      //?Here we handle chaging user reaction type.
+      poepleThatLiked = poepleThatLiked.map((x) =>
+        x.Login !== (currentlyLoggedInUser.Login as string)
+          ? x
+          : { ...x, type: likeTypelocal }
+      );
     }
+    setLikeType(likeTypelocal);
+    console.log(poepleThatLiked);
     saveLikedUsers();
   };
   const saveLikedUsers = (): void => {
@@ -111,34 +151,34 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
           <div className="likeTypesContainer">
             <img
               src={
-                poepleThatLiked.some((x) => {
-                  return (
-                    isEqual(x.Login, currentlyLoggedInUser.Login) &&
-                    x.type === "heart"
-                  );
-                })
-                  ? heart.src
-                  : heartLiked.src
+                isLiked && likeType === "heart" ? heartOutline.src : heart.src
               }
-              alt="Poop"
+              alt="Heart Icon"
+              onClick={(e) => handleLikeChange(e, "heart")}
             />
-            <img src="poop.png" alt="Poop" />
-            <img src="laughing.png" alt="Poop" />
+            <img
+              src={isLiked && likeType === "poop" ? poopOutline.src : poop.src}
+              alt="Poop Emoji"
+              onClick={(e) => handleLikeChange(e, "poop")}
+            />
+            <img
+              src={
+                isLiked && likeType === "laughing"
+                  ? laughingOutline.src
+                  : laughing.src
+              }
+              onClick={(e) => handleLikeChange(e, "laughing")}
+              alt="Laughing Face"
+            />
           </div>
         }
       >
         <img
           className="HeartToLike"
-          ref={heartRef}
-          src={
-            poepleThatLiked.some((x) => {
-              return isEqual(x.Login, currentlyLoggedInUser.Login);
-            })
-              ? heartLiked.src
-              : heart.src
-          }
+          ref={likeRef}
+          src={getProperImage(isLiked, likeType).src}
           onClick={(event) => {
-            handleLikeChange(event);
+            handleLikeChange(event, likeType);
           }}
           alt="Place where you love someone post"
         />
