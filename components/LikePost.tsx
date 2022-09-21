@@ -25,7 +25,7 @@ import {
 import Link from "next/link";
 import { UserForFirebase } from "./Post";
 import { StaticImageData } from "next/image";
-const getProperImage = (
+export const getProperImage = (
   isLiked: boolean,
   likePostType: likeTypes
 ): StaticImageData => {
@@ -122,7 +122,6 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
       );
     }
     setLikeType(likeTypelocal);
-    console.log(poepleThatLiked);
     saveLikedUsers();
   };
   const saveLikedUsers = (): void => {
@@ -173,15 +172,17 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
           </div>
         }
       >
-        <img
-          className="HeartToLike"
-          ref={likeRef}
-          src={getProperImage(isLiked, likeType).src}
-          onClick={(event) => {
-            handleLikeChange(event, likeType);
-          }}
-          alt="Place where you love someone post"
-        />
+        <div>
+          <img
+            className="HeartToLike"
+            ref={likeRef}
+            src={getProperImage(isLiked, likeType).src}
+            onClick={(event) => {
+              handleLikeChange(event, likeType);
+            }}
+            alt="Place where you love someone post"
+          />
+        </div>
       </Tippy>
       {match && (
         <Tippy
@@ -195,6 +196,10 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
                 return (
                   <div className="LikedPostContainer" key={item.Login}>
                     <img src={item.Avatar as string} alt="User Avatar" />
+                    <img
+                      src={getProperImage(true, item.type).src}
+                      alt="likeType"
+                    />
                     <Link href={`/users/${item.Login}`}>
                       <span>{item.Login}</span>
                     </Link>
