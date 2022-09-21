@@ -2,6 +2,7 @@ import * as React from "react";
 import "tippy.js/animations/scale.css";
 import {
   currentlyLoggedInUserContext,
+  likeTypes,
   peopleThatLikedInterface,
   themeContext,
   UserData,
@@ -27,10 +28,10 @@ import { useMediaQuery } from "@react-hook/media-query";
 import { CommentInterface } from "./CreatePost";
 import { CommentComponent } from "./CommentComponent";
 import moment from "moment";
-import { LikePost } from "./LikePost";
+import { getProperImage, LikePost } from "./LikePost";
 import { LazyLoadedImage } from "./LazyLoadedImage";
 import Link from "next/link";
-import { Image, Input, InputRef, message, Spin } from "antd";
+import { Image, Input, InputRef, message, Modal, Spin } from "antd";
 import SkeletonPost from "./SkeletonPost";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import { NotificationInterface } from "../utils/interfaces";
@@ -54,6 +55,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const commentTextInputRef = React.useRef<InputRef | null>(null);
   const submitCommentButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const [wasFadedIn, setWasFadedIn] = useState<boolean>(false);
+  const [showModal, setshowModal] = useState(false);
   const themeCTX = useContext(themeContext);
   //We are defining date as another variable to avoid name collison when passing props to comment element
   const parentDate = props.date;
@@ -76,7 +78,15 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const [addingCommentSelected, setIfAddingCommentIsSelected] =
     useState<boolean>(false);
   const firstRender = React.useRef<boolean>(true);
-
+  interface counterInterface {
+    [key: string]: number;
+  }
+  const reactionsCounter: counterInterface = {};
+  postData?.poepleThatLiked.forEach((x) => {
+    const key = x.type ?? "heart";
+    reactionsCounter[key] = (reactionsCounter[key] || 0) + 1;
+  });
+  console.log(reactionsCounter);
   // Here we are fetching the comments data and setting up top comment
   useEffect(() => {
     let PostSubscription = () => {};
@@ -335,7 +345,23 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
               ></LiteYouTubeEmbed>
             )}
           </div>
-          <span className="WhenPostWasAdded">{moment(myDate).fromNow()}</span>
+          <div className="postTimerAndReactionTypesContainer">
+            <span className="WhenPostWasAdded">{moment(myDate).fromNow()}</span>
+            <div className="ReactionTypes" onClick={() => setshowModal(true)}>
+              {Object.keys(reactionsCounter).map((x) => (
+                <img
+                  key={x}
+                  src={getProperImage(true, x as likeTypes).src}
+                  alt="Like Type"
+                />
+              ))}
+            </div>
+          </div>
+          {/* <Modal
+            title={"Reactions Modal"}
+            visible={showModal}
+            onCancel={() => setshowModal(false)}
+          ></Modal> */}
           <span className="LikesAndComments">
             <LikePost
               currentlyLoggedInUser={currentlyLoggedInUser}

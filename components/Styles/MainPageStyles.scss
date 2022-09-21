@@ -541,6 +541,22 @@ $black: #2f2f2f;
     }
   }
 }
+.postTimerAndReactionTypesContainer {
+  @include FlexCenterHV();
+  flex-direction: column;
+  .ReactionTypes {
+    border-color: lightgray;
+    border-width: 0 2px 2px 2px;
+    border-style: solid;
+    padding: 0.25rem;
+    @include FlexCenterHV();
+    img {
+      margin: 0 3px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
 .CssButtonContainer {
   hr {
     width: 100%;
