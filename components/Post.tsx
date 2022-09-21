@@ -86,7 +86,6 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
     const key = x.type ?? "heart";
     reactionsCounter[key] = (reactionsCounter[key] || 0) + 1;
   });
-  console.log(reactionsCounter);
   // Here we are fetching the comments data and setting up top comment
   useEffect(() => {
     let PostSubscription = () => {};

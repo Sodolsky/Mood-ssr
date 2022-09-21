@@ -8,7 +8,7 @@ import {
   themeContext,
 } from "../utils/interfaces";
 import { LikeOutlined, LikeFilled } from "@ant-design/icons";
-import { removeUserFromLikedArray } from "./likeFunctions";
+import { removeUserFromLikedArrayComment } from "./likeFunctions";
 import { doc, updateDoc } from "@firebase/firestore";
 import { db } from "../firebase/firebase";
 import { UserForFirebase } from "./Post";
@@ -63,7 +63,7 @@ export const CommentComponent: React.FC<CommentInterface> = (props) => {
         return isEqual(x.Login, currentlyLoggedInUser.Login);
       })
     ) {
-      removeUserFromLikedArray(usersThatLikedThisComment, obj);
+      removeUserFromLikedArrayComment(usersThatLikedThisComment, obj);
       setLikeCount(usersThatLikedThisComment.length);
     } else {
       usersThatLikedThisComment.push(obj);

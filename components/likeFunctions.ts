@@ -23,6 +23,16 @@ export const removeUserFromLikedArray = (
   }
   array.splice(getIndexOf(array, currentUser), 1);
 };
+export const removeUserFromLikedArrayComment = (
+  array: UserForFirebase[],
+  currentUser: UserForFirebase
+): void => {
+  if (array.length === 1) {
+    array.pop();
+    return;
+  }
+  array.splice(getIndexOf(array, currentUser), 1);
+};
 // I know its redundant but i dont wanna ever deal with another like logic
 export const playLikeAnimation = (
   ref: React.MutableRefObject<HTMLImageElement>
