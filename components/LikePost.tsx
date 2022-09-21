@@ -16,7 +16,7 @@ import poop from "../public/poop.png";
 import laughing from "../public/laughing.png";
 import heartOutline from "../public/heartoutline.png";
 import poopOutline from "../public/poopoutline.png";
-import laughingOutline from "../public/laughingOutline.png";
+import laughingOutline from "../public/laughingoutline.png";
 import {
   playLikeAnimation,
   removeLikeClass,
