@@ -14,9 +14,13 @@ import { NotificationInterface } from "../utils/interfaces";
 import heart from "../public/heart.png";
 import poop from "../public/poop.png";
 import laughing from "../public/laughing.png";
+import crying from "../public/crying.png";
+import questionMark from "../public/question-mark.png";
 import heartOutline from "../public/heartoutline.png";
 import poopOutline from "../public/poopoutline.png";
 import laughingOutline from "../public/laughingoutline.png";
+import cryingOutline from "../public/cryingOutline.png";
+import questionMarkOutline from "../public/question-markOutline.png";
 import {
   playLikeAnimation,
   removeLikeClass,
@@ -36,6 +40,10 @@ export const getProperImage = (
       return isLiked ? laughing : laughingOutline;
     case "poop":
       return isLiked ? poop : poopOutline;
+    case "crying":
+      return isLiked ? crying : cryingOutline;
+    case "questionMark":
+      return isLiked ? questionMark : questionMarkOutline;
     default:
       return isLiked ? heart : heartOutline;
   }
@@ -168,6 +176,24 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
               }
               onClick={(e) => handleLikeChange(e, "laughing")}
               alt="Laughing Face"
+            />
+            <img
+              src={
+                isLiked && likeType === "crying"
+                  ? cryingOutline.src
+                  : crying.src
+              }
+              onClick={(e) => handleLikeChange(e, "crying")}
+              alt="Crying Face"
+            />
+            <img
+              src={
+                isLiked && likeType === "questionMark"
+                  ? questionMarkOutline.src
+                  : questionMark.src
+              }
+              onClick={(e) => handleLikeChange(e, "questionMark")}
+              alt="Question Mark"
             />
           </div>
         }
