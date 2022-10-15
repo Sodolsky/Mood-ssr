@@ -84,7 +84,8 @@ export type likeTypes =
   | "poop"
   | "laughing"
   | "questionMark"
-  | "crying";
+  | "crying"
+  | "clown";
 export interface peopleThatLikedInterface extends UserForFirebase {
   type: likeTypes;
 }
