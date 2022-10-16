@@ -155,7 +155,7 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
       <Tippy
         interactive={true}
         delay={300}
-        zIndex={10001}
+        zIndex={10000}
         placement="top"
         allowHTML={true}
         animation={"scale"}
