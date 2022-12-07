@@ -20,7 +20,7 @@ import {
 import { useContext } from "react";
 import { db, storageRef } from "../firebase/firebase";
 import { doc, Timestamp, writeBatch } from "@firebase/firestore";
-import { ref, uploadBytes } from "@firebase/storage";
+import { ref } from "@firebase/storage";
 import { downloadImageIfPostHasOne, UserForFirebase } from "./Post";
 import { LoadingRing } from "./LoadingRing";
 import commentSVG from "../public/Comment.svg";
@@ -30,7 +30,7 @@ import { uniq } from "lodash";
 import moment from "moment";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import Image from "next/image";
-import { getDownloadURL } from "firebase/storage";
+import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
 //Key needs to be changed
 const uploadUserImageToStorageBucket = async (
   key: string,
@@ -38,7 +38,7 @@ const uploadUserImageToStorageBucket = async (
 ) => {
   const pathRef = ref(storageRef, "PostImages");
   const fileRef = ref(pathRef, `${key}`);
-  await uploadBytes(fileRef, img);
+  const uploadTask = await uploadBytesResumable(fileRef, img);
   await getDownloadURL(fileRef);
 };
 export interface CommentInterface {
@@ -62,6 +62,7 @@ export const CreatePost: React.FC = () => {
   const [isLinkChoosen, setIfLinkIsChoosen] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [YTLink, setYTLink] = useState<string | undefined>("");
+  const [progressNumber, setprogressNumber] = useState<number>(0);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [postType, setPostType] = useState<string>("");
   const currentlyLoggedInUser = useContext(currentlyLoggedInUserContext);
@@ -73,6 +74,7 @@ export const CreatePost: React.FC = () => {
   const [rawImageBlob, setRawImageBlob] = useState<File | Blob>();
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
   const match = useMediaQuery("only screen and (min-width:450px");
+
   const addNewPostIntoDataBase = async (
     postType: string,
     userThatPostedThis: UserData,
@@ -212,6 +214,9 @@ export const CreatePost: React.FC = () => {
     setRawImageBlob(undefined);
     setPostLoading(false);
     setImgLock(false);
+  };
+  const editPost = (): void => {
+    setShowModal(false);
   };
   //We need to set Post Type and Add Post To DataBase
   const handlePost = async () => {
@@ -432,6 +437,9 @@ export const CreatePost: React.FC = () => {
             }
           >
             Post
+          </Button>
+          <Button variant="secondary" onClick={editPost}>
+            Edit
           </Button>
           <Button variant="secondary" onClick={dismissPost}>
             Dismiss
