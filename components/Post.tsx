@@ -49,6 +49,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { v4 } from "uuid";
 import { default as NextImage } from "next/image";
+import { toast } from "react-toastify";
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
   const postRef = React.useRef<HTMLDivElement | null>(null);
@@ -268,7 +269,21 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                   alt="Add to Hall Of Fame"
                   src={postData.hallOfFame ? StarIcon.src : EmptyStarIcon.src}
                   onClick={() => {
-                    handleHallOfFameChange(postData, props.date);
+                    //If Post is In Hall Of Fame only me and my friend Patryk can unpin it to not cause chaos
+                    //TODO add a special role for trusted users to replace hardcoding nicknames
+                    if (
+                      postData.hallOfFame &&
+                      (currentlyLoggedInUser.Login === "Sodol" ||
+                        currentlyLoggedInUser.Login === "pykir")
+                    ) {
+                      handleHallOfFameChange(postData, props.date);
+                    } else if (postData.hallOfFame) {
+                      toast.error(
+                        "Only trusted users can remove posts from Hall Of Fame."
+                      );
+                    } else {
+                      handleHallOfFameChange(postData, props.date);
+                    }
                   }}
                 />
               </Accordion.Body>

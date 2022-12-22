@@ -39,6 +39,7 @@ import "../components/Styles/RankingComponent.scss";
 import "../components/Styles/UserProfile.scss";
 import "../components/Styles/tippyStyles.scss";
 import "../components/Styles/SearchPage.scss";
+import "react-toastify/dist/ReactToastify.css";
 import "nprogress/nprogress.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -46,6 +47,7 @@ config.autoAddCss = false;
 import Head from "next/head";
 import nProgress from "nprogress";
 import { Router } from "next/router";
+import { ToastContainer } from "react-toastify";
 function MyApp({ Component, pageProps }: AppProps) {
   Router.events.on("routeChangeStart", () => {
     nProgress.start();
@@ -179,6 +181,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </currentlyLoggedInUserContext.Provider>
         </setCurrentlyLoggedInUserContext.Provider>
       </firstLoadContext.Provider>
+      <ToastContainer />
     </>
   );
 }
