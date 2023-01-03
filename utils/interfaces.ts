@@ -70,7 +70,9 @@ export interface UserData {
   commentsRef?: string[];
   commentCount?: number;
   pinnedPost?: string;
+  userRole?: userRoles;
 }
+export type userRoles = "Admin" | "Trusted" | "Normal";
 export interface LogInInterface {
   isUserLoggedIn: boolean | undefined;
   setIfUserIsLoggedIn: any;

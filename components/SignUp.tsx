@@ -14,6 +14,7 @@ import { PostPropsInteface } from "./Post";
 import {
   userPrefferedPostType,
   setCurrentlyLoggedInUserContext,
+  userRoles,
 } from "../utils/interfaces";
 import { createUserWithEmailAndPassword, UserCredential } from "@firebase/auth";
 import { FirebaseError } from "@firebase/util";
@@ -37,7 +38,8 @@ const addNewAccountIntoDataBase = async (
   postCount: number,
   commentsRef: string[],
   commentCount: number,
-  pinnedPost: string
+  pinnedPost: string,
+  userRole: userRoles
 ) => {
   try {
     nProgress.start();
@@ -59,6 +61,7 @@ const addNewAccountIntoDataBase = async (
       commentsRef: commentsRef,
       commentCount: commentCount,
       pinnedPost: pinnedPost,
+      userRole: userRole,
     });
     nProgress.done();
   } catch (error) {
@@ -182,7 +185,8 @@ export const SignUp: React.FC<SignUpProps> = (props) => {
                 0,
                 [],
                 0,
-                ""
+                "",
+                "Normal"
               );
               setIfUserIsLoggedIn(true);
               setCurrentlyLoggedInUser!({
@@ -197,6 +201,7 @@ export const SignUp: React.FC<SignUpProps> = (props) => {
                 UID: user.uid,
                 postCount: 0,
                 pinnedPost: "",
+                userRole: "Normal",
               });
             })
             .catch((error: FirebaseError) => {

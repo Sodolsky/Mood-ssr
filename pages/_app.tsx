@@ -124,6 +124,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           commentsRef: obj.commentsRef,
           commentCount: obj.commentCount,
           pinnedPost: obj.pinnedPost,
+          userRole: obj.userRole,
         });
         getUsersLoginsUtility();
       }
