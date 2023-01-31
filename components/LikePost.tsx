@@ -123,7 +123,7 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
       playLikeAnimation(likeRef);
     } else {
       if (likeType === likeTypelocal) {
-        //?Here we handle removing user reaction when the same type is selected.
+        //?Here we handle removing user reaction when the same type is selected
         const fullObj: peopleThatLikedInterface = {
           ...baseObj,
           type: likeTypelocal,
