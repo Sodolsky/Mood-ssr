@@ -17,12 +17,14 @@ import laughing from "../public/laughing.png";
 import crying from "../public/crying.png";
 import questionMark from "../public/question-mark.png";
 import clown from "../public/clown.png";
+import skull from "../public/skull.png";
 import heartOutline from "../public/heartoutline.png";
 import poopOutline from "../public/poopoutline.png";
 import laughingOutline from "../public/laughingoutline.png";
 import cryingOutline from "../public/cryingOutline.png";
 import questionMarkOutline from "../public/question-markOutline.png";
 import clownOutline from "../public/clownOutline.png";
+import skullOutline from "../public/skullOutline.png";
 
 import {
   playLikeAnimation,
@@ -49,6 +51,8 @@ export const getProperImage = (
       return isLiked ? questionMark : questionMarkOutline;
     case "clown":
       return isLiked ? clown : clownOutline;
+    case "skull":
+      return isLiked ? skull : skullOutline;
     default:
       return isLiked ? heart : heartOutline;
   }
@@ -206,6 +210,13 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
               }
               onClick={(e) => handleLikeChange(e, "clown")}
               alt="Clown Emoji"
+            />
+            <img
+              src={
+                isLiked && likeType === "skull" ? skullOutline.src : skull.src
+              }
+              onClick={(e) => handleLikeChange(e, "skull")}
+              alt="Skull Emoji"
             />
           </div>
         }
