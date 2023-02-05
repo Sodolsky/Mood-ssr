@@ -19,7 +19,7 @@ import {
 } from "../utils/interfaces";
 import { useContext } from "react";
 import { db, storageRef } from "../firebase/firebase";
-import { doc, Timestamp, writeBatch } from "@firebase/firestore";
+import { doc, increment, Timestamp, writeBatch } from "@firebase/firestore";
 import { ref } from "@firebase/storage";
 import { downloadImageIfPostHasOne, UserForFirebase } from "./Post";
 import { LoadingRing } from "./LoadingRing";
@@ -111,13 +111,12 @@ export const CreatePost: React.FC = () => {
         URL: URL,
         hallOfFame: hallOfFame,
       });
-      currentlyLoggedInUser.UserPosts?.push(date);
       //Evil Sodol is my testing account and i dont want to update its UserPosts Reference.
       if (currentlyLoggedInUser.Login !== "EVILSODOL") {
         newPostBatch.update(
           doc(db, "Users", `${currentlyLoggedInUser.Login}`),
           {
-            UserPosts: currentlyLoggedInUser.UserPosts,
+            postCount: increment(1),
           }
         );
       }

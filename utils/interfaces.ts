@@ -27,7 +27,6 @@ export const isaudioMutedContext = createContext<isaudioMutedContextInteface>({
 export const currentlyLoggedInUserContext = createContext<UserData>({
   Login: "",
   Email: "",
-  UserPosts: [],
 });
 export const authProcessStatusContext = createContext<boolean>(true);
 export const firstLoadContext = createContext<FirstLoadContext>({
@@ -62,12 +61,10 @@ export interface UserData {
   Avatar?: string | undefined;
   BackgroundColor?: string | undefined;
   BackgroundImage?: string | undefined;
-  UserPosts?: string[] | undefined;
   Description?: string | undefined;
   userPrefferedPost?: userPrefferedPostType | null;
   UID?: string;
   postCount?: number;
-  commentsRef?: string[];
   commentCount?: number;
   pinnedPost?: string;
   userRole?: userRoles;

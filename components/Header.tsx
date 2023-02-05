@@ -26,6 +26,7 @@ import HalfMoonIcon from "../public/half-moon.svg";
 import {
   arrayRemove,
   collection,
+  deleteField,
   doc,
   getDocs,
   onSnapshot,

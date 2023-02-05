@@ -236,34 +236,37 @@ const UserProfile: React.FC<UserProfileProps> = ({ userDataFromNextJS }) => {
       };
     }
   }, [userData]);
-  const setPostForUser = () => {
-    if (userData?.UserPosts) {
+  const setPostForUser = async () => {
+    const postCollectionRef = collection(db, "Posts");
+    if ((userData?.postCount as number) > 0 && userData) {
       switch (userPrefferedPost) {
         case "Latest Post":
-          const datesForLatestPost = userData.UserPosts.map(
-            (x) => moment(x, "DD-MM-YYYY, HH:mm:ss").unix() * 1000
-          ).sort((a, b) => a - b);
-          const latestPost = moment(
-            datesForLatestPost[datesForLatestPost.length - 1]
-          ).format("DD.MM.YYYY, HH:mm:ss");
-          queryPostByDate(latestPost).then((data) => {
-            sethighlightedPost(data);
+          const latestPost = query(
+            postCollectionRef,
+            where("userThatPostedThis.Login", "==", `${userData?.Login}`),
+            orderBy("timestamp", "desc"),
+            limit(1)
+          );
+          await getDocs(latestPost).then((x) => {
+            sethighlightedPost(x.docs[0].data() as PostPropsInteface);
           });
           break;
         case "Most Liked":
           if (userData.Login) {
-            queryPostByLikeCount(userData.Login).then((data) => {
+            queryPostByLikeCount(userData.Login as string).then((data) => {
               sethighlightedPost(data);
             });
           }
           break;
         case "Oldest Post":
-          const dates = userData.UserPosts.map(
-            (x) => moment(x, "DD-MM-YYYY, HH:mm:ss").unix() * 1000
-          ).sort((a, b) => a - b);
-          const OldestPost = moment(dates[0]).format("DD.MM.YYYY, HH:mm:ss");
-          queryPostByDate(OldestPost).then((data) => {
-            sethighlightedPost(data);
+          const oldestPost = query(
+            postCollectionRef,
+            where("userThatPostedThis.Login", "==", `${userData?.Login}`),
+            orderBy("timestamp", "asc"),
+            limit(1)
+          );
+          await getDocs(oldestPost).then((x) => {
+            sethighlightedPost(x.docs[0].data() as PostPropsInteface);
           });
           break;
         case "Pinned":
@@ -516,7 +519,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userDataFromNextJS }) => {
           <div className="Stats">
             <span>
               <h3>UserPosts</h3>
-              <span>{userData?.UserPosts?.length}</span>
+              <span>{userData?.postCount}</span>
             </span>
           </div>
         </div>

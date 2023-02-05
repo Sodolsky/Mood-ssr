@@ -20,6 +20,7 @@ import {
   arrayUnion,
   collection,
   doc,
+  FirestoreError,
   getDoc,
   onSnapshot,
   updateDoc,
@@ -50,6 +51,8 @@ import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { v4 } from "uuid";
 import { default as NextImage } from "next/image";
 import { toast } from "react-toastify";
+import { FirebaseError } from "firebase/app";
+import { increment } from "firebase/firestore";
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
   const postRef = React.useRef<HTMLDivElement | null>(null);
@@ -571,52 +574,52 @@ export const addCommentToDataBase = async (
   setCommentIsBeingAdded: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   let imageUrl: string = "";
-  if (img) {
-    const pathRef = ref(storageRef, "CommentImages");
-    const fileRef = ref(pathRef, `${v4()}`);
-    await uploadBytes(fileRef, img);
-    await getDownloadURL(fileRef).then((x) => (imageUrl = x));
-  }
-  const postRef = collection(db, "Posts", `${key}`, "comments");
-  const userRef = doc(db, "Users", `${userThatAddedComment.Login}`);
-  const userRefNotification = doc(
-    db,
-    "Notifications",
-    `${userThatPostedLogin}`
-  );
-  const newCommentObj: CommentInterface = {
-    userThatAddedComment: {
-      Login: userThatAddedComment.Login as string,
-      Avatar: userThatAddedComment.Avatar as string,
-    },
-    content: text,
-    date: date,
-    usersThatLikedThisComment: [],
-    img: imageUrl,
-  };
-  const userData = await getDoc(userRef);
-  const userDataObject = userData.data() as UserData;
-  const commentsRefArray = userDataObject.commentsRef;
-  if (userThatPostedLogin !== userThatAddedComment.Login) {
-    const NotificationObj: NotificationInterface = {
-      postId: postId,
-      type: "comment",
-      whoDid: userThatAddedComment.Login as string,
-      date: moment(new Date()).unix(),
+  try {
+    if (img) {
+      const pathRef = ref(storageRef, "CommentImages");
+      const fileRef = ref(pathRef, `${v4()}`);
+      await uploadBytes(fileRef, img);
+      await getDownloadURL(fileRef).then((x) => (imageUrl = x));
+    }
+    const postRef = collection(db, "Posts", `${key}`, "comments");
+    const userRef = doc(db, "Users", `${userThatAddedComment.Login}`);
+    const userRefNotification = doc(
+      db,
+      "Notifications",
+      `${userThatPostedLogin}`
+    );
+    const newCommentObj: CommentInterface = {
+      userThatAddedComment: {
+        Login: userThatAddedComment.Login as string,
+        Avatar: userThatAddedComment.Avatar as string,
+      },
+      content: text,
+      date: date,
+      usersThatLikedThisComment: [],
+      img: imageUrl,
     };
-    await updateDoc(userRefNotification, {
-      Notifications: arrayUnion(NotificationObj),
-    });
-  }
-  await addDoc(postRef, newCommentObj).then(async (doc) => {
-    setCommentIsBeingAdded(false);
-    if (commentsRefArray) {
-      commentsRefArray.push(doc.path);
-      await updateDoc(userData.ref, {
-        commentsRef: commentsRefArray,
+    const userData = await getDoc(userRef);
+    const userDataObject = userData.data() as UserData;
+    if (userThatPostedLogin !== userThatAddedComment.Login) {
+      const NotificationObj: NotificationInterface = {
+        postId: postId,
+        type: "comment",
+        whoDid: userThatAddedComment.Login as string,
+        date: moment(new Date()).unix(),
+      };
+      await updateDoc(userRefNotification, {
+        Notifications: arrayUnion(NotificationObj),
       });
     }
-  });
+    await addDoc(postRef, newCommentObj).then(async (doc) => {
+      setCommentIsBeingAdded(false);
+      await updateDoc(userData.ref, {
+        commentCount: increment(1),
+      });
+    });
+  } catch (error: any) {
+    console.log(error);
+  }
 };
 const showSuccessMesssage = (
   type: "Link" | "Pin" | "HOF",
