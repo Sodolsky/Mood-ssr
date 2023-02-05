@@ -164,7 +164,7 @@ const Explore: React.FC = () => {
           const arr: topPosters[] = [];
           users.forEach((item) => {
             const obj = item.data() as UserData;
-            if (obj.UserPosts && obj.Login) {
+            if (obj.Login) {
               arr.push({
                 postCount: obj.postCount ?? 0,
                 userLogin: obj.Login,
