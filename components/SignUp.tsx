@@ -28,7 +28,6 @@ interface SignUpProps {
 const addNewAccountIntoDataBase = async (
   Login: string | undefined,
   Email: string | undefined,
-  UserPosts: PostPropsInteface[],
   Avatar: File | string,
   Description: string | undefined,
   BackgroundColor: string,
@@ -36,7 +35,6 @@ const addNewAccountIntoDataBase = async (
   userPrefferedPost: userPrefferedPostType,
   UID: string,
   postCount: number,
-  commentsRef: string[],
   commentCount: number,
   pinnedPost: string,
   userRole: userRoles
@@ -50,7 +48,6 @@ const addNewAccountIntoDataBase = async (
     await setDoc(doc(db, "Users", `${Login}`), {
       Login: Login,
       Email: Email,
-      UserPosts: UserPosts,
       Avatar: Avatar,
       Description: Description,
       BackgroundColor: BackgroundColor,
@@ -58,7 +55,6 @@ const addNewAccountIntoDataBase = async (
       userPrefferedPost: userPrefferedPost,
       UID: UID,
       postCount: postCount,
-      commentsRef: commentsRef,
       commentCount: commentCount,
       pinnedPost: pinnedPost,
       userRole: userRole,
@@ -175,7 +171,6 @@ export const SignUp: React.FC<SignUpProps> = (props) => {
               addNewAccountIntoDataBase(
                 registerData.Login,
                 registerData.Email,
-                [],
                 `https://avatars.dicebear.com/api/bottts/${registerData.Login}.svg`,
                 `Hello my name is ${registerData.Login} i'm using MOOD App 😎`,
                 "2f2f2f",
@@ -183,7 +178,6 @@ export const SignUp: React.FC<SignUpProps> = (props) => {
                 "Latest Post",
                 user.uid,
                 0,
-                [],
                 0,
                 "",
                 "Normal"
@@ -192,7 +186,6 @@ export const SignUp: React.FC<SignUpProps> = (props) => {
               setCurrentlyLoggedInUser!({
                 Login: registerData.Login,
                 Email: registerData.Email,
-                UserPosts: [],
                 Avatar: `https://avatars.dicebear.com/api/bottts/${registerData.Login}.svg`,
                 Description: `Hello my name is ${registerData.Login} i'm using MOOD App 😎`,
                 BackgroundColor: "2f2f2f",
