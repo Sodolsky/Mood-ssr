@@ -113,7 +113,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         setCurrentlyLoggedInUser({
           Login: obj.Login,
           Email: obj.Email,
-          UserPosts: obj.UserPosts,
           Avatar: obj.Avatar,
           Description: obj.Description,
           BackgroundColor: obj.BackgroundColor,
@@ -121,7 +120,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           userPrefferedPost: obj.userPrefferedPost,
           UID: obj.UID,
           postCount: obj.postCount,
-          commentsRef: obj.commentsRef,
           commentCount: obj.commentCount,
           pinnedPost: obj.pinnedPost,
           userRole: obj.userRole,
