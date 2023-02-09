@@ -433,13 +433,9 @@ export const CreatePost: React.FC = () => {
                           likeType === x.likeType ? "highlightedReaction" : ""
                         }
                         onClick={() => setLikeType(x.likeType)}
+                        key={x.likeType}
                       >
-                        <Image
-                          key={x.likeType}
-                          src={x.imageData.src}
-                          height={32}
-                          width={32}
-                        />
+                        <Image src={x.imageData.src} height={32} width={32} />
                       </figure>
                     ))}
                   </span>
