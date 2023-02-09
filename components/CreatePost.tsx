@@ -232,6 +232,7 @@ export const CreatePost: React.FC = () => {
     setAddPostIconClicked(false);
     setRawImageBlob(undefined);
     setPostLoading(false);
+    setLikeType("heart");
     setImgLock(false);
   };
   const editPost = (): void => {
