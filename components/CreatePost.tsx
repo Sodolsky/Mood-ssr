@@ -7,12 +7,12 @@ import { v4 as uuidv4 } from "uuid";
 import TextareAutosize from "react-textarea-autosize";
 import { FileUploader } from "./FileUploader";
 import { useEffect } from "react";
-import heart from "../public/heart.png";
 import { UrlUploader } from "./UrlOploader";
 import { getLinkId, validateYouTubeUrl } from "./ValidateYoutubeUrl";
 import { AddPostIcon } from "./AddPostIcon";
 import {
   currentlyLoggedInUserContext,
+  likeTypes,
   peopleThatLikedInterface,
   themeContext,
   UserData,
@@ -29,8 +29,28 @@ import { checkIfTextHaveHashtags } from "./likeFunctions";
 import { uniq } from "lodash";
 import moment from "moment";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import heart from "../public/heart.png";
+import poop from "../public/poop.png";
+import laughing from "../public/laughing.png";
+import crying from "../public/crying.png";
+import questionMark from "../public/question-mark.png";
+import clown from "../public/clown.png";
+import skull from "../public/skull.png";
+interface reaction {
+  imageData: StaticImageData;
+  likeType: likeTypes;
+}
+const allReactions: reaction[] = [
+  { imageData: heart, likeType: "heart" },
+  { imageData: poop, likeType: "poop" },
+  { imageData: laughing, likeType: "laughing" },
+  { imageData: crying, likeType: "crying" },
+  { imageData: questionMark, likeType: "questionMark" },
+  { imageData: clown, likeType: "clown" },
+  { imageData: skull, likeType: "skull" },
+];
 //Key needs to be changed
 const uploadUserImageToStorageBucket = async (
   key: string,
@@ -72,9 +92,9 @@ export const CreatePost: React.FC = () => {
   const [imglock, setImgLock] = useState<boolean>(false);
   const [postLoading, setPostLoading] = useState<boolean>(false);
   const [rawImageBlob, setRawImageBlob] = useState<File | Blob>();
+  const [likeType, setLikeType] = useState<likeTypes>("heart");
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
   const match = useMediaQuery("only screen and (min-width:450px");
-
   const addNewPostIntoDataBase = async (
     postType: string,
     userThatPostedThis: UserData,
@@ -242,7 +262,7 @@ export const CreatePost: React.FC = () => {
     const userObjForFirebase: peopleThatLikedInterface = {
       Login: currentlyLoggedInUser.Login as string,
       Avatar: currentlyLoggedInUser.Avatar as string,
-      type: "heart",
+      type: likeType,
     };
     addNewPostIntoDataBase(
       postType,
@@ -404,22 +424,26 @@ export const CreatePost: React.FC = () => {
                     ></LiteYouTubeEmbed>
                   )}
                 </div>
-                <span className="LikesAndComments">
-                  <Image
-                    src={heart}
-                    width={32}
-                    height={32}
-                    alt="Place where you love someone post"
-                  />
-                  {match && "Hearts"} {1}
-                  <Image
-                    src={commentSVG}
-                    width={32}
-                    height={32}
-                    alt="Place where you can comment someone poost"
-                  />
-                  {match && "Comments"} {0}
-                </span>
+                <div className="ReactionContainer">
+                  <span>Choose your Reaction</span>
+                  <span className="ImagesContainer">
+                    {allReactions.map((x) => (
+                      <figure
+                        className={
+                          likeType === x.likeType ? "highlightedReaction" : ""
+                        }
+                        onClick={() => setLikeType(x.likeType)}
+                      >
+                        <Image
+                          key={x.likeType}
+                          src={x.imageData.src}
+                          height={32}
+                          width={32}
+                        />
+                      </figure>
+                    ))}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

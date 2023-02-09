@@ -195,6 +195,27 @@ $black: #2f2f2f;
           }
         }
       }
+      .ReactionContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+        figure {
+          margin-bottom: 0;
+        }
+        .ImagesContainer {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 0.25rem;
+          padding: 0.5rem;
+          border: black 2px solid;
+        }
+        .highlightedReaction {
+          border-bottom: 2px solid red;
+        }
+      }
       .LikesAndComments {
         display: flex;
         justify-content: center;
