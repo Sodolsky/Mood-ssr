@@ -221,7 +221,7 @@ export const CreatePost: React.FC = () => {
       };
     }
   }, [addPostIconClicked]);
-  //When User decides to dismiss his current Post we need to reset everything
+  //When User decides to dismiss his current Post we need to reset every state
   const dismissPost = (): void => {
     setNewPostText("");
     setImgPrevievSrc("");
