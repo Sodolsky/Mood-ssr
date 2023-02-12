@@ -238,7 +238,6 @@ export const CreatePost: React.FC = () => {
   const editPost = (): void => {
     setShowModal(false);
   };
-  //We need to set Post Type and Add Post To Data Base
   const handlePost = async () => {
     setImgLock(true);
     setPostLoading(true);
