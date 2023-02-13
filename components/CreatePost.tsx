@@ -194,7 +194,7 @@ export const CreatePost: React.FC = () => {
                   blob.type === "video/webm"
                 ) {
                   if (blob.size > 40000000) {
-                    //Normal value 800000000
+                    //Normal value is 40MB
                     return alert(
                       "Your File is bigger than 40MB Try to paste smaller one"
                     );
