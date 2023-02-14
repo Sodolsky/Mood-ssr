@@ -193,18 +193,22 @@ export const CreatePost: React.FC = () => {
                   blob.type === "video/ogg" ||
                   blob.type === "video/webm"
                 ) {
-                  if (blob.size > 40000000) {
-                    //Normal value is 40MB
-                    return alert(
-                      "Your File is bigger than 40MB Try to paste smaller one"
-                    );
-                  } else {
+                  if (currentlyLoggedInUser.userRole === "Normal") {
+                    if (blob.size > 40000000) {
+                      //Normal value is 40MB
+                      return alert(
+                        "Your File is bigger than 40MB Try to paste smaller one"
+                      );
+                    } else {
+                    }
                   }
                 } else {
-                  if (blob.size > 15000000) {
-                    return alert(
-                      "Your File is bigger than 15MB Try to paste smaller one"
-                    );
+                  if (currentlyLoggedInUser.userRole === "Normal") {
+                    if (blob.size > 15000000) {
+                      return alert(
+                        "Your File is bigger than 15MB Try to paste smaller one"
+                      );
+                    }
                   }
                   setRawImageBlob(blob);
 
