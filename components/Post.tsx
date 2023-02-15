@@ -20,7 +20,6 @@ import {
   arrayUnion,
   collection,
   doc,
-  FirestoreError,
   getDoc,
   onSnapshot,
   updateDoc,
@@ -51,8 +50,8 @@ import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { v4 } from "uuid";
 import { default as NextImage } from "next/image";
 import { toast } from "react-toastify";
-import { FirebaseError } from "firebase/app";
 import { increment } from "firebase/firestore";
+import { ShowSpoilerButton } from "./ShowSpoilerButton";
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
   const postRef = React.useRef<HTMLDivElement | null>(null);
@@ -205,6 +204,11 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
       );
     }
   }, [addingCommentSelected]);
+  const showSpoiler = () => {
+    setPostData((prev) => {
+      return { ...(prev as PostPropsInteface), spoiler: false };
+    });
+  };
   const pinPost = async (postDate: string, userLogin: string) => {
     const userRef = doc(db, "Users", userLogin);
     try {
@@ -345,7 +349,13 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
             {postData?.postType === "photo" ? (
               <div className="userImageContainer">
                 {postData?.fileType === "image" ? (
-                  <Image src={postData?.img as string} alt={"Post Photo"} />
+                  postData.spoiler ? (
+                    <ShowSpoilerButton showSpoiler={showSpoiler} />
+                  ) : (
+                    <Image src={postData?.img as string} alt={"Post Photo"} />
+                  )
+                ) : postData.spoiler ? (
+                  <ShowSpoilerButton showSpoiler={showSpoiler} />
                 ) : (
                   <video controls src={postData?.img} />
                 )}
@@ -547,6 +557,7 @@ export interface PostPropsInteface {
   fileType?: string;
   img?: string;
   YTLink?: string;
+  spoiler?: boolean;
   likeCount: number;
   hashtags: string[];
   poepleThatLiked: peopleThatLikedInterface[];

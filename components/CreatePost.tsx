@@ -38,6 +38,7 @@ import crying from "../public/crying.png";
 import questionMark from "../public/question-mark.png";
 import clown from "../public/clown.png";
 import skull from "../public/skull.png";
+import { Checkbox } from "antd";
 interface reaction {
   imageData: StaticImageData;
   likeType: likeTypes;
@@ -93,6 +94,7 @@ export const CreatePost: React.FC = () => {
   const [postLoading, setPostLoading] = useState<boolean>(false);
   const [rawImageBlob, setRawImageBlob] = useState<File | Blob>();
   const [likeType, setLikeType] = useState<likeTypes>("heart");
+  const [spoiler, setSpoiler] = useState<boolean>(false);
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
   const match = useMediaQuery("only screen and (min-width:450px");
   const addNewPostIntoDataBase = async (
@@ -108,7 +110,8 @@ export const CreatePost: React.FC = () => {
     hallOfFame: boolean,
     img?: string,
     fileType?: string,
-    YTLink?: string
+    YTLink?: string,
+    spoiler?: boolean
   ) => {
     // const userRef = doc(db, "Users", `${currentlyLoggedInUser.Login}`);
     try {
@@ -130,6 +133,7 @@ export const CreatePost: React.FC = () => {
         timestamp: timestamp,
         URL: URL,
         hallOfFame: hallOfFame,
+        spoiler: spoiler,
       });
       //Evil Sodol is my testing account and i dont want to update its UserPosts Reference.
       if (currentlyLoggedInUser.Login !== "EVILSODOL") {
@@ -237,6 +241,7 @@ export const CreatePost: React.FC = () => {
     setRawImageBlob(undefined);
     setPostLoading(false);
     setLikeType("heart");
+    setSpoiler(false);
     setImgLock(false);
   };
   const editPost = (): void => {
@@ -281,7 +286,8 @@ export const CreatePost: React.FC = () => {
       false,
       imageUrl,
       fileType,
-      YTLink
+      YTLink,
+      spoiler
     );
     dismissPost();
   };
@@ -444,6 +450,14 @@ export const CreatePost: React.FC = () => {
                     ))}
                   </span>
                 </div>
+                {!isLinkChoosen && (
+                  <Checkbox
+                    onChange={() => setSpoiler((prev) => !prev)}
+                    checked={spoiler}
+                  >
+                    Spoiler
+                  </Checkbox>
+                )}
               </div>
             </div>
           </div>

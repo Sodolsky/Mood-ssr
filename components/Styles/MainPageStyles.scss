@@ -165,6 +165,7 @@ $black: #2f2f2f;
         padding: 0.5rem;
         flex-grow: 3;
         width: 80%;
+
         .userImageContainer {
           width: 100%;
           position: relative;
@@ -194,6 +195,11 @@ $black: #2f2f2f;
             width: 100%;
           }
         }
+      }
+      .selectSpoilerContainer {
+        margin-top: 0.5rem;
+        @include FlexCenterHV();
+        gap: 0.5rem;
       }
       .ReactionContainer {
         display: flex;
@@ -332,6 +338,7 @@ $black: #2f2f2f;
 .fadeIn {
   animation: fadeInAnimation 0.25s forwards;
 }
+
 @keyframes fadeInAnimation {
   to {
     opacity: 1;
