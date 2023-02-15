@@ -59,6 +59,8 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const submitCommentButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const [wasFadedIn, setWasFadedIn] = useState<boolean>(false);
   const [showModal, setshowModal] = useState(false);
+  const [wasShowSpoilerClicked, setWasShowSpoilerClicked] =
+    useState<boolean>(false);
   const themeCTX = useContext(themeContext);
   //We are defining date as another variable to avoid name collison when passing props to comment element
   const parentDate = props.date;
@@ -204,11 +206,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
       );
     }
   }, [addingCommentSelected]);
-  const showSpoiler = () => {
-    setPostData((prev) => {
-      return { ...(prev as PostPropsInteface), spoiler: false };
-    });
-  };
+
   const pinPost = async (postDate: string, userLogin: string) => {
     const userRef = doc(db, "Users", userLogin);
     try {
@@ -349,13 +347,17 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
             {postData?.postType === "photo" ? (
               <div className="userImageContainer">
                 {postData?.fileType === "image" ? (
-                  postData.spoiler ? (
-                    <ShowSpoilerButton showSpoiler={showSpoiler} />
+                  postData.spoiler && !wasShowSpoilerClicked ? (
+                    <ShowSpoilerButton
+                      setWasShowSpoilerClicked={setWasShowSpoilerClicked}
+                    />
                   ) : (
                     <Image src={postData?.img as string} alt={"Post Photo"} />
                   )
-                ) : postData.spoiler ? (
-                  <ShowSpoilerButton showSpoiler={showSpoiler} />
+                ) : postData.spoiler && !wasShowSpoilerClicked ? (
+                  <ShowSpoilerButton
+                    setWasShowSpoilerClicked={setWasShowSpoilerClicked}
+                  />
                 ) : (
                   <video controls src={postData?.img} />
                 )}

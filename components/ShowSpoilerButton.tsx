@@ -1,13 +1,13 @@
 import { Button } from "antd";
 
 interface ShowSpoilerButtonProps {
-  showSpoiler: () => void;
+  setWasShowSpoilerClicked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const ShowSpoilerButton: React.FC<ShowSpoilerButtonProps> = ({
-  showSpoiler,
+  setWasShowSpoilerClicked,
 }) => {
   return (
-    <Button type="dashed" onClick={showSpoiler}>
+    <Button type="dashed" onClick={() => setWasShowSpoilerClicked(true)}>
       Show Spoiler
     </Button>
   );
