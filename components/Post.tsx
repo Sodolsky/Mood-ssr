@@ -215,7 +215,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
       });
       showSuccessMesssage("Pin");
     } catch (error) {
-      alert("An error occured while trying to pin Post");
+      alert("An error occured while trying to pin a Post");
     }
   };
   const currentlyLoggedInUser = useContext(currentlyLoggedInUserContext);
