@@ -178,10 +178,12 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                   return alert(
                     "We are sorry your current file format is not supported"
                   );
-                if (blob.size > 15000000) {
-                  return alert(
-                    "Your File is bigger than 15MB Try to paste smaller one"
-                  );
+                if (currentlyLoggedInUser.userRole === "Normal") {
+                  if (blob.size > 15000000) {
+                    return alert(
+                      "Your File is bigger than 15MB Try to paste smaller one"
+                    );
+                  }
                 }
                 const data = URL.createObjectURL(blob);
                 changeCommentVal((prev) => ({
