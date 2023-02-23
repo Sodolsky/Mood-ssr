@@ -38,6 +38,8 @@ import crying from "../public/crying.png";
 import questionMark from "../public/question-mark.png";
 import clown from "../public/clown.png";
 import skull from "../public/skull.png";
+import openMouth from "../public/openMouth.png";
+
 import { Checkbox } from "antd";
 interface reaction {
   imageData: StaticImageData;
@@ -47,6 +49,7 @@ const allReactions: reaction[] = [
   { imageData: heart, likeType: "heart" },
   { imageData: poop, likeType: "poop" },
   { imageData: laughing, likeType: "laughing" },
+  { imageData: openMouth, likeType: "openMouth" },
   { imageData: crying, likeType: "crying" },
   { imageData: questionMark, likeType: "questionMark" },
   { imageData: clown, likeType: "clown" },

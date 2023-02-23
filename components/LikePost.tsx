@@ -18,6 +18,7 @@ import crying from "../public/crying.png";
 import questionMark from "../public/question-mark.png";
 import clown from "../public/clown.png";
 import skull from "../public/skull.png";
+import openMouth from "../public/openMouth.png";
 import heartOutline from "../public/heartoutline.png";
 import poopOutline from "../public/poopoutline.png";
 import laughingOutline from "../public/laughingoutline.png";
@@ -25,6 +26,7 @@ import cryingOutline from "../public/cryingOutline.png";
 import questionMarkOutline from "../public/question-markOutline.png";
 import clownOutline from "../public/clownOutline.png";
 import skullOutline from "../public/skullOutline.png";
+import openMouthOutline from "../public/openMouthOutline.png";
 
 import {
   playLikeAnimation,
@@ -43,6 +45,8 @@ export const getProperImage = (
       return isLiked ? heart : heartOutline;
     case "laughing":
       return isLiked ? laughing : laughingOutline;
+    case "openMouth":
+      return isLiked ? openMouth : openMouthOutline;
     case "poop":
       return isLiked ? poop : poopOutline;
     case "crying":
@@ -185,6 +189,15 @@ export const LikePost: React.FC<LikePostInterface> = (props) => {
               }
               onClick={(e) => handleLikeChange(e, "laughing")}
               alt="Laughing Face"
+            />
+            <img
+              src={
+                isLiked && likeType === "openMouth"
+                  ? openMouthOutline.src
+                  : openMouth.src
+              }
+              onClick={(e) => handleLikeChange(e, "openMouth")}
+              alt="Open Mouth"
             />
             <img
               src={
