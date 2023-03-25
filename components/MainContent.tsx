@@ -51,6 +51,7 @@ export const MainContent: React.FC = () => {
     rawPosts,
     audioElement.current
   );
+  console.error("Fix the bug so new users can't add posts");
   useEffect(() => {
     const ref = collection(db, "Posts");
     const q = query(ref, orderBy("timestamp", "desc"), limit(4));
