@@ -18,6 +18,8 @@ export const FileUploader: React.FC<any> = ({ onFileSelect }) => {
           return alert(
             "Your File is bigger than 100MB Try to upload smaller one"
           );
+        } else {
+          onFileSelect(file);
         }
       } else {
         onFileSelect(file);
@@ -28,6 +30,8 @@ export const FileUploader: React.FC<any> = ({ onFileSelect }) => {
           return alert(
             "Your File is bigger than 30MB Try to upload smaller one"
           );
+        } else {
+          onFileSelect(file);
         }
       } else {
         onFileSelect(file);
