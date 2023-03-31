@@ -14,7 +14,6 @@ export const FileUploader: React.FC<any> = ({ onFileSelect }) => {
     ) {
       if (currentlyLoggedInUser.userRole === "Normal") {
         if (file.size > 100000000) {
-          //Normal value 800000000
           return alert(
             "Your File is bigger than 100MB Try to upload smaller one"
           );
