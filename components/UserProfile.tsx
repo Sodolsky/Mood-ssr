@@ -75,15 +75,6 @@ const applyChanges = async (
   Description: string,
   Avatar: File | null
 ) => {
-  // const allusers = collection(db, "Users");
-  // const usersAvatarObject: { [key: string]: string } = {};
-  // await getDocs(allusers).then((x) => {
-  //   x.forEach((item) => {
-  //     const data = item.data() as UserData;
-  //     usersAvatarObject[data.Login as string] = data.Avatar as string;
-  //   });
-  // });
-  // await updateDoc(doc(db, "Utility", "UserAvatars"), usersAvatarObject);
   const userRef = doc(db, "Users", user);
   const fileRef = ref(storageRef, `${user}`);
 
