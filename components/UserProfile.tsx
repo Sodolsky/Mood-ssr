@@ -80,7 +80,7 @@ const applyChanges = async (
 
   if (Avatar) {
     nProgress.start();
-    await uploadBytes(fileRef, Avatar).then((snapshot) => {});
+    await uploadBytes(fileRef, Avatar);
     const uploadedFile = await getDownloadURL(fileRef);
     nProgress.inc();
     const newBatch = writeBatch(db);
