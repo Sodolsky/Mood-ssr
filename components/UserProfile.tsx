@@ -30,7 +30,6 @@ import { query, where, orderBy } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import nProgress from "nprogress";
-import moment from "moment";
 import { userPrefferedPostType } from "../utils/interfaces";
 import { useRouter } from "next/router";
 
