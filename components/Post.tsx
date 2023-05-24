@@ -497,8 +497,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
           )}
           <div className="TopComment">
             {topComment === null
-              ? // <p>{randomCommentText}</p>
-                null
+              ? null
               : !addingCommentSelected && (
                   <>
                     <CommentComponent
