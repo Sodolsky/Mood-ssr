@@ -446,7 +446,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                     type="file"
                     id={`comment-image-uploader-${postData.URL}`}
                     name="Img"
-                    accept="image/png, image/gif, image/jpeg "
+                    accept="image/png, image/gif, image/jpeg"
                     style={{ display: "none" }}
                     onChange={handleFileInput}
                   />
