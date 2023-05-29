@@ -436,7 +436,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                   <label htmlFor={`comment-image-uploader-${postData.URL}`}>
                     <NextImage
                       src={AddImageToPostIcon}
-                      alt="Add Image to Post"
+                      alt="Button to Add image to Post"
                       width={32}
                       height={32}
                       className="AddImageToCommentIcon"
