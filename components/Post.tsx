@@ -411,7 +411,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
               onClick={() => {
                 setIfAddingCommentIsSelected(!addingCommentSelected);
               }}
-              alt="Heart"
+              alt="Heart Image"
               height={32}
               width={32}
             />
