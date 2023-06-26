@@ -43,6 +43,7 @@ import StarIcon from "../public/star.png";
 import PinIcon from "../public/pin.png";
 import LinkIcon from "../public/link.png";
 import CommentIcon from "../public/Comment.svg";
+import VoiceMessageIcon from "../public/microphone.png";
 import { has } from "lodash";
 import AddImageToPostIcon from "../public/insertpic.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -58,6 +59,8 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const commentTextInputRef = React.useRef<InputRef | null>(null);
   const submitCommentButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const [wasFadedIn, setWasFadedIn] = useState<boolean>(false);
+  const [isVoiceMessageBeingRecorded, setisVoiceMessageBeingRecorded] =
+    useState<boolean>(false);
   const [showModal, setshowModal] = useState(false);
   const [wasShowSpoilerClicked, setWasShowSpoilerClicked] =
     useState<boolean>(false);
@@ -208,7 +211,6 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
       );
     }
   }, [addingCommentSelected]);
-
   const pinPost = async (postDate: string, userLogin: string) => {
     const userRef = doc(db, "Users", userLogin);
     try {
@@ -433,6 +435,15 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                 <Spin />
               ) : commentVal.img === "" ? (
                 <>
+                  <NextImage
+                    src={VoiceMessageIcon}
+                    width={32}
+                    height={32}
+                    alt="Record voice message"
+                    className="VoiceMessageIcon"
+                    onMouseDown={() => setisVoiceMessageBeingRecorded(true)}
+                    onMouseUp={() => setisVoiceMessageBeingRecorded(false)}
+                  />
                   <label htmlFor={`comment-image-uploader-${postData.URL}`}>
                     <NextImage
                       src={AddImageToPostIcon}
