@@ -342,10 +342,36 @@ $black: #2f2f2f;
 .fadeIn {
   animation: fadeInAnimation 0.25s forwards;
 }
-
+.moveOutOfView {
+  place-self: start;
+  align-self: center;
+  animation: translateOutOfSight 0.5s forwards ease-out;
+}
+.showRecordingMessage {
+  place-self: center;
+  align-self: center;
+  animation: showRecordingMessageAnimation 0.5s forwards;
+}
+.videoMenager {
+  background-color: skyblue;
+  border-radius: 2rem;
+  padding: 0.5rem 1rem;
+}
 @keyframes fadeInAnimation {
   to {
     opacity: 1;
+  }
+}
+@keyframes translateOutOfSight {
+  to {
+    width: 0%;
+    opacity: 0;
+  }
+}
+@keyframes showRecordingMessageAnimation {
+  to {
+    opacity: 1;
+    width: 80%;
   }
 }
 .singleComment {
