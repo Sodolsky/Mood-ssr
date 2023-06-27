@@ -254,7 +254,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   function checkVoiceRecordingSupport() {
     return new Promise<void>((resolve, reject) => {
       if (!navigator.mediaDevices) {
-        reject(new Error("Browser doesn't support voice recording!"));
+        reject(new Error("Browser doesn't support voice recording !"));
       } else {
         resolve();
       }
