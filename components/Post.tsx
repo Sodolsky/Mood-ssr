@@ -43,6 +43,7 @@ import StarIcon from "../public/star.png";
 import PinIcon from "../public/pin.png";
 import LinkIcon from "../public/link.png";
 import CommentIcon from "../public/Comment.svg";
+import VoiceMessageIcon from "../public/microphone.png";
 import { has } from "lodash";
 import AddImageToPostIcon from "../public/insertpic.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -52,12 +53,24 @@ import { default as NextImage } from "next/image";
 import { toast } from "react-toastify";
 import { increment } from "firebase/firestore";
 import { ShowSpoilerButton } from "./ShowSpoilerButton";
+interface voiceMessageAnimations {
+  hideAddComment: boolean;
+  showRecordingScreen: boolean;
+}
+const baseVoiceMessageAnimations: voiceMessageAnimations = {
+  hideAddComment: false,
+  showRecordingScreen: false,
+};
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
   const postRef = React.useRef<HTMLDivElement | null>(null);
   const commentTextInputRef = React.useRef<InputRef | null>(null);
   const submitCommentButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const [wasFadedIn, setWasFadedIn] = useState<boolean>(false);
+  const [isVoiceMessageBeingRecorded, setisVoiceMessageBeingRecorded] =
+    useState<boolean>(false);
+  const [voiceMessageAnimations, setVoiceMessageAnimations] =
+    useState<voiceMessageAnimations>(baseVoiceMessageAnimations);
   const [showModal, setshowModal] = useState(false);
   const [wasShowSpoilerClicked, setWasShowSpoilerClicked] =
     useState<boolean>(false);
@@ -208,7 +221,6 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
       );
     }
   }, [addingCommentSelected]);
-
   const pinPost = async (postDate: string, userLogin: string) => {
     const userRef = doc(db, "Users", userLogin);
     try {
@@ -238,6 +250,68 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
         imgBlob: file,
       }));
     }
+  };
+  function checkVoiceRecordingSupport() {
+    return new Promise<void>((resolve, reject) => {
+      if (!navigator.mediaDevices) {
+        reject(new Error("Browser doesn't support voice recording !"));
+      } else {
+        resolve();
+      }
+    });
+  }
+  // useEffect(() => {
+  //   if (isVoiceMessageBeingRecorded) {
+  //     if (!navigator.mediaDevices) {
+  //     } else {
+  //       toast.error(
+  //         "We are sorry but your browser doesn't support voice recording!"
+  //       );
+  //       cleanUpAfterVoiceRecording();
+  //     }
+  //     /*
+  //     How to record user media 101
+  //   1.Make sure the user browser supports the media structure
+  //   2.Try to get acess to user audio device
+  //   3.Record the audio and when user stopps pressing the button make sure he can play it and send it or just get rid of it
+  //   4.Clean everything  up
+  //   */
+  //   } else {
+  //   }
+  // }, [isVoiceMessageBeingRecorded]);
+  const startVoiceMessage = async () => {
+    //   How to record user media 101
+    // 1.Make sure the user browser supports the media structure
+    // 2.Try to get acess to user audio device
+    // 3.Play the animations and make sure user didn't missclick the button
+    // 4.Record the audio and when user stopps pressing the button make sure he can play it and send it or just get rid of it
+    // 5.Clean everything  up
+
+    try {
+      await checkVoiceRecordingSupport();
+      setVoiceMessageAnimations((prev) => ({ ...prev, hideAddComment: true }));
+      setisVoiceMessageBeingRecorded(true);
+      setTimeout(
+        () =>
+          setVoiceMessageAnimations((prev) => ({
+            ...prev,
+            showRecordingScreen: true,
+          })),
+        500
+      );
+    } catch (error) {
+      if (typeof error === "string") {
+        toast.error(error);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
+  };
+  const stopVoiceMessage = () => {
+    setisVoiceMessageBeingRecorded(false);
+  };
+  const cleanUpAfterVoiceRecording = () => {
+    setVoiceMessageAnimations(baseVoiceMessageAnimations);
   };
   return !postData ? (
     <SkeletonPost />
@@ -409,7 +483,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
               onClick={() => {
                 setIfAddingCommentIsSelected(!addingCommentSelected);
               }}
-              alt="Heart"
+              alt="Heart Image"
               height={32}
               width={32}
             />
@@ -422,17 +496,33 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
         >
           {!addingCommentSelected ? null : (
             <div className="addComment" key={postData.URL}>
-              <Input
-                type="text"
-                value={commentVal.text}
-                onChange={handleChange}
-                placeholder="Your comment"
-                ref={commentTextInputRef}
-              />
+              {voiceMessageAnimations.showRecordingScreen ? (
+                <div className="videoMenager showRecordingMessage">TIMER</div>
+              ) : (
+                <Input
+                  type="text"
+                  value={commentVal.text}
+                  onChange={handleChange}
+                  placeholder="Your comment"
+                  className={`${
+                    voiceMessageAnimations.hideAddComment ? "moveOutOfView" : ""
+                  }`}
+                  ref={commentTextInputRef}
+                />
+              )}
               {commentIsBeingAdded ? (
                 <Spin />
               ) : commentVal.img === "" ? (
                 <>
+                  <NextImage
+                    src={VoiceMessageIcon}
+                    width={32}
+                    height={32}
+                    alt="Record voice message"
+                    className="VoiceMessageIcon"
+                    onMouseDown={startVoiceMessage}
+                    onMouseUp={stopVoiceMessage}
+                  />
                   <label htmlFor={`comment-image-uploader-${postData.URL}`}>
                     <NextImage
                       src={AddImageToPostIcon}
