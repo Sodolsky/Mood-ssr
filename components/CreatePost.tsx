@@ -23,7 +23,6 @@ import { doc, increment, Timestamp, writeBatch } from "@firebase/firestore";
 import { ref } from "@firebase/storage";
 import { downloadImageIfPostHasOne, UserForFirebase } from "./Post";
 import { LoadingRing } from "./LoadingRing";
-import commentSVG from "../public/Comment.svg";
 import { useMediaQuery } from "@react-hook/media-query";
 import { checkIfTextHaveHashtags } from "./likeFunctions";
 import { uniq } from "lodash";
