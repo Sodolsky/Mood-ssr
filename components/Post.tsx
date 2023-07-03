@@ -31,7 +31,7 @@ import moment from "moment";
 import { getProperImage, LikePost } from "./LikePost";
 import { LazyLoadedImage } from "./LazyLoadedImage";
 import Link from "next/link";
-import { Image, Input, InputRef, message, Modal, Spin } from "antd";
+import { Image, Input, InputRef, message, Spin } from "antd";
 import SkeletonPost from "./SkeletonPost";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import { NotificationInterface } from "../utils/interfaces";
@@ -57,9 +57,17 @@ interface voiceMessageAnimations {
   hideAddComment: boolean;
   showRecordingScreen: boolean;
 }
+interface voiceMessageLogic {
+  voiceMessageBlob: Blob | null;
+  voiceMessageUrl: string;
+}
 const baseVoiceMessageAnimations: voiceMessageAnimations = {
   hideAddComment: false,
   showRecordingScreen: false,
+};
+const baseVoiceMessageLogic: voiceMessageLogic = {
+  voiceMessageBlob: null,
+  voiceMessageUrl: "",
 };
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
@@ -67,8 +75,11 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const commentTextInputRef = React.useRef<InputRef | null>(null);
   const submitCommentButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const [wasFadedIn, setWasFadedIn] = useState<boolean>(false);
-  const [isVoiceMessageBeingRecorded, setisVoiceMessageBeingRecorded] =
-    useState<boolean>(false);
+
+  const [voiceMessageLogic, setVoiceMessageLogic] = useState<voiceMessageLogic>(
+    baseVoiceMessageLogic
+  );
+  const [mediaStream, setMediaStream] = useState<MediaRecorder | null>(null);
   const [voiceMessageAnimations, setVoiceMessageAnimations] =
     useState<voiceMessageAnimations>(baseVoiceMessageAnimations);
   const [showModal, setshowModal] = useState(false);
@@ -260,25 +271,6 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
       }
     });
   }
-  // useEffect(() => {
-  //   if (isVoiceMessageBeingRecorded) {
-  //     if (!navigator.mediaDevices) {
-  //     } else {
-  //       toast.error(
-  //         "We are sorry but your browser doesn't support voice recording!"
-  //       );
-  //       cleanUpAfterVoiceRecording();
-  //     }
-  //     /*
-  //     How to record user media 101
-  //   1.Make sure the user browser supports the media structure
-  //   2.Try to get acess to user audio device
-  //   3.Record the audio and when user stopps pressing the button make sure he can play it and send it or just get rid of it
-  //   4.Clean everything  up
-  //   */
-  //   } else {
-  //   }
-  // }, [isVoiceMessageBeingRecorded]);
   const startVoiceMessage = async () => {
     //   How to record user media 101
     // 1.Make sure the user browser supports the media structure
@@ -289,28 +281,56 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
 
     try {
       await checkVoiceRecordingSupport();
-      setVoiceMessageAnimations((prev) => ({ ...prev, hideAddComment: true }));
-      setisVoiceMessageBeingRecorded(true);
-      setTimeout(
-        () =>
-          setVoiceMessageAnimations((prev) => ({
-            ...prev,
-            showRecordingScreen: true,
-          })),
-        500
-      );
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const audioRecording = new MediaRecorder(stream);
+
+      setMediaStream(audioRecording);
+      setVoiceMessageAnimations((prev) => ({
+        ...prev,
+        hideAddComment: true,
+      }));
+      if (mediaStream) {
+        mediaStream.start();
+        console.log("start");
+        let chuncks: any[] = [];
+        mediaStream.ondataavailable = (e) => {
+          chuncks.push(e);
+        };
+        mediaStream.onstop = (e) => {
+          console.log("onstop");
+          const blob = new Blob(chuncks, { type: "audio/ogg; codecs=opus" });
+          chuncks = [];
+          const audioUrl = window.URL.createObjectURL(blob);
+          console.log(audioUrl);
+        };
+        setTimeout(
+          () =>
+            setVoiceMessageAnimations((prev) => ({
+              ...prev,
+              showRecordingScreen: true,
+            })),
+          500
+        );
+      }
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
       } else if (error instanceof Error) {
         toast.error(error.message);
       }
+      cleanUpAfterVoiceRecording();
     }
   };
+  // const recordVoiceMessage = () => {};
   const stopVoiceMessage = () => {
-    setisVoiceMessageBeingRecorded(false);
+    if (mediaStream) {
+      mediaStream.stop();
+      console.log(mediaStream);
+    }
   };
   const cleanUpAfterVoiceRecording = () => {
+    setMediaStream(null);
+    setVoiceMessageLogic(baseVoiceMessageLogic);
     setVoiceMessageAnimations(baseVoiceMessageAnimations);
   };
   return !postData ? (
