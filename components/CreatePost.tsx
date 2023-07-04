@@ -148,7 +148,7 @@ export const CreatePost: React.FC = () => {
       }
       await newPostBatch.commit();
     } catch (error) {
-      console.log("Error with adding document", error);
+      console.log("Error happened with adding document", error);
     }
   };
   const handleChange = (
