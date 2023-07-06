@@ -190,7 +190,6 @@ export const CreatePost: React.FC = () => {
               var reader = new FileReader();
               reader.onload = function (event) {
                 if (event.target) {
-                  // console.log(event.target.result?.toString()); // data url!
                 }
               };
               if (blob) {
