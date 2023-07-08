@@ -62,7 +62,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const [wasShowSpoilerClicked, setWasShowSpoilerClicked] =
     useState<boolean>(false);
   const themeCTX = useContext(themeContext);
-  //We are defining date as another variable to avoid name collison when passing props to comment element
+  //We are defining date as another variable to avoid name collison while passing props to comment element
   const parentDate = props.date;
 
   const myDate = moment(parentDate, "DD-MM-YYYY  HH:mm:ss").toDate();
