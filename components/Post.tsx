@@ -170,7 +170,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
               var reader = new FileReader();
               reader.onload = function (event) {
                 if (event.target) {
-                  // console.log(event.target.result?.toString()); // data url!
+                  // console.log(event.target.result?.toString()); // Url to pasted image
                 }
               };
               if (blob) {
