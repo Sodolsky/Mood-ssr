@@ -276,7 +276,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                   alt="Add to Hall Of Fame"
                   src={postData.hallOfFame ? StarIcon.src : EmptyStarIcon.src}
                   onClick={() => {
-                    //If Post is In Hall Of Fame only trusted users can unpin it
+                    //If Post is In Hall Of Fame only trusted users can unpin it to avoid griefing
                     if (
                       postData.hallOfFame &&
                       (currentlyLoggedInUser.userRole === "Admin" ||
