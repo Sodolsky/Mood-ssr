@@ -296,7 +296,9 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
             </Accordion.Item>
           </Accordion>
 
-          {/* {currentlyLoggedInUser.Login === "EVILSODOL" &&
+          {/*
+          EVILSODOL is my test account          
+          {currentlyLoggedInUser.Login === "EVILSODOL" &&
             postData?.userThatPostedThis.Login === "EVILSODOL" && (
               <img
                 src={RemovePostIcon}
