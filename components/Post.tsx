@@ -297,7 +297,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
           </Accordion>
 
           {/*
-          EVILSODOL is my test account          
+          EVILSODOL is my test account used to check logic       
           {currentlyLoggedInUser.Login === "EVILSODOL" &&
             postData?.userThatPostedThis.Login === "EVILSODOL" && (
               <img
