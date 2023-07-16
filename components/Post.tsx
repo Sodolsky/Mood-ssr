@@ -389,7 +389,6 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
             </div>
           </div>
           {/*
-          TBA  Modal that lets users view all reactions      
           <Modal 
             title={"Reactions Modal"}
             visible={showModal}
