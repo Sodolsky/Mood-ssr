@@ -127,7 +127,6 @@ export const MainContent: React.FC = () => {
     );
     setIsLaoding(false);
   }, [rawPosts]);
-  // const currentUser = React.useContext(currentlyLoggedInUserContext);
   const loadFunc = async (): Promise<void> => {
     const ref = collection(db, "Posts");
     const q = query(
