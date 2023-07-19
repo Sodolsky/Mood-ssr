@@ -115,7 +115,6 @@ export const CreatePost: React.FC = () => {
     YTLink?: string,
     spoiler?: boolean
   ) => {
-    // const userRef = doc(db, "Users", `${currentlyLoggedInUser.Login}`);
     try {
       const newPostBatch = writeBatch(db);
       newPostBatch.set(doc(db, "Posts", `${date}`), {
