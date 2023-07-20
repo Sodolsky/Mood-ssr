@@ -136,7 +136,7 @@ export const CreatePost: React.FC = () => {
         hallOfFame: hallOfFame,
         spoiler: spoiler,
       });
-      //Evil Sodol is my testing account and i dont want to increment post count
+      //?Evil Sodol is my testing account and i dont want to increment post count
       if (currentlyLoggedInUser.Login !== "EVILSODOL") {
         newPostBatch.update(
           doc(db, "Users", `${currentlyLoggedInUser.Login}`),
