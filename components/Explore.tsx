@@ -15,9 +15,11 @@ import { LoadingRing } from "./LoadingRing";
 import RankingComponent from "./RankingComponent";
 import StatsImg from "../public/stats.png";
 import HashtagIMG from "../public/hashtag.png";
+import AllTagsIMG from "../public/allTags.png";
 import { LazyLoadedImage } from "./LazyLoadedImage";
 import Link from "next/link";
 import { BackArrow } from "./BackArrow";
+import Image from "next/image";
 type topPosters = { postCount: number; userLogin: string; avatar: string };
 type topTags = {
   count: number;
@@ -233,6 +235,9 @@ const Explore: React.FC = () => {
       setIsLoading(false);
     }
   }, [currentExploreOption, topCommenters, topPosters, topTags]);
+  const showAllHashtags = () => {
+    alert("To be added. Showing more tags");
+  };
   return isLoading ? (
     <div className="LoadingContainer">
       <LoadingRing colorVariant="white" />
@@ -378,8 +383,16 @@ const Explore: React.FC = () => {
     <>
       <div className="StatsHeader TagsHeader">
         <span>
-          Tags
+          <span>Top Tags</span>
           <BackArrow onClickFunc={() => setCurrentExploreOption("default")} />
+          <div className="ViewAllContainer" onClick={showAllHashtags}>
+            <Image
+              src={AllTagsIMG}
+              alt="View All Tags"
+              width={24}
+              height={24}
+            />
+          </div>
         </span>
       </div>
       <div className="TagsContainer">

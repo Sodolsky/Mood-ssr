@@ -2,9 +2,14 @@
   display: flex;
   justify-content: center;
 }
+@mixin FlexAround {
+  display: flex;
+  justify-content: space-around;
+}
 .StatsHeader {
-  @include FlexCenter();
+  @include FlexAround();
   align-items: center;
+
   span {
     font-size: 2rem;
     color: white;
@@ -12,10 +17,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    .ViewAllContainer {
+      position: absolute;
+      right: 30px;
+      @include FlexCenter();
+      flex-direction: column;
+      justify-content: center;
+      img {
+        cursor: pointer;
+      }
+    }
     .BackArrowContainer {
       position: absolute;
       left: 30px;
       cursor: pointer;
+
       font-size: 2rem;
       .BackArrow {
         color: white;
