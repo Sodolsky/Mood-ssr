@@ -1,7 +1,6 @@
-import * as React from "react";
 import { CreatePost } from "./CreatePost";
 import { Post, PostPropsInteface } from "./Post";
-import { useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
@@ -29,22 +28,23 @@ export type incomingPostsType = {
 };
 export const MainContent: React.FC = () => {
   const { isItTheFirstLoad, setIsItTheFirstLoad } =
-    React.useContext(firstLoadContext);
-  const firstBatch = React.useRef<boolean>(true);
-  const audioElement = React.useRef<HTMLAudioElement | null>(null);
-  const divListRef = React.useRef<HTMLDivElement | null>(null);
+    useContext(firstLoadContext);
+  const firstBatch = useRef<boolean>(true);
+  const audioElement = useRef<HTMLAudioElement | null>(null);
+  const divListRef = useRef<HTMLDivElement | null>(null);
   const [lastDoc, setLastDoc] = useState<null | DocumentData>(null);
   const [isLaoding, setIsLaoding] = useState<boolean>(true);
   const [rawPosts, setRawPosts] = useState<PostPropsInteface[]>([]);
   const [Posts, setPosts] = useState<JSX.Element[]>();
-  const [newPostsAreReady, setIfNewPostsAreReady] =
-    React.useState<incomingPostsType>({
+  const [newPostsAreReady, setIfNewPostsAreReady] = useState<incomingPostsType>(
+    {
       count: 0,
       ready: false,
-    });
-  const potentialNewPostsCount = React.useRef<number>(0);
-  const cachedPosts = React.useRef<DocumentData[]>([]);
-  const lastPostSeen = React.useRef<PostPropsInteface | null>(null);
+    }
+  );
+  const potentialNewPostsCount = useRef<number>(0);
+  const cachedPosts = useRef<DocumentData[]>([]);
+  const lastPostSeen = useRef<PostPropsInteface | null>(null);
   const { title } = useTitleNotifications(
     newPostsAreReady,
     lastPostSeen,
