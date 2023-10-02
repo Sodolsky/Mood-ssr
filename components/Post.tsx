@@ -52,6 +52,7 @@ import { default as NextImage } from "next/image";
 import { toast } from "react-toastify";
 import { increment } from "firebase/firestore";
 import { ShowSpoilerButton } from "./ShowSpoilerButton";
+import ReactPlayer from "react-player";
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
   const postRef = React.useRef<HTMLDivElement | null>(null);
@@ -64,7 +65,6 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const themeCTX = useContext(themeContext);
   //We are defining date as another variable to avoid name collison while passing props to comment element
   const parentDate = props.date;
-
   const myDate = moment(parentDate, "DD-MM-YYYY  HH:mm:ss").toDate();
   const [commentIsBeingAdded, setCommentIsBeingAdded] =
     useState<boolean>(false);
@@ -91,6 +91,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
     const key = x.type ?? "heart";
     reactionsCounter[key] = (reactionsCounter[key] || 0) + 1;
   });
+
   // Here we are fetching the comments and setting up the top comment
   useEffect(() => {
     let PostSubscription = () => {};
@@ -362,7 +363,10 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                     setWasShowSpoilerClicked={setWasShowSpoilerClicked}
                   />
                 ) : (
-                  <video controls src={postData?.img} />
+                  // <video controls>
+                  //   <source src={postData?.img} type="video/mp4" >
+                  // </video>
+                  <ReactPlayer url={postData.img} controls />
                 )}
               </div>
             ) : (
