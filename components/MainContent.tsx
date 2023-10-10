@@ -193,7 +193,7 @@ export const MainContent: React.FC = () => {
         endMessage={
           <div style={{ display: "flex", justifyContent: "center" }}>
             All posts have been already displayed! If you see this message that
-            means that you are the real one"
+            means that you are the real one
           </div>
         }
       >
