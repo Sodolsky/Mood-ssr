@@ -53,6 +53,7 @@ import { toast } from "react-toastify";
 import { increment } from "firebase/firestore";
 import { ShowSpoilerButton } from "./ShowSpoilerButton";
 import ReactPlayer from "react-player";
+import { PostDate } from "./PostDate";
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
   const postRef = React.useRef<HTMLDivElement | null>(null);
@@ -65,7 +66,6 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const themeCTX = useContext(themeContext);
   //We are defining date as another variable to avoid name collison while passing props to comment element
   const parentDate = props.date;
-  const myDate = moment(parentDate, "DD-MM-YYYY  HH:mm:ss").toDate();
   const [commentIsBeingAdded, setCommentIsBeingAdded] =
     useState<boolean>(false);
   const [allComments, setAllComments] = useState<CommentInterface[]>([]);
@@ -381,7 +381,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
             )}
           </div>
           <div className="postTimerAndReactionTypesContainer">
-            <span className="WhenPostWasAdded">{moment(myDate).fromNow()}</span>
+            <PostDate date={parentDate} />
             <div className="ReactionTypes" onClick={() => setshowModal(true)}>
               {Object.keys(reactionsCounter).map((x) => (
                 <img
