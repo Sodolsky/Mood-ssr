@@ -53,6 +53,9 @@
   background-position: center;
   // background-size: cover;
   height: auto;
+  .GoldenBorder {
+    border: 0.3rem solid gold !important;
+  }
   .UserInfoContainer {
     position: relative;
     display: grid;
@@ -131,6 +134,14 @@
       flex-wrap: wrap;
       flex-direction: column;
       span {
+        img {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: -20%;
+          margin: auto;
+        }
+        position: relative;
         min-width: 20%;
         text-align: center;
         font-size: 3vw;

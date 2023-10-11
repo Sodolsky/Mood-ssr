@@ -24,7 +24,7 @@ import Dropzone, { useDropzone } from "react-dropzone";
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { Dropdown, Menu, message, Switch } from "antd";
 import Link from "next/link";
-
+import KingIcon from "../public/king.png";
 import TextareAutosize from "react-textarea-autosize";
 import { query, where, orderBy } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,7 +32,7 @@ import { faImage } from "@fortawesome/free-solid-svg-icons";
 import nProgress from "nprogress";
 import { userPrefferedPostType } from "../utils/interfaces";
 import { useRouter } from "next/router";
-
+import CrownImage from "../public/crown.png";
 export const queryPostByDate = async (key: string) => {
   const ref = doc(db, "Posts", `${key}`);
   const highlightedPost = await getDoc(ref);
@@ -320,7 +320,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ userDataFromNextJS }) => {
             : userData?.BackgroundColor,
         }}
       >
-        <div className="UserInfoContainer">
+        <div
+          className={`UserInfoContainer ${
+            userData?.Login === "pykir" && "GoldenBorder"
+          }`}
+        >
           {!profileIsBeingChanged
             ? currentlyLoggedInUser.Login === userData?.Login && (
                 <div className="changeProfile">
@@ -457,7 +461,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ userDataFromNextJS }) => {
           </Dropzone>
 
           <div className="UserNameAndDescription">
-            <span>{userData?.Login}</span>
+            <span>
+              {userData?.Login}
+              {userData?.Login === "pykir" && (
+                <img src={KingIcon.src} width={32} height={32} />
+              )}
+            </span>
             {profileIsBeingChanged ? (
               <TextareAutosize
                 maxRows={3}
