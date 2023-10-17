@@ -82,7 +82,6 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const [addingCommentSelected, setIfAddingCommentIsSelected] =
     useState<boolean>(false);
   const firstRender = React.useRef<boolean>(true);
-  console.log(postData?.img);
 
   interface counterInterface {
     [key: string]: number;
@@ -364,7 +363,12 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                     setWasShowSpoilerClicked={setWasShowSpoilerClicked}
                   />
                 ) : (
-                  <video controls src={postData?.img} />
+                  <video controls>
+                    <source src={postData.img} type="video/mp4" />
+                    <source src={postData.img} type="video/webm" />
+                    <source src={postData.img} type="video/ogg" />
+                    <source src={postData.img} type="video/quicktime" />
+                  </video>
                 )}
               </div>
             ) : (

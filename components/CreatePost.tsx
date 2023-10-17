@@ -420,7 +420,12 @@ export const CreatePost: React.FC = () => {
                           style={{ width: "100%", height: "100%" }}
                         />
                       ) : (
-                        <video controls src={imgPrevievSrc} />
+                        <video controls>
+                          <source src={imgPrevievSrc} type="video/mp4" />
+                          <source src={imgPrevievSrc} type="video/webm" />
+                          <source src={imgPrevievSrc} type="video/ogg" />
+                          <source src={imgPrevievSrc} type="video/quicktime" />
+                        </video>
                       )}
                     </div>
                   ) : (
