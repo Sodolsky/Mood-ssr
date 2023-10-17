@@ -52,7 +52,6 @@ import { default as NextImage } from "next/image";
 import { toast } from "react-toastify";
 import { increment } from "firebase/firestore";
 import { ShowSpoilerButton } from "./ShowSpoilerButton";
-import ReactPlayer from "react-player";
 import { PostDate } from "./PostDate";
 export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const match = useMediaQuery("only screen and (min-width:450px");
@@ -83,6 +82,8 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   const [addingCommentSelected, setIfAddingCommentIsSelected] =
     useState<boolean>(false);
   const firstRender = React.useRef<boolean>(true);
+  console.log(postData?.img);
+
   interface counterInterface {
     [key: string]: number;
   }
@@ -363,10 +364,7 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                     setWasShowSpoilerClicked={setWasShowSpoilerClicked}
                   />
                 ) : (
-                  // <video controls>
-                  //   <source src={postData?.img} type="video/mp4" >
-                  // </video>
-                  <ReactPlayer url={postData.img} controls />
+                  <video controls src={postData?.img} />
                 )}
               </div>
             ) : (
