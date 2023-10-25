@@ -40,6 +40,9 @@ import skull from "../public/skull.png";
 import openMouth from "../public/openMouth.png";
 
 import { Checkbox } from "antd";
+import { toast } from "react-toastify";
+export const maxVideoSize = 100000000;
+export const maxImageSize = 30000000;
 interface reaction {
   imageData: StaticImageData;
   likeType: likeTypes;
@@ -167,6 +170,7 @@ export const CreatePost: React.FC = () => {
   useEffect(() => {
     isLinkChoosen ? setPostType("video") : setPostType("photo");
   }, [isLinkChoosen]);
+  //Handle Pasting Files
   useEffect(() => {
     if (createPostRef.current) {
       createPostRef.current.onpaste = function (event) {
@@ -196,22 +200,28 @@ export const CreatePost: React.FC = () => {
                 if (
                   blob.type === "video/mp4" ||
                   blob.type === "video/ogg" ||
-                  blob.type === "video/webm"
+                  blob.type === "video/webm" ||
+                  blob.type === "video/quicktime"
                 ) {
                   if (currentlyLoggedInUser.userRole === "Normal") {
-                    if (blob.size > 40000000) {
-                      //Normal value is 40MB
+                    if (blob.size > maxVideoSize) {
                       return alert(
-                        "Your File is bigger than 40MB Try to paste smaller one"
+                        "Your File is bigger than 100MB Try to paste smaller one"
                       );
                     } else {
+                      if (blob.type === "video/quicktime") {
+                        toast.error(
+                          "Sorry but we currently don't support .MOV files"
+                        );
+                        return;
+                      }
                     }
                   }
                 } else {
                   if (currentlyLoggedInUser.userRole === "Normal") {
-                    if (blob.size > 15000000) {
+                    if (blob.size > maxImageSize) {
                       return alert(
-                        "Your File is bigger than 15MB Try to paste smaller one"
+                        "Your File is bigger than 30MB Try to paste smaller one"
                       );
                     }
                   }
