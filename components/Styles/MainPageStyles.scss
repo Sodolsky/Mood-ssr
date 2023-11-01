@@ -451,6 +451,18 @@ $black: #2f2f2f;
     }
   }
 }
+.sortPosts {
+  margin: 1rem 0;
+  @include FlexCenterHV();
+  flex-direction: column;
+  .warning {
+    color: red;
+    font-weight: bold;
+  }
+  select {
+    width: 20vw;
+  }
+}
 .createPost {
   font-family: "Source Code Pro", monospace;
   position: relative;

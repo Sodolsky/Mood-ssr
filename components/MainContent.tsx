@@ -17,11 +17,11 @@ import {
 import { db } from "../firebase/firebase";
 import { firstLoadContext, isaudioMutedContext } from "../utils/interfaces";
 import { LoadingRing } from "./LoadingRing";
-import { BackTop } from "antd";
+import { BackTop, Select } from "antd";
 import nProgress from "nprogress";
 import { NextSeo } from "next-seo";
 import { useTitleNotifications } from "./hooks/useTitleNotification";
-
+type sortingOptions = "latest" | "oldest";
 export type incomingPostsType = {
   ready: boolean;
   count: number;
@@ -30,6 +30,8 @@ export const MainContent: React.FC = () => {
   const { isItTheFirstLoad, setIsItTheFirstLoad } =
     useContext(firstLoadContext);
   const firstBatch = useRef<boolean>(true);
+  const [sortingPostsOption, setSortingPostsOption] =
+    useState<sortingOptions>("latest");
   const audioElement = useRef<HTMLAudioElement | null>(null);
   const divListRef = useRef<HTMLDivElement | null>(null);
   const [lastDoc, setLastDoc] = useState<null | DocumentData>(null);
@@ -53,7 +55,10 @@ export const MainContent: React.FC = () => {
   );
   useEffect(() => {
     const ref = collection(db, "Posts");
-    const q = query(ref, orderBy("timestamp", "desc"), limit(4));
+    const q =
+      sortingPostsOption === "latest"
+        ? query(ref, orderBy("timestamp", "desc"), limit(4))
+        : query(ref, orderBy("timestamp", "asc"), limit(4));
     const Unsubscibe = onSnapshot(q, (doc) => {
       if (doc.metadata.fromCache && !isItTheFirstLoad) return;
       setIsItTheFirstLoad(false);
@@ -101,7 +106,7 @@ export const MainContent: React.FC = () => {
     return () => {
       Unsubscibe();
     };
-  }, []);
+  }, [sortingPostsOption]);
   const showNewPosts = async () => {
     nProgress.start();
     const cachedPostDataArray = cachedPosts.current.map((item) => {
@@ -127,14 +132,11 @@ export const MainContent: React.FC = () => {
     );
     setIsLaoding(false);
   }, [rawPosts]);
-  const loadFunc = async (): Promise<void> => {
+  const loadFunc = async (loadLatest: boolean): Promise<void> => {
     const ref = collection(db, "Posts");
-    const q = query(
-      ref,
-      orderBy("timestamp", "desc"),
-      limit(4),
-      startAfter(lastDoc)
-    );
+    const q = loadLatest
+      ? query(ref, orderBy("timestamp", "desc"), limit(4), startAfter(lastDoc))
+      : query(ref, orderBy("timestamp", "asc"), limit(4), startAfter(lastDoc));
     onSnapshot(q, (doc) => {
       doc.docChanges().forEach((change) => {
         if (change.type === "modified") {
@@ -149,6 +151,10 @@ export const MainContent: React.FC = () => {
       });
     });
   };
+  const changePostSorting = (value: string) => {
+    setSortingPostsOption(value as sortingOptions);
+  };
+
   return isLaoding ? (
     <div className="MainContentGrid">
       <div
@@ -171,6 +177,17 @@ export const MainContent: React.FC = () => {
         </div>
       )}
       <CreatePost />
+      <div className="sortPosts">
+        <span className="warning">Experimental</span>
+        <Select
+          value={sortingPostsOption}
+          onChange={changePostSorting}
+          options={[
+            { label: "Latest", value: "latest" },
+            { label: "Oldest", value: "oldest" },
+          ]}
+        />
+      </div>
       <InfiniteScroll
         scrollThreshold={0.7}
         style={{ overflow: "hidden" }}
@@ -186,7 +203,7 @@ export const MainContent: React.FC = () => {
           </div>
         }
         hasMore={lastDoc !== undefined}
-        next={loadFunc}
+        next={() => loadFunc(sortingPostsOption === "latest")}
         inverse={false}
         dataLength={rawPosts.length}
         scrollableTarget={this}

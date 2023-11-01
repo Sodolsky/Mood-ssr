@@ -43,6 +43,7 @@ import StarIcon from "../public/star.png";
 import PinIcon from "../public/pin.png";
 import LinkIcon from "../public/link.png";
 import CommentIcon from "../public/Comment.svg";
+import AddFolderIcon from "../public/addFolder.png";
 import { has } from "lodash";
 import AddImageToPostIcon from "../public/insertpic.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -240,6 +241,10 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
       }));
     }
   };
+  function addToFolder(): void {
+    throw new Error("Function not implemented.");
+  }
+
   return !postData ? (
     <SkeletonPost />
   ) : (
@@ -273,6 +278,11 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
                     pinPost(props.date, currentlyLoggedInUser.Login as string)
                   }
                 />
+                {/* <LazyLoadedImage
+                  src={AddFolderIcon.src}
+                  alt={"Add Post to Folder"}
+                  onClick={() => addToFolder()}
+                /> */}
                 <LazyLoadedImage
                   alt="Add to Hall Of Fame"
                   src={postData.hallOfFame ? StarIcon.src : EmptyStarIcon.src}
