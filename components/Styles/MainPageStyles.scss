@@ -455,6 +455,7 @@ $black: #2f2f2f;
   margin: 1rem 0;
   @include FlexCenterHV();
   flex-direction: column;
+  gap: 0.5rem;
   .warning {
     color: red;
     font-weight: bold;

@@ -17,21 +17,30 @@ import {
 import { db } from "../firebase/firebase";
 import { firstLoadContext, isaudioMutedContext } from "../utils/interfaces";
 import { LoadingRing } from "./LoadingRing";
-import { BackTop, Select } from "antd";
+import { BackTop, DatePicker, Select } from "antd";
 import nProgress from "nprogress";
 import { NextSeo } from "next-seo";
 import { useTitleNotifications } from "./hooks/useTitleNotification";
-type sortingOptions = "latest" | "oldest";
+import { RangePickerProps } from "antd/lib/date-picker";
+import { where } from "firebase/firestore";
+import moment from "moment";
+type sortingOptions = "latest" | "oldest" | "date";
 export type incomingPostsType = {
   ready: boolean;
   count: number;
 };
+export interface dateRangeI {
+  startDate: Date;
+  endDate: Date;
+}
+const { RangePicker } = DatePicker;
 export const MainContent: React.FC = () => {
   const { isItTheFirstLoad, setIsItTheFirstLoad } =
     useContext(firstLoadContext);
   const firstBatch = useRef<boolean>(true);
   const [sortingPostsOption, setSortingPostsOption] =
     useState<sortingOptions>("latest");
+  const [dateRanges, setDateRanges] = useState<dateRangeI | null>(null);
   const audioElement = useRef<HTMLAudioElement | null>(null);
   const divListRef = useRef<HTMLDivElement | null>(null);
   const [lastDoc, setLastDoc] = useState<null | DocumentData>(null);
@@ -56,9 +65,17 @@ export const MainContent: React.FC = () => {
   useEffect(() => {
     const ref = collection(db, "Posts");
     const q =
-      sortingPostsOption === "latest"
-        ? query(ref, orderBy("timestamp", "desc"), limit(4))
-        : query(ref, orderBy("timestamp", "asc"), limit(4));
+      sortingPostsOption === "oldest"
+        ? query(ref, orderBy("timestamp", "asc"), limit(4))
+        : sortingPostsOption === "date" && dateRanges
+        ? query(
+            ref,
+            where(`timestamp`, ">", dateRanges.startDate),
+            where(`timestamp`, "<", dateRanges.endDate),
+            limit(4)
+          )
+        : query(ref, orderBy("timestamp", "desc"), limit(4));
+
     const Unsubscibe = onSnapshot(q, (doc) => {
       if (doc.metadata.fromCache && !isItTheFirstLoad) return;
       setIsItTheFirstLoad(false);
@@ -106,7 +123,7 @@ export const MainContent: React.FC = () => {
     return () => {
       Unsubscibe();
     };
-  }, [sortingPostsOption]);
+  }, [sortingPostsOption, dateRanges]);
   const showNewPosts = async () => {
     nProgress.start();
     const cachedPostDataArray = cachedPosts.current.map((item) => {
@@ -132,11 +149,30 @@ export const MainContent: React.FC = () => {
     );
     setIsLaoding(false);
   }, [rawPosts]);
-  const loadFunc = async (loadLatest: boolean): Promise<void> => {
+  const loadFunc = async (loadType: sortingOptions): Promise<void> => {
     const ref = collection(db, "Posts");
-    const q = loadLatest
-      ? query(ref, orderBy("timestamp", "desc"), limit(4), startAfter(lastDoc))
-      : query(ref, orderBy("timestamp", "asc"), limit(4), startAfter(lastDoc));
+    const q =
+      loadType === "latest"
+        ? query(
+            ref,
+            orderBy("timestamp", "desc"),
+            limit(4),
+            startAfter(lastDoc)
+          )
+        : loadType === "date" && dateRanges
+        ? query(
+            ref,
+            where(`timestamp`, "<", dateRanges.endDate),
+            limit(4),
+            startAfter(lastDoc)
+          )
+        : query(
+            ref,
+            orderBy("timestamp", "asc"),
+            limit(4),
+            startAfter(lastDoc)
+          );
+
     onSnapshot(q, (doc) => {
       doc.docChanges().forEach((change) => {
         if (change.type === "modified") {
@@ -145,6 +181,8 @@ export const MainContent: React.FC = () => {
           const val = doc.docs.map((item) => {
             return item.data() as PostPropsInteface;
           });
+          //If sorting option isnt set do date we can load the number of items infinitely
+
           setLastDoc(doc.docs[doc.docs.length - 1]);
           setRawPosts([...rawPosts, ...val]);
         }
@@ -154,7 +192,16 @@ export const MainContent: React.FC = () => {
   const changePostSorting = (value: string) => {
     setSortingPostsOption(value as sortingOptions);
   };
-
+  const handleDateChange: RangePickerProps["onChange"] = (e) => {
+    const startDate = e?.[0];
+    const endDate = e?.[1];
+    if (startDate && endDate) {
+      setDateRanges({
+        startDate: startDate.toDate(),
+        endDate: endDate.toDate(),
+      });
+    }
+  };
   return isLaoding ? (
     <div className="MainContentGrid">
       <div
@@ -185,8 +232,12 @@ export const MainContent: React.FC = () => {
           options={[
             { label: "Latest", value: "latest" },
             { label: "Oldest", value: "oldest" },
+            { label: "Date", value: "date" },
           ]}
         />
+        {sortingPostsOption === "date" && (
+          <RangePicker onChange={handleDateChange} />
+        )}
       </div>
       <InfiniteScroll
         scrollThreshold={0.7}
@@ -203,14 +254,13 @@ export const MainContent: React.FC = () => {
           </div>
         }
         hasMore={lastDoc !== undefined}
-        next={() => loadFunc(sortingPostsOption === "latest")}
+        next={() => loadFunc(sortingPostsOption)}
         inverse={false}
         dataLength={rawPosts.length}
         scrollableTarget={this}
         endMessage={
           <div style={{ display: "flex", justifyContent: "center" }}>
-            All posts have been already displayed! If you see this message that
-            means that you are the real one
+            All posts have been already displayed!
           </div>
         }
       >
