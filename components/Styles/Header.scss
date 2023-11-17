@@ -40,14 +40,30 @@ header {
     font-size: 3rem;
     height: 10vh;
     gap: 0.5rem;
-    img {
-      height: 2.5rem;
-      margin-left: 10px;
-      transition: transform 0.5s;
-      &:hover {
-        transform: rotate(60deg);
+    .FlexCol {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.25rem;
+      }
+      img {
+        height: 2.5rem;
+        margin-left: 10px;
+        transition: transform 0.5s;
+        &:hover {
+          transform: rotate(60deg);
+        }
+      }
+      .Info {
+        font-size: 0.5rem;
       }
     }
+
     .FAContainer {
       @include HeaderIcon();
       right: 5px;

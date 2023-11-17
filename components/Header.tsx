@@ -94,19 +94,28 @@ export const Header: React.FC = () => {
         <Row className="Logo">
           <Col>
             <div className="AlignLogo">
-              MOOD
-              <Image
-                src={HalfMoonIcon}
-                width={40}
-                height={40}
-                alt="Logo of a moon"
-                onClick={() =>
-                  themeCTX.setTheme &&
-                  themeCTX.setTheme(
-                    themeCTX.theme === "bright" ? "dark" : "bright"
-                  )
-                }
-              />
+              <div className="FlexCol">
+                <div>
+                  <span>MOOD</span>
+                  <Image
+                    src={HalfMoonIcon}
+                    width={40}
+                    height={40}
+                    alt="Logo of a moon"
+                    onClick={() =>
+                      themeCTX.setTheme &&
+                      themeCTX.setTheme(
+                        themeCTX.theme === "bright" ? "dark" : "bright"
+                      )
+                    }
+                  />
+                </div>
+
+                <span className="Info">
+                  Everything posted here is a joke, dont take it seriously!
+                </span>
+              </div>
+
               {auth.currentUser && (
                 <>
                   <div className="HOFContainer">
