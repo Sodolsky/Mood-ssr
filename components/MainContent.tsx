@@ -225,7 +225,6 @@ export const MainContent: React.FC = () => {
       )}
       <CreatePost />
       <div className="sortPosts">
-        <span className="warning">Experimental</span>
         <Select
           value={sortingPostsOption}
           onChange={changePostSorting}
