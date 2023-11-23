@@ -256,7 +256,9 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
             ? {
                 borderColor: `${currentlyLoggedInUser.BackgroundColor}`,
               }
-            : { borderColor: "" }
+            : themeCTX.theme === "dark"
+            ? { borderColor: "#fefefe" }
+            : {}
         }
         className={`Post ${postData.hallOfFame ? "GoldenBorder" : ""} ${
           themeCTX.theme === "dark" && "PostDark"
