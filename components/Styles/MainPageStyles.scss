@@ -43,7 +43,7 @@ $black: #2f2f2f;
 }
 .PostDark {
   background-color: hsl(15, 0%, 18%) !important;
-  border: 3px $white solid !important;
+  border: 3px $white solid;
   color: $white !important;
 }
 @mixin PostSchema {

@@ -250,6 +250,14 @@ export const Post: React.FC<{ date: string } | PostPropsInteface> = (props) => {
   ) : (
     <div className={`ListWrapper ${wasFadedIn ? "fadeIn" : ""}`} ref={postRef}>
       <div
+        style={
+          postData.userThatPostedThis.Login === currentlyLoggedInUser.Login &&
+          !postData.hallOfFame
+            ? {
+                borderColor: `${currentlyLoggedInUser.BackgroundColor}`,
+              }
+            : { borderColor: "" }
+        }
         className={`Post ${postData.hallOfFame ? "GoldenBorder" : ""} ${
           themeCTX.theme === "dark" && "PostDark"
         }`}
