@@ -21,7 +21,7 @@ import {
   UserData,
 } from "../utils/interfaces";
 import Tippy from "@tippyjs/react";
-import { Button } from "antd";
+import { Avatar, Button } from "antd";
 import HalfMoonIcon from "../public/half-moon.svg";
 import {
   arrayRemove,
@@ -31,6 +31,7 @@ import {
   getDocs,
   onSnapshot,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -40,7 +41,20 @@ import { NotificationInterface } from "../utils/interfaces";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-// const handleComplexBackendChanges = async () => {};
+// const handleComplexBackendChanges = async () => {
+//   const q = query(collection(db, "Users"));
+//   const docs = await getDocs(q);
+//   docs.forEach(async (doc) => {
+//     const data = doc.data() as UserData;
+//     if (data.Avatar?.includes("avatars.dicebear.com")) {
+//       const newAvatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${
+//         data.Login?.trim() as string
+//       }`;
+//       const newDoc: UserData = { ...data, Avatar: newAvatar };
+//       await setDoc(doc.ref, newDoc);
+//     }
+//   });
+// };
 export const Header: React.FC = () => {
   const match = useMediaQuery("only screen and (min-width:440px");
   const router = useRouter();

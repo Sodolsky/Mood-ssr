@@ -171,7 +171,7 @@ export const SignUp: React.FC<SignUpProps> = (props) => {
               addNewAccountIntoDataBase(
                 registerData.Login,
                 registerData.Email,
-                `https://avatars.dicebear.com/api/bottts/${registerData.Login}.svg`,
+                `https://api.dicebear.com/7.x/bottts/svg?seed=${registerData.Login.trim()}`,
                 `Hello my name is ${registerData.Login} i'm using MOOD App 😎`,
                 "2f2f2f",
                 "",
@@ -186,7 +186,7 @@ export const SignUp: React.FC<SignUpProps> = (props) => {
               setCurrentlyLoggedInUser!({
                 Login: registerData.Login,
                 Email: registerData.Email,
-                Avatar: `https://avatars.dicebear.com/api/bottts/${registerData.Login}.svg`,
+                Avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${registerData.Login.trim()}`,
                 Description: `Hello my name is ${registerData.Login} i'm using MOOD App 😎`,
                 BackgroundColor: "2f2f2f",
                 BackgroundImage: "",
