@@ -125,9 +125,9 @@ export const Header: React.FC = () => {
                   />
                 </div>
 
-                <span className="Info">
+                {/* <span className="Info">
                   Everything posted here is a joke, dont take it seriously!
-                </span>
+                </span> */}
               </div>
 
               {auth.currentUser && (
