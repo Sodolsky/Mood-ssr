@@ -46,6 +46,7 @@ const UserProfilePage: NextPage<UserProfileProps> = ({
       {authStatus ? (
         <>
           <UIWrapper>
+            {`${console.log(userDataFromNextJS ?? "chuj")}`}
             <UserProfile userDataFromNextJS={userDataFromNextJS} />
           </UIWrapper>
         </>
