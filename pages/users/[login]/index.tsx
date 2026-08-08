@@ -74,10 +74,23 @@ export const getStaticProps: GetStaticProps<UserProfileProps> = async ({
 }) => {
   const profileName = params?.login as string;
   const db = getFirestore(app);
+
+  // LOG 1: Sprawdzamy, o jaki login dokładnie pyta Next.js (wielkość liter!)
+  console.log(`[DEBUG] Próba wygenerowania profilu dla: "${profileName}"`);
+
   try {
     const userFirebaseDoc = await getDoc(doc(db, "Users", profileName));
     const userData = userFirebaseDoc.data() as UserData;
-    if (!userData) throw new Error("Profile was not found");
+
+    // LOG 2: Sprawdzamy, co dokładnie zwrócił Firebase (czy obiekt, czy undefined)
+    console.log(`[DEBUG] Odpowiedź z bazy dla ${profileName}:`, userData);
+
+    if (!userData) {
+      // LOG 3: Dowiemy się, czy to wina braku danych w bazie
+      console.log(`[DEBUG] Nie znaleziono userData, rzucam błędem (404)!`);
+      throw new Error("Profile was not found");
+    }
+
     return {
       props: {
         userDataFromNextJS: userData,
@@ -85,6 +98,12 @@ export const getStaticProps: GetStaticProps<UserProfileProps> = async ({
       revalidate: 1,
     };
   } catch (error) {
+    // LOG 4 (NAJWAŻNIEJSZY): Wypisze pełny, faktyczny błąd, jeśli np. Firebase odrzuci połączenie
+    console.error(
+      `[DEBUG FATAL ERROR] Błąd w getStaticProps dla "${profileName}":`,
+      error,
+    );
+
     return {
       notFound: true,
     };
